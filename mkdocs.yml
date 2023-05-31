@@ -1,0 +1,27 @@
+site_name: Airflow-DF Documentation
+
+theme:
+  name: material
+
+repo_name: airflow-df
+repo_url: https://github.com/know-ai/airflow-df
+edit_uri: ""
+site_dir: _build/html
+
+nav:
+    - Summary: 'index.md'
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - mkautodoc
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_css:
+    - css/custom.css
+
+extra_javascript:
+  - javascripts/config.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
