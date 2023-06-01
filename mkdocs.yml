@@ -9,7 +9,8 @@ edit_uri: ""
 site_dir: _build/html
 
 nav:
-    - Summary: 'index.md'
+  - Summary: 'index.md'
+  - Installation: 'installation.md'
 
 markdown_extensions:
   - admonition

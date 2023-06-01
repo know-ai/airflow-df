@@ -1,11 +1,17 @@
+import sys, os
+# These code lines is to avoid import relative error
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+from helpers import as_airflow_tasks
 from .csv import CSVFormatter
 
+@as_airflow_tasks()
 class IO:
     r"""
     Documentation here
     """
-    @classmethod
-    def read_csv(self, filepath_or_buffer, **kwargs):
+    @staticmethod
+    def read_csv(filepath:str, **kwargs):
         r"""
         Read a comma-separated values (csv) file into DataFrame.
 
@@ -13,7 +19,7 @@ class IO:
 
         **Parameters**
 
-        - *filepath_or_bufferstr:*  path object or file-like object
+        - *filepath:*  path object
         Any valid string path is acceptable. The string could be a URL. Valid URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is expected. A local file could be: file://localhost/path/to/table.csv. 
         If you want to pass in a path object, pandas accepts any os.PathLike.
         By file-like object, we refer to objects with a read() method, such as a file handle (e.g. via builtin open function) or StringIO.
@@ -24,5 +30,8 @@ class IO:
         - *delimiter:* (str, default None)
         Alias for sep.
         """
+        if "config" in kwargs:
 
-        return CSVFormatter.read(filepath_or_buffer=filepath_or_buffer, **kwargs)
+            config = kwargs['config']
+            
+        return CSVFormatter.read(filepath=filepath, **kwargs)

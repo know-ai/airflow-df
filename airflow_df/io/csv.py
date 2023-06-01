@@ -1,12 +1,13 @@
 import pandas as pd
 
+
 class CSVFormatter:
     r"""
     Documentation here
     """
 
-    @classmethod
-    def read(self, filepath_or_buffer, **kwargs)->pd.DataFrame:
+    @staticmethod
+    def read(filepath, **kwargs)->pd.DataFrame:
         r"""
         Read a comma-separated values (csv) file into DataFrame.
 
@@ -14,7 +15,7 @@ class CSVFormatter:
 
         **Parameters**
 
-        - *filepath_or_bufferstr:*  path object or file-like object
+        - *filepath:*  path object
         Any valid string path is acceptable. The string could be a URL. Valid URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is expected. A local file could be: file://localhost/path/to/table.csv. 
         If you want to pass in a path object, pandas accepts any os.PathLike.
         By file-like object, we refer to objects with a read() method, such as a file handle (e.g. via builtin open function) or StringIO.
@@ -25,5 +26,9 @@ class CSVFormatter:
         - *delimiter:* (str, default None)
         Alias for sep.
         """
+        df = pd.read_csv(filepath, **kwargs)
+
+        print(df.info())
+        print(df.head())
         
-        return pd.read_csv(filepath_or_buffer, **kwargs)
+        return df
