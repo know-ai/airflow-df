@@ -25,10 +25,5 @@ class CSVFormatter:
 
         - *delimiter:* (str, default None)
         Alias for sep.
-        """
-        df = pd.read_csv(filepath, **kwargs)
-
-        print(df.info())
-        print(df.head())
-        
-        return df
+        """        
+        return pd.read_csv(filepath, **kwargs)

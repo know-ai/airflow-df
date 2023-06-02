@@ -9,8 +9,26 @@ edit_uri: ""
 site_dir: _build/html
 
 nav:
-  - Summary: 'index.md'
-  - Installation: 'installation.md'
+  - Summary: index.md
+  - Installation: installation.md
+  - API Reference:
+    - IO: 
+      - class: io/api_io.md
+      - read_csv: io/api_io_read_csv.md
+      - read_tpl: io/api_io_read_tpl.md
+      - read_sql: io/api_io_read_sql.md
+      - read_pkl: io/api_io_read_pkl.md
+    - Transform:
+      - class: transform/api_transform.md
+    - DAG:
+      - class: dag/api_dag.md
+      - create: dag/api_dag_create.md
+    - Helpers:
+      - class: helpers/api_helpers.md
+      - decorator: helpers/api_helpers_decorator.md
+      - as_airflow_tasks: helpers/api_helpers_as_airflow_tasks.md
+      - check_airflow_task_args: helpers/api_helpers_check_airflow_task_args.md
+      - get_default_args_in_tasks: helpers/api_helpers_get_default_args_in_tasks.md
 
 markdown_extensions:
   - admonition
