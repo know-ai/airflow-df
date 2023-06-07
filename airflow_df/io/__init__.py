@@ -1,5 +1,6 @@
 from ..helpers import Helpers
 from .csv import CSVFormatter
+from .olga import OlgaFormatter
 import pandas as pd
 
 @Helpers.as_airflow_tasks()
@@ -283,6 +284,14 @@ A comma-separated values (csv) file is returned as two-dimensional data structur
     @Helpers.check_airflow_task_args
     @staticmethod
     def read_sql()->pd.DataFrame:
+        """
+        Documentation here
+        """
+        pass
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def read_olga()->pd.DataFrame:
         """
         Documentation here
         """
