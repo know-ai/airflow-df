@@ -10,11 +10,28 @@ class TPL:
         self.raw_file = None
         self.info = Info()
 
-    def set_info(self):
+    def set_info(self, file:str):
         r"""
-        Documentation here
+        Set all info attributes of tpl file in each class attribute.
+
+        **Parameters**
+
+        - **file:** (str) raw tpl file as string.
+
+        **Attributes to set**
+
+        - **version:** (str) Olga version with which the file was generated
+        - **input_file:** (str) Genkey file name binded to this tpl file
+        - **pvt_file:** (str) Fluid property file name
+        - **date:** (str) TPL file generation date
+        - **project:** (str) Project name
+        - **title:** (str) Simulation title name
+        - **author:** (str) Responsible for the simulation
+        - **network:** (int) If 1, is a pipeline, > 1, is a network
+        - **geometry:** (str) Unit for pipeline length
+        - **branch:** (str) Branch name
         """
-        pass
+        self.info.set_info(file)
 
     def set_profile(self):
         r"""
@@ -47,7 +64,28 @@ class TPL:
 
 class Info:
     r"""
-    Documentation here
+    Stores the attributes in the information section inside a tpl file
+    for example
+    >>> 'OLGA 2017.2.0.107'
+    >>> INPUT FILE
+    >>> 'SF_SH_D0_R0.genkey'
+    >>> PVT FILE
+    >>> '../../../00 Nuevos fluidos/Diesel_1.tab' 
+    >>> DATE
+    >>> '23-06-06 15:12:27'
+    >>> PROJECT
+    >>> 'Supe'
+    >>> TITLE
+    >>> ''
+    >>> AUTHOR
+    >>> 'Jesus E Varajas'
+    >>> NETWORK
+    >>> 1
+    >>> GEOMETRY ' (M)  '
+    >>> BRANCH
+    >>> 'PIPELINE'
+
+    As class attributes
     """
 
     def __init__(self):
@@ -65,13 +103,34 @@ class Info:
 
     def set_info(self, file:str):
         r"""
-        Documentation here
+        Set all info attributes of tpl file in each class attribute.
+
+        **Parameters**
+
+        - **file:** (str) raw tpl file as string.
+
+        **Attributes to set**
+
+        - **version:** (str) Olga version with which the file was generated
+        - **input_file:** (str) Genkey file name binded to this tpl file
+        - **pvt_file:** (str) Fluid property file name
+        - **date:** (str) TPL file generation date
+        - **project:** (str) Project name
+        - **title:** (str) Simulation title name
+        - **author:** (str) Responsible for the simulation
+        - **network:** (int) If 1, is a pipeline, > 1, is a network
+        - **geometry:** (str) Unit for pipeline length
+        - **branch:** (str) Branch name
         """
         pass
 
     def serialize(self):
         r"""
-        Documentation here
+        Serializes all information attributes of the Olga file
+
+        **Returns**
+
+        - **attrs:** (dict)
         """
 
         return {
