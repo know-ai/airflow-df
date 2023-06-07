@@ -8,9 +8,27 @@ class TPL:
     def __init__(self):
 
         self.raw_file = None
-        self.info = TPLInfo()
+        self.info = Info()
 
-    def read_info(self):
+    def set_info(self):
+        r"""
+        Documentation here
+        """
+        pass
+
+    def set_profile(self):
+        r"""
+        Documentation here
+        """
+        pass
+
+    def set_columns(self):
+        r"""
+        Documentation here
+        """
+        pass
+
+    def set_content(self):
         r"""
         Documentation here
         """
@@ -27,7 +45,7 @@ class TPL:
         return self.raw_file
     
 
-class TPLInfo:
+class Info:
     r"""
     Documentation here
     """
@@ -44,6 +62,12 @@ class TPLInfo:
         self.network = None
         self.geometry = None
         self.branch = None
+
+    def set_info(self, file:str):
+        r"""
+        Documentation here
+        """
+        pass
 
     def serialize(self):
         r"""
@@ -62,3 +86,102 @@ class TPLInfo:
             'geometry': self.geometry,
             'branch': self.branch
         }
+    
+
+class Profile:
+    r"""
+    Documentation here
+    """
+
+    def __init__(self):
+
+        self._x = None
+        self._y = None
+
+    def set_profile(self, file:str):
+        r"""
+        Documentation here
+        """
+        pass
+
+    @property
+    def x(self, values:list):
+        r"""
+        Documentation here
+        """
+
+        self._x = values
+
+    @x.setter
+    def x(self):
+
+        return self._x
+    
+    @property
+    def y(self, values:list):
+        r"""
+        Documentation here
+        """
+
+        self._y = values
+
+    @x.setter
+    def y(self):
+
+        return self._y
+    
+    def serialize(self):
+        r"""
+        Documentation here
+        """
+
+        return (self.x, self.y)
+    
+
+class Columns:
+    r"""
+    Documentation here
+    """
+
+    def __init__(self):
+
+        self.columns = list()
+
+    def set_columns(self, file:str):
+        r"""
+        Documentation here
+        """
+
+        pass
+
+    def serialize(self):
+        r"""
+        Documentation here
+        """
+        pass
+
+
+class Content:
+    r"""
+    Documentation here
+    """
+
+    def __init__(self):
+        r"""
+        Documentation here
+        """
+
+        pass
+
+    def set_content(self, file:str):
+        r"""
+        Documentation here
+        """
+        pass
+
+    def serialize(self):
+        r"""
+        Documentation here
+        """
+
+        pass

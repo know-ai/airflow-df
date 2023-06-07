@@ -1396,7 +1396,7 @@ TIME SERIES  ' (S)  '
 
         tpl.read_raw_file(filepath=self.filepath)
         
-        tpl.read_info()
+        tpl.set_info()
 
         expected = {
             'version': 'OLGA 2017.2.0.107',
@@ -1412,6 +1412,14 @@ TIME SERIES  ' (S)  '
         }
 
         self.assertEqual(tpl.info.serialize(), expected)
+
+    def test_profile(self):
+
+        tpl = TPL()
+
+        tpl.read_raw_file(filepath=self.filepath)
+
+        tpl.set_profile()        
 
     def test_data_structure(self):
 
