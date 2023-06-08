@@ -245,7 +245,7 @@ If a filepath is provided for filepath_or_buffer, map the file object directly o
 
 - **float_precision:** str, optional
 
-Specifies which converter the C engine should use for floating-point values. The options are None or ‘high’ for the ordinary converter, ‘legacy’ for the original lower precision pandas converter, and ‘round_trip’ for the round-trip converter.
+Specifies which converter the C engine should use for floating-point values. The options are None or 'high' for the ordinary converter, 'legacy' for the original lower precision pandas converter, and 'round_trip' for the round-trip converter.
 
 - **storage_options:** dict, optional
 
