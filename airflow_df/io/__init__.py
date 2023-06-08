@@ -267,7 +267,7 @@ A comma-separated values (csv) file is returned as two-dimensional data structur
     
     @Helpers.check_airflow_task_args
     @staticmethod
-    def read_tpl(filepath:str, **kwargs)->pd.DataFrame:
+    def read_olga(filepath:str, **kwargs)->pd.DataFrame:
         """
         Documentation here
         """
@@ -284,14 +284,6 @@ A comma-separated values (csv) file is returned as two-dimensional data structur
     @Helpers.check_airflow_task_args
     @staticmethod
     def read_sql()->pd.DataFrame:
-        """
-        Documentation here
-        """
-        pass
-
-    @Helpers.check_airflow_task_args
-    @staticmethod
-    def read_olga()->pd.DataFrame:
         """
         Documentation here
         """
