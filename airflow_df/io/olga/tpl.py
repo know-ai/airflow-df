@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class TPL:
     r"""
     Documentation Here
@@ -10,7 +11,7 @@ class TPL:
         self.raw_file = None
         self.info = Info()
 
-    def set_info(self, file:str):
+    def set_info(self, file: str):
         r"""
         Set all info attributes of tpl file in each class attribute.
 
@@ -51,16 +52,16 @@ class TPL:
         """
         pass
 
-    def read_raw_file(self, filepath:str):
+    def read_raw_file(self, filepath: str):
         r"""
         Documentation here
         """
         with open(filepath, 'r') as file:
-            
+
             self.raw_file = file.read()
 
         return self.raw_file
-    
+
 
 class Info:
     r"""
@@ -101,7 +102,7 @@ class Info:
         self.geometry = None
         self.branch = None
 
-    def set_info(self, file:str):
+    def set_info(self, file: str):
         r"""
         Set all info attributes of tpl file in each class attribute.
 
@@ -122,7 +123,21 @@ class Info:
         - **geometry:** (str) Unit for pipeline length
         - **branch:** (str) Branch name
         """
-        pass
+        _file = file.split('\n')[:19]
+
+        def delete_quotes(string: str = '') -> str:
+            return string.replace("'", "").strip()
+
+        self.version = delete_quotes(_file[0])
+        self.input_file = delete_quotes(_file[3])
+        self.pvt_file = delete_quotes(_file[5])
+        self.date = delete_quotes(_file[7])
+        self.project = delete_quotes(_file[9])
+        self.title = delete_quotes(_file[11])
+        self.author = delete_quotes(_file[13])
+        self.network = eval(_file[15])
+        self.geometry = _file[16].split()[1]
+        self.branch = delete_quotes(_file[-1])
 
     def serialize(self):
         r"""
@@ -145,7 +160,7 @@ class Info:
             'geometry': self.geometry,
             'branch': self.branch
         }
-    
+
 
 class Profile:
     r"""
@@ -157,14 +172,14 @@ class Profile:
         self._x = None
         self._y = None
 
-    def set_profile(self, file:str):
+    def set_profile(self, file: str):
         r"""
         Documentation here
         """
         pass
 
     @property
-    def x(self, values:list):
+    def x(self, values: list):
         r"""
         Documentation here
         """
@@ -175,9 +190,9 @@ class Profile:
     def x(self):
 
         return self._x
-    
+
     @property
-    def y(self, values:list):
+    def y(self, values: list):
         r"""
         Documentation here
         """
@@ -188,14 +203,14 @@ class Profile:
     def y(self):
 
         return self._y
-    
+
     def serialize(self):
         r"""
         Documentation here
         """
 
         return (self.x, self.y)
-    
+
 
 class Columns:
     r"""
@@ -206,7 +221,7 @@ class Columns:
 
         self.columns = list()
 
-    def set_columns(self, file:str):
+    def set_columns(self, file: str):
         r"""
         Documentation here
         """
@@ -232,7 +247,7 @@ class Content:
 
         pass
 
-    def set_content(self, file:str):
+    def set_content(self, file: str):
         r"""
         Documentation here
         """
