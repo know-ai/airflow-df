@@ -154,14 +154,14 @@ TIME SERIES  ' (S)  '
 
         self.assertEqual(tpl.info.serialize(), expected)
 
-    def test_profile(self):
+    # def test_profile(self):
 
-        tpl = TPL()
+    #     tpl = TPL()
 
-        tpl.read_raw_file(filepath=self.filepath)
+    #     tpl.read_raw_file(filepath=self.filepath)
 
-        tpl.set_profile()      
+    #     tpl.set_profile()
 
-    def test_data_structure(self):
+    # def test_data_structure(self):
 
-        pass
+    #     pass

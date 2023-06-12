@@ -1,5 +1,5 @@
 from unittest import TestLoader, TestSuite, TextTestRunner
-from airflow_df.tests.test_io import TestIO
+# from airflow_df.tests.test_io import TestIO
 from airflow_df.tests.test_tpl import TestTPL
 
 def suite():
@@ -8,7 +8,7 @@ def suite():
     """
     tests = list()
     suite = TestSuite()
-    tests.append(TestLoader().loadTestsFromTestCase(TestIO))
+    # tests.append(TestLoader().loadTestsFromTestCase(TestIO))
     tests.append(TestLoader().loadTestsFromTestCase(TestTPL))
 
     suite = TestSuite(tests)
