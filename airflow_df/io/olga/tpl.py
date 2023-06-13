@@ -130,10 +130,11 @@ class Profile(list):
 - **x:** (float) x coordinate
 - **y:** (float) y coordinate
         """
+
         if isinstance(x, float) & isinstance(y, float):
 
-            self.__point(round(x, 3), round(y, 3))
-            super(Profile, self).append(self.__point)
+            point = self.__point(round(x, 3), round(y, 3))
+            super(Profile, self).append(point)
 
     def set_profile(self, file: str):
         """Set elevation profile
@@ -142,7 +143,34 @@ class Profile(list):
 
 - **file:** (str) raw tpl file read
         """
-        pass
+        def string_list_2_float_list(val_list: list) -> list:
+            """Converts a list of string numeric values to a list of float values.
+            Returns a list of float values.
+
+            **Parameters**
+
+            **val_list:** (list) string numeric values.
+            """
+            val_list = ''.join(val_list)
+            val_list = val_list.split()
+
+            return list(map(float, val_list))
+
+        file = file.split('CATALOG')[0]
+        file = file.split('\n')[20:]
+        file.pop(-1)
+
+        sep = int(len(file)/2)
+
+        x_vals = string_list_2_float_list(val_list=file[:sep])
+        y_vals = string_list_2_float_list(val_list=file[sep:])
+        points = list(zip(x_vals, y_vals))
+
+        for point in points:
+            x = point[0]
+            y = point[1]
+
+            self.append(x=x, y=y)
 
     @property
     def x(self) -> list:
