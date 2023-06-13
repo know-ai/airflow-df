@@ -105,9 +105,9 @@ class Profile(list):
 
 **Attributes**
 
-- **x:** (list) x coordinates values
-- **y:** (list) y coordinates values
-- **profile:** (list) (x, y) pair coordinates values
+- **x:** (list) x coordinates values (m)
+- **y:** (list) y coordinates values (m)
+- **profile:** (list) (x, y) pair coordinates values (m)
     """
 
     def __init__(self):
@@ -124,7 +124,7 @@ class Profile(list):
         """
         if isinstance(x, float) & isinstance(y, float):
             
-            self.__point(x, y)
+            self.__point(round(x, 3), round(y, 3))
             super(Profile, self).append(self.__point)
 
     def set_profile(self, file:str):

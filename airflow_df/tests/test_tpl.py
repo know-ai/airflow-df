@@ -81,13 +81,100 @@ TIME SERIES  ' (S)  '
 
         self.assertEqual(tpl.info.serialize(), expected)
 
-    # def test_profile(self):
+    def test_profile(self):
 
-    #     tpl = TPL()
+        tpl = TPL()
 
-    #     tpl.read_raw_file(filepath=self.filepath)
+        filepath = os.path.join("data", "olga", "1.tpl")
 
-    #     tpl.set_profile()
+        file = tpl.read_raw_file(filepath=filepath)
+
+        tpl.set_profile(file)
+
+        with self.subTest(f"Test x Profile"):
+
+            x_expected = [
+                0.0,
+                1.5,
+                3.0,
+                9.85,
+                16.7,
+                18.7,
+                20.7,
+                29.3,
+                37.9,
+                45.4,
+                52.9,
+                566.14,
+                1079.38,
+                1222.03,
+                1364.68,
+                1365.68,
+                1366.68,
+                1430.03,
+                1493.38
+            ]
+            self.assertEqual(tpl.profile.x, x_expected)
+
+        with self.subTest(f"Test y Profile"):
+
+            y_expected = [
+                0.0,
+                0.0,
+                0.0,
+                6.85,
+                13.7,
+                13.7,
+                13.7,
+                5.1,
+                -3.5,
+                -3.5,
+                -3.5,
+                2.75,
+                9.0,
+                9.0,
+                9.0,
+                10.0,
+                11.0,
+                11.0,
+                11.0 
+            ]
+            self.assertEqual(tpl.profile.y, y_expected)
+
+        with self.subTest(f"Test Profile"):
+
+            expected_profile = [(0.0, 0.0),
+                (1.5, 0.0),
+                (3.0, 0.0),
+                (9.85, 6.85),
+                (16.7, 13.7),
+                (18.7, 13.7),
+                (20.7, 13.7),
+                (29.3, 5.1),
+                (37.9, -3.5),
+                (45.4, -3.5),
+                (52.9, -3.5),
+                (566.14, 2.75),
+                (1079.38, 9.0),
+                (1222.03, 9.0),
+                (1364.68, 9.0),
+                (1365.68, 10.0),
+                (1366.68, 11.0),
+                (1430.03, 11.0),
+                (1493.38, 11.0)
+            ]
+
+            self.assertEqual(tpl.profile.profile, expected_profile)
+
+        with self.subTest(f"Test Profile Serialized"):
+
+            expected_profile = {
+                'profile': expected_profile,
+                'x': x_expected,
+                'y': y_expected
+            }
+
+            self.assertEqual(tpl.profile.serialize(), expected_profile)
 
     # def test_data_structure(self):
 
