@@ -81,6 +81,16 @@ TIME SERIES  ' (S)  '
 
         self.assertEqual(tpl.info.serialize(), expected)
 
+    def test_delete_quotes(self):
+        """
+        Set delete_quotes as a static method with documentation
+        """
+        tpl = TPL()
+
+        with self.subTest(f"Has delete_quotes method as staticmethod?"):
+
+            self.assertTrue(hasattr(tpl.info, 'delete_quotes'))
+
     def test_profile(self):
 
         tpl = TPL()
