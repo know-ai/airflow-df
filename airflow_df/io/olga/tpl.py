@@ -34,6 +34,12 @@ class Info:
 
     @staticmethod
     def delete_quotes(string: str = '') -> str:
+        """Deletes inner quotes in a string. Returns a string without them.
+
+    **Parameters**
+
+    **string:** (str) string with inner quotes.
+        """
         return string.replace("'", "").strip()
 
     def set_info(self, file: str):
