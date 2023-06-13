@@ -51,7 +51,21 @@ class Info:
 - **geometry:** (str) Unit for pipeline length
 - **branch:** (str) Branch name
         """
-        pass
+        _file = file.split('\n')[:19]
+
+        def delete_quotes(string: str = '') -> str:
+            return string.replace("'", "").strip()
+
+        self.version = delete_quotes(_file[0])
+        self.input_file = delete_quotes(_file[3])
+        self.pvt_file = delete_quotes(_file[5])
+        self.date = delete_quotes(_file[7])
+        self.project = delete_quotes(_file[9])
+        self.title = delete_quotes(_file[11])
+        self.author = delete_quotes(_file[13])
+        self.network = eval(_file[15])
+        self.geometry = _file[16].split()[1]
+        self.branch = delete_quotes(_file[-1])
 
     def serialize(self):
         """Serializes all information attributes of the Olga file
@@ -84,7 +98,7 @@ class Info:
             'geometry': self.geometry,
             'branch': self.branch
         }
-    
+
 
 class Profile(list):
     """Stores the attributes to describe the elevation profile section of a tpl file as class attributes.
