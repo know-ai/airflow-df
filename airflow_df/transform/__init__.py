@@ -455,11 +455,10 @@ class Transform:
             errors=errors,
         )
     
-    @Helpers.check_airflow_task_args
     @staticmethod
     def resample(
         df:pd.DataFrame,
-        rule, 
+        rule=None, 
         axis=0, 
         closed=None, 
         label=None, 
@@ -862,56 +861,42 @@ Freq: 17T, dtype: int64
             group_keys=group_keys
         )
     
-    @Helpers.check_airflow_task_args
     @staticmethod
-    def reset_index(df:pd.DataFrame, **kwargs)->pd.DataFrame:
+    def reset_index(df:pd.DataFrame)->pd.DataFrame:
         r"""
         Documentation here
         """
 
-        return df.reset_index(**kwargs)
-    
-    @Helpers.check_airflow_task_args
+        return df.reset_index()
+
     @staticmethod
-    def keep_columns(df:pd.DataFrame, **kwargs)->pd.DataFrame:
+    def convert_to_float(df:pd.DataFrame)->pd.DataFrame:
         r"""
         Documentation here
         """
 
-        return df.drop(**kwargs)
-    
-    @Helpers.check_airflow_task_args
+        return df
+
     @staticmethod
-    def convert_to_float(df:pd.DataFrame, **kwargs)->pd.DataFrame:
+    def set_datetime_index(df:pd.DataFrame)->pd.DataFrame:
         r"""
         Documentation here
         """
 
-        pass
+        return df
 
-    @Helpers.check_airflow_task_args
     @staticmethod
-    def set_datetime_index(df:pd.DataFrame, **kwargs)->pd.DataFrame:
+    def info(df:pd.DataFrame)->pd.DataFrame:
         r"""
         Documentation here
         """
-
-        pass
-
-    @Helpers.check_airflow_task_args
-    @staticmethod
-    def info(df:pd.DataFrame, **kwargs)->pd.DataFrame:
-        r"""
-        Documentation here
-        """
-        print(df.info(**kwargs))
+        print(df.info())
         return df
     
-    @Helpers.check_airflow_task_args
     @staticmethod
-    def add_columns(df:pd.DataFrame, **kwargs)->pd.DataFrame:
+    def add_columns(df:pd.DataFrame)->pd.DataFrame:
         r"""
         Documentation here
         """
 
-        pass
+        return df
