@@ -1,6 +1,7 @@
 from collections import namedtuple
 import pandas as pd
 
+
 class Info:
     """Stores the attributes to describe the information section of a tpl file as class attributes.
 
@@ -31,7 +32,17 @@ class Info:
         self.geometry = None
         self.branch = None
 
-    def set_info(self, file:str):
+    @staticmethod
+    def delete_quotes(string: str = '') -> str:
+        """Deletes inner quotes in a string. Returns a string without them.
+
+    **Parameters**
+
+    **string:** (str) string with inner quotes.
+        """
+        return string.replace("'", "").strip()
+
+    def set_info(self, file: str):
         """Set all info attributes of tpl file in each class attribute.
 
 **Parameters**
@@ -51,21 +62,18 @@ class Info:
 - **geometry:** (str) Unit for pipeline length
 - **branch:** (str) Branch name
         """
-        _file = file.split('\n')[:19]
+        file = file.split('\n')[:19]
 
-        def delete_quotes(string: str = '') -> str:
-            return string.replace("'", "").strip()
-
-        self.version = delete_quotes(_file[0])
-        self.input_file = delete_quotes(_file[3])
-        self.pvt_file = delete_quotes(_file[5])
-        self.date = delete_quotes(_file[7])
-        self.project = delete_quotes(_file[9])
-        self.title = delete_quotes(_file[11])
-        self.author = delete_quotes(_file[13])
-        self.network = eval(_file[15])
-        self.geometry = _file[16].split()[1]
-        self.branch = delete_quotes(_file[-1])
+        self.version = self.delete_quotes(file[0])
+        self.input_file = self.delete_quotes(file[3])
+        self.pvt_file = self.delete_quotes(file[5])
+        self.date = self.delete_quotes(file[7])
+        self.project = self.delete_quotes(file[9])
+        self.title = self.delete_quotes(file[11])
+        self.author = self.delete_quotes(file[13])
+        self.network = eval(file[15])
+        self.geometry = file[16].split()[1]
+        self.branch = self.delete_quotes(file[-1])
 
     def serialize(self):
         """Serializes all information attributes of the Olga file
@@ -113,8 +121,8 @@ class Profile(list):
     def __init__(self):
 
         self.__point = namedtuple("Point", "x y")
-    
-    def append(self, x:float, y:float):
+
+    def append(self, x: float, y: float):
         """Add point to profile list
 
 **Parameters**
@@ -122,39 +130,67 @@ class Profile(list):
 - **x:** (float) x coordinate
 - **y:** (float) y coordinate
         """
-        if isinstance(x, float) & isinstance(y, float):
-            
-            self.__point(round(x, 3), round(y, 3))
-            super(Profile, self).append(self.__point)
 
-    def set_profile(self, file:str):
+        if isinstance(x, float) & isinstance(y, float):
+
+            point = self.__point(round(x, 3), round(y, 3))
+            super(Profile, self).append(point)
+
+    def set_profile(self, file: str):
         """Set elevation profile
 
 **Parameters**
 
 - **file:** (str) raw tpl file read
         """
-        pass
-    
+        def string_list_2_float_list(val_list: list) -> list:
+            """Converts a list of string numeric values to a list of float values.
+            Returns a list of float values.
+
+            **Parameters**
+
+            **val_list:** (list) string numeric values.
+            """
+            val_list = ''.join(val_list)
+            val_list = val_list.split()
+
+            return list(map(float, val_list))
+
+        file = file.split('CATALOG')[0]
+        file = file.split('\n')[20:]
+        file.pop(-1)
+
+        sep = int(len(file)/2)
+
+        x_vals = string_list_2_float_list(val_list=file[:sep])
+        y_vals = string_list_2_float_list(val_list=file[sep:])
+        points = list(zip(x_vals, y_vals))
+
+        for point in points:
+            x = point[0]
+            y = point[1]
+
+            self.append(x=x, y=y)
+
     @property
-    def x(self)->list:
+    def x(self) -> list:
         """X coordinates values
         """
         return [point.x for point in self]
-    
+
     @property
-    def y(self)->list:
+    def y(self) -> list:
         """Y coordinate values
         """
         return [point.y for point in self]
-    
+
     @property
-    def profile(self)->list:
+    def profile(self) -> list:
         """(x, y) coordinates values
         """
         return [(point.x, point.y) for point in self]
 
-    def serialize(self)->dict:
+    def serialize(self) -> dict:
         """Serializes elevation profile of a tpl file
 
 **Returns**
@@ -170,7 +206,7 @@ class Profile(list):
             'x': self.x,
             'y': self.y
         }
-    
+
 
 class Data:
     """Stores Pandas DataFrame with variables values according Olga simulation
@@ -184,7 +220,7 @@ class Data:
 
         self.__df = None
 
-    def set_data(self, file:str):
+    def set_data(self, file: str):
         """Parses data section of a .tpl file into pandas DataFrame
 
 **Parameters**
@@ -195,12 +231,12 @@ class Data:
         pass
 
     @property
-    def df(self)->pd.DataFrame:
+    def df(self) -> pd.DataFrame:
         """Pandas DataFrame
         """
         return self.__df
 
-    def serialize(self)->dict:
+    def serialize(self) -> dict:
         """Serializes pandas DataFrame to a python dictionary
 
 **Returns**
@@ -242,7 +278,7 @@ class TPL:
         self.profile = Profile()
         self.data = Data()
 
-    def set_info(self, file:str):
+    def set_info(self, file: str):
         """Sets all info attributes of tpl file in each class attribute.
 
 **Parameters**
@@ -264,7 +300,7 @@ class TPL:
         """
         self.info.set_info(file)
 
-    def set_profile(self, file:str):
+    def set_profile(self, file: str):
         """Sets elevation profile
 
 **Parameters**
@@ -273,7 +309,7 @@ class TPL:
         """
         self.profile.set_profile(file)
 
-    def set_data(self, file:str):
+    def set_data(self, file: str):
         """Parses tabular time series data of a .tpl file into a Pandas DataFrame
 
 **Parameters**
@@ -282,7 +318,7 @@ class TPL:
         """
         pass
 
-    def read_raw_file(self, filepath:str)->str:
+    def read_raw_file(self, filepath: str) -> str:
         """Parses .tpl files into a python string
 
 **Parameters**
@@ -294,12 +330,12 @@ class TPL:
 - **file:** (str) 
         """
         with open(filepath, 'r') as file:
-            
+
             raw_file = file.read()
 
         return raw_file
-    
-    def read(self, filepath:str):
+
+    def read(self, filepath: str):
         """Read .tpl file into a TPL Object Structure
 
 **Parameters**
@@ -307,9 +343,9 @@ class TPL:
 - **filepath:** (str) .tpl file location
         """
         pass
-    
+
     @property
-    def df(self)->pd.DataFrame:
+    def df(self) -> pd.DataFrame:
         """Gets tabular time series data of a .tpl
 
 **Returns**
@@ -318,7 +354,7 @@ class TPL:
         """
         return self.data.df
 
-    def serialize(self)->dict:
+    def serialize(self) -> dict:
         """Serializes TPL Object
 
 **Returns**
