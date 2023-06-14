@@ -1,7 +1,6 @@
 import os
 import unittest
 from ..io.olga.genkey import Genkey
-from pandas import DataFrame as DF
 
 class TestGenkey(unittest.TestCase):
 
