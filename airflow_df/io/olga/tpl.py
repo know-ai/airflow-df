@@ -1,5 +1,6 @@
 from collections import namedtuple
 import pandas as pd
+import numpy as np
 
 
 class Info:
@@ -228,20 +229,27 @@ class Data:
 
 - **file:** (str) raw tpl file read
         """
-        # file = file.split('CATALOG')[1]
-        # file = file.split('\n')
-        # file = list(map(lambda el: el.strip(), file))
-        # file = list(filter(None, file))
+        file = file.split('CATALOG')[1]
+        file = file.split('\n')
+        file = list(map(lambda el: el.strip(), file))
+        file = list(filter(None, file))
+        
+        column_number = int(file.pop(0)) + 1
+        columns = file[:column_number]
+        columns.insert(0, columns.pop())
 
-        # column_number = file[0]
-        # file.remove(column_number)
-        # column_number = int(column_number) + 1
+        rows = file[column_number:]
+        row_numbers = len(rows)
 
-        # columns = file[:column_number]
-        # breakpoint()
-        # values = Profile.string_list_2_float_list(file[column_number:])
+        rows = Profile.string_list_2_float_list(rows, join_by=' ')
+        rows = np.array_split(rows, row_numbers)
+        rows = list(zip(*rows))
 
-        # breakpoint()
+        df = dict(zip(columns, rows))
+
+        self.__df = pd.DataFrame(df)
+
+        return self.__df
 
     @property
     def df(self) -> pd.DataFrame:

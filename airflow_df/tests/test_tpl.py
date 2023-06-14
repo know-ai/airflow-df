@@ -203,7 +203,7 @@ TIME SERIES  ' (S)  '
             "GT 'POSITION:' 'POS-1378M' '(KG/S)' 'Total mass flow'": [1.292260e+002, 1.317514e+002, 1.382876e+002, 1.391391e+002, 1.407468e+002, 1.439100e+002],
             "PTLKUP 'LEAK:' 'LEAK' '(PA)' 'Pressure at the position where Leak is positioned'": [4.473485e+005, 4.931588e+005, 5.277908e+005, 4.781485e+005, 5.130500e+005, 5.252984e+005]
         }
-
+        breakpoint()
         expected_df = DF(expected_df_serialized)
 
         with self.subTest(f"Test Data as a DataFrame"):
