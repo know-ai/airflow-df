@@ -1,6 +1,7 @@
 import os
 import unittest
 from ..io.olga.tpl import TPL
+from pandas import DataFrame as DF
 
 class TestTPL(unittest.TestCase):
 
@@ -186,6 +187,29 @@ TIME SERIES  ' (S)  '
 
             self.assertEqual(tpl.profile.serialize(), expected_profile)
 
-    # def test_data_structure(self):
+    def test_data_structure(self):
 
-    #     pass
+        tpl = TPL()
+
+        filepath = os.path.join("data", "olga", "1.tpl")
+
+        file = tpl.read_raw_file(filepath=filepath)
+
+        tpl.set_data(file)
+
+        expected_df_serialized = {
+            "TIME SERIES  ' (S)  '": [0.000000e+000, 1.005464e+000, 2.000000e+000, 3.009312e+000, 4.117419e+000, 5.220287e+000],
+            "PT 'POSITION:' 'POS-1378M' '(PA)' 'Pressure'":[3.246019e+005, 3.395254e+005, 3.520170e+005, 3.483150e+005, 3.579895e+005, 3.637217e+005],
+            "GT 'POSITION:' 'POS-1378M' '(KG/S)' 'Total mass flow'": [1.292260e+002, 1.317514e+002, 1.382876e+002, 1.391391e+002, 1.407468e+002, 1.439100e+002],
+            "PTLKUP 'LEAK:' 'LEAK' '(PA)' 'Pressure at the position where Leak is positioned'": [4.473485e+005, 4.931588e+005, 5.277908e+005, 4.781485e+005, 5.130500e+005, 5.252984e+005]
+        }
+
+        expected_df = DF(expected_df_serialized)
+
+        with self.subTest(f"Test Data as a DataFrame"):
+
+            self.assertEqual(expected_df, tpl.data.df)
+
+        with self.subTest("Test Serialized Data"):
+
+            self.assertDictEqual(expected_df_serialized, tpl.data.serialize())
