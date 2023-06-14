@@ -7,7 +7,8 @@ class OlgaFormatter:
     """
 
     @staticmethod
-    def read(filepath, **kwargs)->pd.DataFrame:
+    def read(filepath)->pd.DataFrame | list:
         r"""
         Documentation here
         """
+        pass

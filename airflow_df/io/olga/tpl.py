@@ -318,7 +318,7 @@ class TPL:
         """
         pass
 
-    def read_raw_file(self, filepath: str) -> str:
+    def read_raw_file(self, filepath: str | list) -> str | list:
         """Parses .tpl files into a python string
 
 **Parameters**
