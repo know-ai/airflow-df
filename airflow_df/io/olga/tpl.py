@@ -137,7 +137,7 @@ class Profile(list):
             super(Profile, self).append(point)
 
     @staticmethod
-    def string_list_2_float_list(val_list: list) -> list:
+    def string_list_2_float_list(val_list: list, join_by:str='') -> list:
         """Converts a list of string numeric values to a list of float values.
         Returns a list of float values.
 
@@ -145,7 +145,7 @@ class Profile(list):
 
         **val_list:** (list) string numeric values.
         """
-        val_list = ''.join(val_list)
+        val_list = join_by.join(val_list)
         val_list = val_list.split()
 
         return list(map(float, val_list))
@@ -162,7 +162,7 @@ class Profile(list):
         file.pop(-1)
 
         sep = int(len(file)/2)
-
+        
         x_vals = self.string_list_2_float_list(val_list=file[:sep])
         y_vals = self.string_list_2_float_list(val_list=file[sep:])
         points = list(zip(x_vals, y_vals))
@@ -238,11 +238,10 @@ class Data:
         # column_number = int(column_number) + 1
 
         # columns = file[:column_number]
-        # values = file[column_number:]
+        # breakpoint()
+        # values = Profile.string_list_2_float_list(file[column_number:])
 
         # breakpoint()
-
-        pass
 
     @property
     def df(self) -> pd.DataFrame:
