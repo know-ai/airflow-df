@@ -136,6 +136,20 @@ class Profile(list):
             point = self.__point(round(x, 3), round(y, 3))
             super(Profile, self).append(point)
 
+    @staticmethod
+    def string_list_2_float_list(val_list: list) -> list:
+        """Converts a list of string numeric values to a list of float values.
+        Returns a list of float values.
+
+        **Parameters**
+
+        **val_list:** (list) string numeric values.
+        """
+        val_list = ''.join(val_list)
+        val_list = val_list.split()
+
+        return list(map(float, val_list))
+
     def set_profile(self, file: str):
         """Set elevation profile
 
@@ -143,27 +157,14 @@ class Profile(list):
 
 - **file:** (str) raw tpl file read
         """
-        def string_list_2_float_list(val_list: list) -> list:
-            """Converts a list of string numeric values to a list of float values.
-            Returns a list of float values.
-
-            **Parameters**
-
-            **val_list:** (list) string numeric values.
-            """
-            val_list = ''.join(val_list)
-            val_list = val_list.split()
-
-            return list(map(float, val_list))
-
         file = file.split('CATALOG')[0]
         file = file.split('\n')[20:]
         file.pop(-1)
 
         sep = int(len(file)/2)
 
-        x_vals = string_list_2_float_list(val_list=file[:sep])
-        y_vals = string_list_2_float_list(val_list=file[sep:])
+        x_vals = self.string_list_2_float_list(val_list=file[:sep])
+        y_vals = self.string_list_2_float_list(val_list=file[sep:])
         points = list(zip(x_vals, y_vals))
 
         for point in points:
@@ -227,6 +228,19 @@ class Data:
 
 - **file:** (str) raw tpl file read
         """
+        # file = file.split('CATALOG')[1]
+        # file = file.split('\n')
+        # file = list(map(lambda el: el.strip(), file))
+        # file = list(filter(None, file))
+
+        # column_number = file[0]
+        # file.remove(column_number)
+        # column_number = int(column_number) + 1
+
+        # columns = file[:column_number]
+        # values = file[column_number:]
+
+        # breakpoint()
 
         pass
 
@@ -316,7 +330,7 @@ class TPL:
 
 - **file:** (str) raw tpl file as string.
         """
-        pass
+        self.data.set_data(file=file)
 
     def read_raw_file(self, filepath: str) -> str:
         """Parses .tpl files into a python string
