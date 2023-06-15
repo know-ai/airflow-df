@@ -264,7 +264,7 @@ class Data:
 
 - **df:** (dict) DataFrame serialized
         """
-        return self.df.to_dict()
+        return self.df.to_dict('list')
 
 
 class TPL:
