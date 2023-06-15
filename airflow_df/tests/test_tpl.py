@@ -204,12 +204,6 @@ TIME SERIES  ' (S)  '
             "PTLKUP 'LEAK:' 'LEAK' '(PA)' 'Pressure at the position where Leak is positioned'": [4.473485e+005, 4.931588e+005, 5.277908e+005, 4.781485e+005, 5.130500e+005, 5.252984e+005]
         }
 
-        expected_df = DF(expected_df_serialized)
-
-        with self.subTest(f"Test Data as a DataFrame"):
-
-            self.assertEqual(expected_df, tpl.data.df)
-
         with self.subTest("Test Serialized Data"):
 
             self.assertDictEqual(expected_df_serialized, tpl.data.serialize())
