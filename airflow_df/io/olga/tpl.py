@@ -138,7 +138,7 @@ class Profile(list):
             super(Profile, self).append(point)
 
     @staticmethod
-    def string_list_2_float_list(val_list: list, join_by:str='') -> list:
+    def string_list_2_float_list(val_list: list, join_by: str = '') -> list:
         """Converts a list of string numeric values to a list of float values.
         Returns a list of float values.
 
@@ -163,7 +163,7 @@ class Profile(list):
         file.pop(-1)
 
         sep = int(len(file)/2)
-        
+
         x_vals = self.string_list_2_float_list(val_list=file[:sep])
         y_vals = self.string_list_2_float_list(val_list=file[sep:])
         points = list(zip(x_vals, y_vals))
@@ -233,7 +233,7 @@ class Data:
         file = file.split('\n')
         file = list(map(lambda el: el.strip(), file))
         file = list(filter(None, file))
-        
+
         column_number = int(file.pop(0)) + 1
         columns = file[:column_number]
         columns.insert(0, columns.pop())
@@ -363,7 +363,11 @@ class TPL:
 
 - **filepath:** (str) .tpl file location
         """
-        pass
+        file = self.read_raw_file(filepath=filepath)
+
+        self.info.set_info(file=file)
+        self.profile.set_profile(file=file)
+        self.data.set_data(file=file)
 
     @property
     def df(self) -> pd.DataFrame:
