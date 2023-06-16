@@ -48,7 +48,7 @@ class OlgaFormatter(list):
 
         return glob.glob(filepath)
 
-    def read(self, filepath) -> pd.DataFrame | list:
+    def read(self, filepath) -> TPL | list:
         """Read .tpl file into a TPL Object Structure
 
 **Parameters**
