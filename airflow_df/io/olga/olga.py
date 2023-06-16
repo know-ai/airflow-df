@@ -6,8 +6,7 @@ from . import TPL
 
 
 class OlgaFormatter(list):
-    r"""
-    Documentation here
+    """Reads and saves the tpl files into a list of TPL objects.
     """
 
     def append(self, tpl: TPL):
