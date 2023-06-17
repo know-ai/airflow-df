@@ -9,6 +9,12 @@ class OlgaFormatter(list):
     """Reads and saves the tpl files into a list of TPL objects.
     """
 
+    def __init__(self):
+        self.tpl = TPL()
+
+    def __reset(self):
+        self.__init__()
+
     def append(self, tpl: TPL):
         """Add tpl to the OlgaFormatter list.
 
@@ -16,11 +22,12 @@ class OlgaFormatter(list):
 
         **tpl:** (TPL) tpl object to be appended.
         """
-        if tpl:
+        if isinstance(tpl, TPL):
             super().append(tpl)
 
-    @staticmethod
-    def read_file(filepath: str) -> TPL:
+        self.__reset()
+
+    def __read_file(self, filepath: str) -> TPL:
         """Reads one tpl file. Retunrs a TPL object.
 
     **Parameters**
@@ -28,10 +35,10 @@ class OlgaFormatter(list):
         **filepath:** (str) Path to the file.
         """
         if os.path.isfile(filepath) & filepath.endswith('.tpl'):
-            tpl = TPL()
-            tpl.read(filepath=filepath)
+            self.tpl.read(filepath=filepath)
 
-            return tpl
+        else:
+            self.tpl = None
 
     @staticmethod
     def get_files(filepath: str) -> list:
@@ -50,7 +57,7 @@ class OlgaFormatter(list):
     def read(self, filepath) -> TPL | list:
         """Read .tpl file into a TPL Object Structure
 
-**Parameters**
+    **Parameters**
 
 -       **filepath:** (str) .tpl file location
         """
@@ -58,13 +65,13 @@ class OlgaFormatter(list):
             files = self.get_files(filepath=filepath)
 
             for file in files:
-                tpl = self.read_file(filepath=file)
+                self.__read_file(filepath=file)
 
-                self.append(tpl)
+                self.append(tpl=self.tpl)
 
             return self
 
-        tpl = self.read_file(filepath=filepath)
-        self.append(tpl)
+        self.__read_file(filepath=filepath)
+        self.append(tpl=self.tpl)
 
-        return tpl
+        return self[0]
