@@ -156,7 +156,7 @@ class Genkey(dict):
         k = [el.split('=')[0].strip() for el in values]
         v = [el.split('=')[1].strip() for el in values]
         k_v = dict(zip(k, v))
-
+        
         pattern = re.compile(r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+')
         for key, val in k_v.items():
             if re.search(r'\(\"\.\./|\(\"\w+', val):
@@ -214,8 +214,14 @@ class Genkey(dict):
                     }
                     continue
 
-            if re.search(r'\d+\.\d+|^[0-9]*$', val):
+            if re.search(r'\d+\.\d+|^[0-9]*$|\(\d+', val):
                 k_v[key] = eval(val)
+                continue
+
+            if re.search(r'\(\w+', val):
+                val = val.strip('(').strip(')')
+                val = [el.strip() for el in val.split(',') if el]
+                k_v[key] = tuple(val)
                 continue
 
             k_v[key] = val.replace('"', '')
