@@ -100,8 +100,8 @@ class Genkey(dict):
         opening_third_key_pattern_2 = re.compile(r'^[A-Z]+\=\(')
         third_key_pattern = re.compile(r'^[A-Z]+\=')
         closing_third_key_pattern = re.compile(r'\)$|\)\s.+$')
-
-        for el in line.split(', '):
+        
+        for n, el in enumerate(line.split(', ')):
             if second_key_pattern.search(el):
                 splited_line = el.split(' ')
                 clean_line.append(splited_line[0])
@@ -121,13 +121,17 @@ class Genkey(dict):
                 continue
 
             if third_key_pattern.search(el):
+                if n + 1 == len(line.split(', ')):
+                    clean_line.append(el)
+                    continue
+
                 if re.search(r'^INFO', el):
                     _info = el
                     continue
 
                 clean_line.append(el)
                 continue
-
+            
             if re.search(r'^INFO', _info):
                 _info = _info + ', ' + el
                 clean_line.append(_info)
@@ -142,7 +146,7 @@ class Genkey(dict):
                     clean_line.append(_el)
                     _el = ''
                     flag = False
-
+        
         return clean_line
 
     def get_dict_values(self, values: list):
@@ -286,5 +290,5 @@ class Genkey(dict):
         for key, val in self.items():
             if val == {}:
                 self[key] = None
-
+        
         return self
