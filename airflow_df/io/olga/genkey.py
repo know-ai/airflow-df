@@ -1,6 +1,7 @@
 import os
 import re
 
+
 class Genkey(dict):
 
     def __init__(self, *args, **kwargs):
@@ -100,7 +101,7 @@ class Genkey(dict):
         opening_third_key_pattern_2 = re.compile(r'^[A-Z]+\=\(')
         third_key_pattern = re.compile(r'^[A-Z]+\=')
         closing_third_key_pattern = re.compile(r'\)$|\)\s.+$')
-        
+
         for n, el in enumerate(line.split(', ')):
             if second_key_pattern.search(el):
                 splited_line = el.split(' ')
@@ -131,7 +132,7 @@ class Genkey(dict):
 
                 clean_line.append(el)
                 continue
-            
+
             if re.search(r'^INFO', _info):
                 _info = _info + ', ' + el
                 clean_line.append(_info)
@@ -146,7 +147,7 @@ class Genkey(dict):
                     clean_line.append(_el)
                     _el = ''
                     flag = False
-        
+
         return clean_line
 
     def get_dict_values(self, values: list):
@@ -156,7 +157,7 @@ class Genkey(dict):
         k = [el.split('=')[0].strip() for el in values]
         v = [el.split('=')[1].strip() for el in values]
         k_v = dict(zip(k, v))
-        
+
         pattern = re.compile(r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+')
         for key, val in k_v.items():
             if re.search(r'\(\"\.\./|\(\"\w+', val):
@@ -224,6 +225,16 @@ class Genkey(dict):
                 k_v[key] = tuple(val)
                 continue
 
+            if re.search(r'\d+\ \W+', val):
+                val = val.strip().split()
+                VALUE = eval(val[0])
+                UNIT = val[-1]
+                k_v[key] = {
+                    'VALUE': VALUE,
+                    'UNIT': UNIT
+                }
+                continue
+
             k_v[key] = val.replace('"', '')
 
         return k_v
@@ -233,7 +244,7 @@ class Genkey(dict):
         """
         assert isinstance(
             filepath, str), f'filepath must be a string! Not {type(filepath)}'
-        
+
         try:
 
             with open(filepath, 'r') as f:
@@ -296,5 +307,5 @@ class Genkey(dict):
         for key, val in self.items():
             if val == {}:
                 self[key] = None
-        
+
         return self
