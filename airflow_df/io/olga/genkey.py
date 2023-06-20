@@ -1,6 +1,7 @@
 import os
 import re
 
+
 class Genkey(dict):
 
     def __init__(self, *args, **kwargs):
@@ -101,7 +102,7 @@ class Genkey(dict):
         third_key_pattern = re.compile(r'^[A-Z]+\=')
         closing_third_key_pattern = re.compile(r'\)$|\)\s.+$')
 
-        for el in line.split(', '):
+        for n, el in enumerate(line.split(', ')):
             if second_key_pattern.search(el):
                 splited_line = el.split(' ')
                 clean_line.append(splited_line[0])
@@ -121,6 +122,10 @@ class Genkey(dict):
                 continue
 
             if third_key_pattern.search(el):
+                if n + 1 == len(line.split(', ')):
+                    clean_line.append(el)
+                    continue
+
                 if re.search(r'^INFO', el):
                     _info = el
                     continue
@@ -210,8 +215,24 @@ class Genkey(dict):
                     }
                     continue
 
-            if re.search(r'\d+\.\d+|^[0-9]*$', val):
+            if re.search(r'\d+\.\d+|^[0-9]*$|\(\d+', val):
                 k_v[key] = eval(val)
+                continue
+
+            if re.search(r'\(\w+', val):
+                val = val.strip('(').strip(')')
+                val = [el.strip() for el in val.split(',') if el]
+                k_v[key] = tuple(val)
+                continue
+
+            if re.search(r'\d+\ \W+', val):
+                val = val.strip().split()
+                VALUE = eval(val[0])
+                UNIT = val[-1]
+                k_v[key] = {
+                    'VALUE': VALUE,
+                    'UNIT': UNIT
+                }
                 continue
 
             k_v[key] = val.replace('"', '')
@@ -223,7 +244,7 @@ class Genkey(dict):
         """
         assert isinstance(
             filepath, str), f'filepath must be a string! Not {type(filepath)}'
-        
+
         try:
 
             with open(filepath, 'r') as f:

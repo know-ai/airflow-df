@@ -906,6 +906,28 @@ class TestGenkey(unittest.TestCase):
                 {
                     'NETWORKCOMPONENT': {
                         'TYPE': 'MANUALCONTROLLER',
+                        'TAG': 'MANUALCONTROLLER_4'
+                    },
+                    'PARAMETERS': {
+                        'LABEL': 'Control-TKin', 
+                        'TIME': {
+                            'VALUE': 0,
+                            'UNIT': 's'
+                        },
+                        'SETPOINT': 0.7884,
+                        'OPENINGTIME': {
+                            'VALUE': 10,
+                            'UNIT': 's'
+                        },
+                        'CLOSINGTIME': {
+                            'VALUE': 124.24933,
+                            'UNIT': 's'
+                        }
+                    }
+                },
+                {
+                    'NETWORKCOMPONENT': {
+                        'TYPE': 'MANUALCONTROLLER',
                         'TAG': 'MANUALCONTROLLER_5'
                     },
                     'PARAMETERS': {
