@@ -29,7 +29,7 @@ class TestOlga(unittest.TestCase):
         olga = OlgaFormatter()
         filepath = os.path.join("data", "olga", "1.tpl")
         olga.read(filepath=filepath)
-
+        
         for item in olga:
 
             with self.subTest(f"Test Info Item"):
@@ -95,7 +95,7 @@ class TestOlga(unittest.TestCase):
         olga = OlgaFormatter()
         filepath = os.path.join("data", "olga")
         files = olga.read(filepath=filepath)
-
+        
         # Expected Values
         ## Expected Info
         expected_info = [
@@ -208,5 +208,5 @@ class TestOlga(unittest.TestCase):
                 self.assertDictEqual(item.profile.serialize(), expected_profiles[counter])
 
             with self.subTest(f"Test Data Structure Item"):
-
+                
                 self.assertDictEqual(item.data.serialize(), expected_data[counter])
