@@ -3,6 +3,8 @@ import re
 
 
 class Genkey(dict):
+    """This class takes the genkey file and saves it into a Python dictionary.
+    """
 
     def __init__(self, *args, **kwargs):
         self.__previous_line = None
@@ -44,7 +46,8 @@ class Genkey(dict):
 
         return self._keys
 
-    def clean_lines(self, lines: str):
+    @staticmethod
+    def __clean_lines(lines: str) -> list:
         """Documentation here
         """
         # Append lines when it has \\
@@ -88,7 +91,8 @@ class Genkey(dict):
 
         return fixed_lines
 
-    def split_values(self, line):
+    @staticmethod
+    def __split_values(line: str) -> list:
         """Documentation here
         """
         _info = ''
@@ -239,44 +243,63 @@ class Genkey(dict):
 
         return k_v
 
+    @staticmethod
+    def __search_by_regex(regex: str, string: str) -> re.Match:
+
+        regex = re.compile(regex)
+
+        return regex.search(string)
+
+    @staticmethod
+    def __clean_empty_spaces(string: str, join_by: str = '') -> str:
+
+        return join_by.join([character.strip() for character
+                            in string.split(join_by)])
+
+    @staticmethod
+    def __read_file(filepath: str) -> str:
+
+        with open(filepath, 'r') as file:
+            genkey_file = file.read()
+
+        return genkey_file
+
     def read(self, filepath: str):
-        """Documentstion here
+        """Reads and process a genkey file. Retunrs a Genkey object.
+
+    **Parameters**
+
+        **filepath:** (str) Path to the file.
         """
         assert isinstance(
             filepath, str), f'filepath must be a string! Not {type(filepath)}'
 
-        try:
-
-            with open(filepath, 'r') as f:
-                file = f.read()
-
-        except:
-
-            with open(os.path.sep + os.path.join(filepath), 'r') as f:
-                file = f.read()
+        file = self.__read_file(filepath=filepath)
 
         # Splitting Genkey in principal elements
-        split_genkey_elements_pattern = re.compile('\s\n')
         genkey_elements = []
-
-        for element in split_genkey_elements_pattern.split(file):
+        for element in re.split(r'\s\n', file):
             genkey_elements.append(element)
 
         # Getting first level and second level Genkey keys
-        first_level_key_pattern = re.compile('!\s\w+.+')
         first_level_keys = []
         second_level_keys = []
 
         for el in genkey_elements:
-            genkey_element = ' '.join([c.strip() for c in el.split(' ')])
-            _first_level_key = first_level_key_pattern.search(genkey_element)
 
-            if _first_level_key:
-                first_level_key = _first_level_key.group().replace('!', '').strip()
+            # Finding first-level keys in the genkey file's splitted line
+            genkey_element = self.__clean_empty_spaces(string=el, join_by=' ')
+            first_level_key = self.__search_by_regex(
+                regex=r'!\s\w+.+', string=genkey_element)
+
+            if first_level_key:
+
+                # Remove '!' from the begining of first-level key string
+                first_level_key = first_level_key.group().replace('!', '').strip()
                 first_level_keys.append(first_level_key)
 
-                lines = self.clean_lines(el)
-                elements = list(map(self.split_values, lines))
+                lines = self.__clean_lines(el)
+                elements = list(map(self.__split_values, lines))
                 second_keys = [el[0] for el in elements]
                 list_values = [el[1:] for el in elements]
                 values = list(map(self.get_dict_values, list_values))
