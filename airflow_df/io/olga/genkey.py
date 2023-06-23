@@ -154,12 +154,21 @@ class Genkey(dict):
 
         return clean_line
 
-    def get_dict_values(self, values: list):
-        '''
-        Documentation here
-        '''
-        k = [el.split('=')[0].strip() for el in values]
-        v = [el.split('=')[1].strip() for el in values]
+    def list_of_strings_2_dict(self, key_values: list):
+        """Converts a list of strings into a dictionary.
+
+        It takes a list of strings as follows:
+            ['Key1=value', 'key2=value2', 'key3=value3']
+        And returns a dictionary as follows:
+            {'Key1':'value', 'key2':'value2', 'key3':'value3'}
+
+    **Parameters**
+
+        **key_values:** (list) List of strings. Each string represents a key-value pair separated by an equal sign.
+        """
+        # breakpoint()
+        k = [el.split('=')[0].strip() for el in key_values]
+        v = [el.split('=')[1].strip() for el in key_values]
         k_v = dict(zip(k, v))
 
         pattern = re.compile(r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+')
@@ -275,7 +284,7 @@ class Genkey(dict):
         **dict_elements:** (list) List of tuples. The first element is the key and the second one its value.
         """
         # Convert list of strings into a list of dictionaries
-        values = list(map(self.get_dict_values,
+        values = list(map(self.list_of_strings_2_dict,
                           dict_elements[1]))
         key_vals_list = list(zip(dict_elements[0], values))
 
