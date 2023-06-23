@@ -244,9 +244,12 @@ class Genkey(dict):
         return k_v
 
     def __build_dictionary(self, key_vals_list: list) -> dict:
-        """
-        """
+        """Builds a dictionary from a list containing tuples with keys and values. Returns a dictionary.
 
+    **Parameters**
+
+        **key_vals_list:** (list) List of tuples. The first element is the key and the second one its value.
+        """
         self.clear()
 
         # Creating list of second level keys for duplicated first level keys
@@ -265,7 +268,13 @@ class Genkey(dict):
         return self
 
     def __get_second_level_dictionary(self, dict_elements: tuple) -> dict:
+        """Builds a dictionary from a list containing tuples with keys and values. Returns a dictionary.
 
+    **Parameters**
+
+        **dict_elements:** (list) List of tuples. The first element is the key and the second one its value.
+        """
+        # Convert list of strings into a list of dictionaries
         values = list(map(self.get_dict_values,
                           dict_elements[1]))
         key_vals_list = list(zip(dict_elements[0], values))
@@ -279,9 +288,8 @@ class Genkey(dict):
 
     **Parameters**
 
-    **lines:** (list) List of lines of the text block belonging to the genkey's first-level key. 
+        **lines:** (list) List of lines of the text block belonging to the genkey's first-level key. 
         """
-
         elements = list(map(self.__split_elements, lines))
         second_level_keys = [el[0] for el in elements]
         second_level_values = [el[1:] for el in elements]
@@ -326,9 +334,8 @@ class Genkey(dict):
         for element in re.split(r'\s\n', file):
             genkey_elements.append(element)
 
-        # Getting first level and second level Genkey keys
         first_level_keys = []
-        second_level_keys = []
+        second_level_keys_and_vals = []
 
         for element in genkey_elements:
 
@@ -350,13 +357,12 @@ class Genkey(dict):
                 # Convert each line into a dictionary
                 second_level_elements = self.__get_second_level_key_val_lists(
                     lines=lines)
-
                 second_level_dict = self.__get_second_level_dictionary(
                     dict_elements=second_level_elements)
 
-                second_level_keys.append(second_level_dict.copy())
+                second_level_keys_and_vals.append(second_level_dict.copy())
 
         # Putting together first and second level keys
-        genkey_keys = list(zip(first_level_keys, second_level_keys))
+        genkey_keys = list(zip(first_level_keys, second_level_keys_and_vals))
 
         return self.__build_dictionary(key_vals_list=genkey_keys)
