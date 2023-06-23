@@ -92,7 +92,7 @@ class Genkey(dict):
         return fixed_lines
 
     @staticmethod
-    def __split_values(line: str) -> list:
+    def __split_elements(line: str) -> list:
         """Documentation here
         """
         _info = ''
@@ -243,8 +243,53 @@ class Genkey(dict):
 
         return k_v
 
+    def __build_dictionary(self, key_vals_list: list) -> dict:
+        """
+        """
+
+        self.clear()
+
+        # Creating list of second level keys for duplicated first level keys
+        for key in key_vals_list:
+            self.setdefault(key[0], []).append(key[1])
+
+        # Extracting second level keys from list if first level key is not duplicated.
+        for key, val in self.items():
+            if len(val) == 1:
+                self[key] = self.get(key)[0]
+
+        for key, val in self.items():
+            if val == {}:
+                self[key] = None
+
+        return self
+
+    def __get_second_level_dictionary(self, dict_elements: tuple) -> dict:
+
+        values = list(map(self.get_dict_values,
+                          dict_elements[1]))
+        key_vals_list = list(zip(dict_elements[0], values))
+
+        return self.__build_dictionary(key_vals_list=key_vals_list)
+
+    def __get_second_level_key_val_lists(self, lines: list) -> tuple:
+        """Splits a list of lines of genkey text and saves them into two lists. 
+        Returns a tuple with each value are the lists.
+        The first one is the genkey's second-level keys, and the second one is its values.
+
+    **Parameters**
+
+    **lines:** (list) List of lines of the text block belonging to the genkey's first-level key. 
+        """
+
+        elements = list(map(self.__split_elements, lines))
+        second_level_keys = [el[0] for el in elements]
+        second_level_values = [el[1:] for el in elements]
+
+        return second_level_keys, second_level_values
+
     @staticmethod
-    def __search_by_regex(regex: str, string: str) -> re.Match:
+    def __search_by_regex(regex: str, string: str) -> re.Match | None:
 
         regex = re.compile(regex)
 
@@ -285,50 +330,33 @@ class Genkey(dict):
         first_level_keys = []
         second_level_keys = []
 
-        for el in genkey_elements:
+        for element in genkey_elements:
 
             # Finding first-level keys in the genkey file's splitted line
-            genkey_element = self.__clean_empty_spaces(string=el, join_by=' ')
+            genkey_element = self.__clean_empty_spaces(
+                string=element, join_by=' ')
             first_level_key = self.__search_by_regex(
                 regex=r'!\s\w+.+', string=genkey_element)
 
             if first_level_key:
 
-                # Remove '!' from the begining of first-level key string
+                # Remove '!' from the begining of first-level key string.
+                # That's because it is distinctive of them.
                 first_level_key = first_level_key.group().replace('!', '').strip()
                 first_level_keys.append(first_level_key)
 
-                lines = self.__clean_lines(el)
-                elements = list(map(self.__split_values, lines))
-                second_keys = [el[0] for el in elements]
-                list_values = [el[1:] for el in elements]
-                values = list(map(self.get_dict_values, list_values))
-                key_vals_list = list(zip(second_keys, values))
+                lines = self.__clean_lines(element)
 
-                key_vals_dict = {}
-                for key in key_vals_list:
-                    key_vals_dict.setdefault(key[0], []).append(key[1])
+                # Convert each line into a dictionary
+                second_level_elements = self.__get_second_level_key_val_lists(
+                    lines=lines)
 
-                for key, val in key_vals_dict.items():
-                    if len(val) == 1:
-                        key_vals_dict[key] = key_vals_dict.get(key)[0]
+                second_level_dict = self.__get_second_level_dictionary(
+                    dict_elements=second_level_elements)
 
-                second_level_keys.append(key_vals_dict)
+                second_level_keys.append(second_level_dict.copy())
 
         # Putting together first and second level keys
         genkey_keys = list(zip(first_level_keys, second_level_keys))
 
-        # Creating list of second level keys for duplicated first level keys
-        for key in genkey_keys:
-            self.setdefault(key[0], []).append(key[1])
-
-        # Extracting second level keys from list if first level key is not duplicated.
-        for key, val in self.items():
-            if len(val) == 1:
-                self[key] = self.get(key)[0]
-
-        for key, val in self.items():
-            if val == {}:
-                self[key] = None
-
-        return self
+        return self.__build_dictionary(key_vals_list=genkey_keys)
