@@ -154,6 +154,10 @@ class Genkey(dict):
 
         return clean_line
 
+    @staticmethod
+    def __group_key_and_vals(keys: list, vals: list) -> list:
+        return list(zip(keys, vals))
+
     def list_of_strings_2_dict(self, key_values: list):
         """Converts a list of strings into a dictionary.
 
@@ -167,26 +171,29 @@ class Genkey(dict):
         **key_values:** (list) List of strings. Each string represents a key-value pair separated by an equal sign.
         """
         # breakpoint()
-        k = [el.split('=')[0].strip() for el in key_values]
-        v = [el.split('=')[1].strip() for el in key_values]
-        k_v = dict(zip(k, v))
+        keys = [element.split('=')[0].strip() for element in key_values]
+        vals = [element.split('=')[1].strip() for element in key_values]
+
+        key_vals_list = self.__group_key_and_vals(keys=keys, vals=vals)
+        self.__build_dictionary(key_vals_list=key_vals_list)
 
         pattern = re.compile(r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+')
-        for key, val in k_v.items():
+        for key, val in self.items():
+
             if re.search(r'\(\"\.\./|\(\"\w+', val):
                 val = [e.replace('"', '').replace('(', '').replace(')', '').strip()
                        for e in val.split(',')]
                 val = tuple(val)
-                k_v[key] = val
+                self[key] = val
                 continue
 
             if re.search(r'^INFO', key):
                 val = val.replace('"', '')
-                k_v[key] = val
+                self[key] = val
                 continue
 
             if re.search(r'PVTFILE', key) and not re.search(r'\(\"\.\./|\(\"\w+', val):
-                k_v[key] = val.replace('"', '')
+                self[key] = val.replace('"', '')
                 continue
 
             if pattern.search(val):
@@ -210,47 +217,47 @@ class Genkey(dict):
                             n = 0
                             continue
                     VALUE = tuple(_val)
-                    k_v[key] = VALUE
+                    self[key] = VALUE
                     continue
-                else:
-                    val = val.split(' ')
-                    VALUE = ' '.join([el for el in val[:-1]])
-                    UNIT = val[-1]
-                    plural = False
-                    VALUE = eval(VALUE)
 
-                    if isinstance(VALUE, tuple):
-                        plural = True
+                val = val.split(' ')
+                VALUE = ' '.join([el for el in val[:-1]])
+                UNIT = val[-1]
+                plural = False
+                VALUE = eval(VALUE)
 
-                    k_v[key] = {
-                        f'VALUE{"S" if plural else ""}': VALUE,
-                        'UNIT': UNIT.strip(',')
-                    }
-                    continue
+                if isinstance(VALUE, tuple):
+                    plural = True
+
+                self[key] = {
+                    f'VALUE{"S" if plural else ""}': VALUE,
+                    'UNIT': UNIT.strip(',')
+                }
+                continue
 
             if re.search(r'\d+\.\d+|^[0-9]*$|\(\d+', val):
-                k_v[key] = eval(val)
+                self[key] = eval(val)
                 continue
 
             if re.search(r'\(\w+', val):
                 val = val.strip('(').strip(')')
                 val = [el.strip() for el in val.split(',') if el]
-                k_v[key] = tuple(val)
+                self[key] = tuple(val)
                 continue
 
             if re.search(r'\d+\ \W+', val):
                 val = val.strip().split()
                 VALUE = eval(val[0])
                 UNIT = val[-1]
-                k_v[key] = {
+                self[key] = {
                     'VALUE': VALUE,
                     'UNIT': UNIT
                 }
                 continue
 
-            k_v[key] = val.replace('"', '')
+            self[key] = val.replace('"', '')
 
-        return k_v
+        return self.copy()
 
     def __build_dictionary(self, key_vals_list: list) -> dict:
         """Builds a dictionary from a list containing tuples with keys and values. Returns a dictionary.
@@ -286,7 +293,9 @@ class Genkey(dict):
         # Convert list of strings into a list of dictionaries
         values = list(map(self.list_of_strings_2_dict,
                           dict_elements[1]))
-        key_vals_list = list(zip(dict_elements[0], values))
+
+        key_vals_list = self.__group_key_and_vals(
+            keys=dict_elements[0], vals=values)
 
         return self.__build_dictionary(key_vals_list=key_vals_list)
 
@@ -372,6 +381,7 @@ class Genkey(dict):
                 second_level_keys_and_vals.append(second_level_dict.copy())
 
         # Putting together first and second level keys
-        genkey_keys = list(zip(first_level_keys, second_level_keys_and_vals))
+        genkey_keys = self.__group_key_and_vals(
+            keys=first_level_keys, vals=second_level_keys_and_vals)
 
         return self.__build_dictionary(key_vals_list=genkey_keys)
