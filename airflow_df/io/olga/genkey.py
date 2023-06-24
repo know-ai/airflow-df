@@ -1,5 +1,6 @@
 import os
 import re
+import ast
 
 
 class Genkey(dict):
@@ -237,7 +238,7 @@ class Genkey(dict):
                 VALUE = ' '.join([el for el in val[:-1]])
                 UNIT = val[-1]
                 plural = False
-                VALUE = eval(VALUE)
+                VALUE = ast.literal_eval(VALUE)
 
                 if isinstance(VALUE, tuple):
                     plural = True
@@ -249,7 +250,7 @@ class Genkey(dict):
                 continue
 
             if THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN.search(val):
-                self[key] = eval(val)
+                self[key] = ast.literal_eval(val)
                 continue
 
             if THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN.search(val):
