@@ -159,7 +159,7 @@ class Genkey(dict):
     def __group_key_and_vals(keys: list, vals: list) -> list:
         return list(zip(keys, vals))
 
-    def list_of_strings_2_dict(self, key_values: list):
+    def __list_of_strings_2_dict(self, key_values: list):
         """Converts a list of strings into a dictionary.
 
         It takes a list of strings as follows:
@@ -171,7 +171,6 @@ class Genkey(dict):
 
         **key_values:** (list) List of strings. Each string represents a key-value pair separated by an equal sign.
         """
-        # breakpoint()
         keys = [element.split('=')[0].strip() for element in key_values]
         vals = [element.split('=')[1].strip() for element in key_values]
 
@@ -305,7 +304,7 @@ class Genkey(dict):
         **dict_elements:** (list) List of tuples. The first element is the key and the second one its value.
         """
         # Convert list of strings into a list of dictionaries
-        values = list(map(self.list_of_strings_2_dict,
+        values = list(map(self.__list_of_strings_2_dict,
                           dict_elements[1]))
 
         key_vals_list = self.__group_key_and_vals(
