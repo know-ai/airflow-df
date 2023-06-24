@@ -181,10 +181,19 @@ class Genkey(dict):
         THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
         THIRD_LEVEL_KEY_PVTFILE_PATTERN = re.compile(r'PVTFILE')
 
-        pattern = re.compile(r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+')
+        THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN = re.compile(
+            r'\(\"\.\./|\(\"\w+')
+        THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN = re.compile(r'\(\w+')
+        # THIRD_LEVEL_NUMBER_PLUS_CHARACTER_VALUE_PATTERN = re.compile(
+        #     r'\d+\ \W+')
+        THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN = re.compile(
+            r'\d+\.\d+|^[0-9]*$|\(\d+')
+        THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT = re.compile(
+            r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+|\d+\ \W+')
+
         for key, val in self.items():
 
-            if re.search(r'\(\"\.\./|\(\"\w+', val):
+            if THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN.search(val):
                 val = [e.replace('"', '').replace('(', '').replace(')', '').strip()
                        for e in val.split(',')]
                 val = tuple(val)
@@ -196,11 +205,11 @@ class Genkey(dict):
                 self[key] = val
                 continue
 
-            if re.search(r'PVTFILE', key) and not re.search(r'\(\"\.\./|\(\"\w+', val):
+            if THIRD_LEVEL_KEY_PVTFILE_PATTERN.search(key):
                 self[key] = val.replace('"', '')
                 continue
 
-            if pattern.search(val):
+            if THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT.search(val):
                 if THIRD_LEVEL_KEY_TERMINALS_PATTERN.search(key):
                     val = val.replace('(', '').replace(')',
                                                        '').replace(',', '')
@@ -224,7 +233,7 @@ class Genkey(dict):
                     self[key] = VALUE
                     continue
 
-                val = val.split(' ')
+                val = val.strip().split(' ')
                 VALUE = ' '.join([el for el in val[:-1]])
                 UNIT = val[-1]
                 plural = False
@@ -239,25 +248,25 @@ class Genkey(dict):
                 }
                 continue
 
-            if re.search(r'\d+\.\d+|^[0-9]*$|\(\d+', val):
+            if THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN.search(val):
                 self[key] = eval(val)
                 continue
 
-            if re.search(r'\(\w+', val):
+            if THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN.search(val):
                 val = val.strip('(').strip(')')
                 val = [el.strip() for el in val.split(',') if el]
                 self[key] = tuple(val)
                 continue
 
-            if re.search(r'\d+\ \W+', val):
-                val = val.strip().split()
-                VALUE = eval(val[0])
-                UNIT = val[-1]
-                self[key] = {
-                    'VALUE': VALUE,
-                    'UNIT': UNIT
-                }
-                continue
+            # if THIRD_LEVEL_NUMBER_PLUS_CHARACTER_VALUE_PATTERN.search(val):
+            #     val = val.strip().split()
+            #     VALUE = eval(val[0])
+            #     UNIT = val[-1]
+            #     self[key] = {
+            #         'VALUE': VALUE,
+            #         'UNIT': UNIT
+            #     }
+            #     continue
 
             self[key] = val.replace('"', '')
 
