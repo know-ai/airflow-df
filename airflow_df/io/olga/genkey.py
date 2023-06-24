@@ -177,6 +177,10 @@ class Genkey(dict):
         key_vals_list = self.__group_key_and_vals(keys=keys, vals=vals)
         self.__build_dictionary(key_vals_list=key_vals_list)
 
+        THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
+        THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
+        THIRD_LEVEL_KEY_PVTFILE_PATTERN = re.compile(r'PVTFILE')
+
         pattern = re.compile(r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+')
         for key, val in self.items():
 
@@ -187,7 +191,7 @@ class Genkey(dict):
                 self[key] = val
                 continue
 
-            if re.search(r'^INFO', key):
+            if THIRD_LEVEL_KEY_INFO_PATTERN.search(key):
                 val = val.replace('"', '')
                 self[key] = val
                 continue
@@ -197,7 +201,7 @@ class Genkey(dict):
                 continue
 
             if pattern.search(val):
-                if re.search(r'TERMINALS', key):
+                if THIRD_LEVEL_KEY_TERMINALS_PATTERN.search(key):
                     val = val.replace('(', '').replace(')',
                                                        '').replace(',', '')
                     val = [e.strip() for e in val.split(' ')]
@@ -315,14 +319,6 @@ class Genkey(dict):
         return second_level_keys, second_level_values
 
     @staticmethod
-    def __search_by_regex(regex: str | re.Pattern, string: str) -> re.Match | None:
-
-        if isinstance(regex, str):
-            regex = re.compile(regex)
-
-        return regex.search(string)
-
-    @staticmethod
     def __clean_empty_spaces(string: str, join_by: str = '') -> str:
 
         return join_by.join([character.strip() for character
@@ -364,8 +360,8 @@ class Genkey(dict):
             # Finding first-level keys in the genkey file's splitted line
             genkey_element = self.__clean_empty_spaces(
                 string=element, join_by=' ')
-            first_level_key = self.__search_by_regex(
-                regex=GENKEY_FIRST_LEVEL_KEY_PATTERN, string=genkey_element)
+            first_level_key = GENKEY_FIRST_LEVEL_KEY_PATTERN.search(
+                genkey_element)
 
             if first_level_key:
 
