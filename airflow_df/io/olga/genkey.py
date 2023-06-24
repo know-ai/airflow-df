@@ -176,7 +176,7 @@ class Genkey(dict):
         vals = [element.split('=')[1].strip() for element in key_values]
 
         key_vals_list = self.__group_key_and_vals(keys=keys, vals=vals)
-        self.__build_dictionary(key_vals_list=key_vals_list)
+        third_level_dict = self.__build_dictionary(key_vals_list=key_vals_list)
 
         THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
         THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
@@ -192,22 +192,22 @@ class Genkey(dict):
         THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT = re.compile(
             r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+|\d+\ \W+')
 
-        for key, val in self.items():
+        for key, val in third_level_dict.items():
 
             if THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN.search(val):
                 val = [e.replace('"', '').replace('(', '').replace(')', '').strip()
                        for e in val.split(',')]
                 val = tuple(val)
-                self[key] = val
+                third_level_dict[key] = val
                 continue
 
             if THIRD_LEVEL_KEY_INFO_PATTERN.search(key):
                 val = val.replace('"', '')
-                self[key] = val
+                third_level_dict[key] = val
                 continue
 
             if THIRD_LEVEL_KEY_PVTFILE_PATTERN.search(key):
-                self[key] = val.replace('"', '')
+                third_level_dict[key] = val.replace('"', '')
                 continue
 
             if THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT.search(val):
@@ -231,7 +231,7 @@ class Genkey(dict):
                             n = 0
                             continue
                     VALUE = tuple(_val)
-                    self[key] = VALUE
+                    third_level_dict[key] = VALUE
                     continue
 
                 val = val.strip().split(' ')
@@ -243,20 +243,20 @@ class Genkey(dict):
                 if isinstance(VALUE, tuple):
                     plural = True
 
-                self[key] = {
+                third_level_dict[key] = {
                     f'VALUE{"S" if plural else ""}': VALUE,
                     'UNIT': UNIT.strip(',')
                 }
                 continue
 
             if THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN.search(val):
-                self[key] = ast.literal_eval(val)
+                third_level_dict[key] = ast.literal_eval(val)
                 continue
 
             if THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN.search(val):
                 val = val.strip('(').strip(')')
                 val = [el.strip() for el in val.split(',') if el]
-                self[key] = tuple(val)
+                third_level_dict[key] = tuple(val)
                 continue
 
             # if THIRD_LEVEL_NUMBER_PLUS_CHARACTER_VALUE_PATTERN.search(val):
@@ -269,9 +269,9 @@ class Genkey(dict):
             #     }
             #     continue
 
-            self[key] = val.replace('"', '')
+            third_level_dict[key] = val.replace('"', '')
 
-        return self.copy()
+        return third_level_dict
 
     def __build_dictionary(self, key_vals_list: list) -> dict:
         """Builds a dictionary from a list containing tuples with keys and values. Returns a dictionary.
@@ -295,7 +295,7 @@ class Genkey(dict):
             if val == {}:
                 self[key] = None
 
-        return self
+        return self.copy()
 
     def __get_second_level_dictionary(self, dict_elements: tuple) -> dict:
         """Builds a dictionary from a list containing tuples with keys and values. Returns a dictionary.
@@ -388,7 +388,7 @@ class Genkey(dict):
                 second_level_dict = self.__get_second_level_dictionary(
                     dict_elements=second_level_elements)
 
-                second_level_keys_and_vals.append(second_level_dict.copy())
+                second_level_keys_and_vals.append(second_level_dict)
 
         # Putting together first and second level keys
         genkey_keys = self.__group_key_and_vals(
