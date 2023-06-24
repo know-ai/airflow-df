@@ -315,9 +315,10 @@ class Genkey(dict):
         return second_level_keys, second_level_values
 
     @staticmethod
-    def __search_by_regex(regex: str, string: str) -> re.Match | None:
+    def __search_by_regex(regex: str | re.Pattern, string: str) -> re.Match | None:
 
-        regex = re.compile(regex)
+        if isinstance(regex, str):
+            regex = re.compile(regex)
 
         return regex.search(string)
 
@@ -347,9 +348,12 @@ class Genkey(dict):
 
         file = self.__read_file(filepath=filepath)
 
+        GENKEY_PRINCIPAL_ELEMENT_PATTERN = re.compile(r'\s\n')
+        GENKEY_FIRST_LEVEL_KEY_PATTERN = re.compile(r'!\s\w+.+')
+
         # Splitting Genkey in principal elements
         genkey_elements = []
-        for element in re.split(r'\s\n', file):
+        for element in GENKEY_PRINCIPAL_ELEMENT_PATTERN.split(file):
             genkey_elements.append(element)
 
         first_level_keys = []
@@ -361,7 +365,7 @@ class Genkey(dict):
             genkey_element = self.__clean_empty_spaces(
                 string=element, join_by=' ')
             first_level_key = self.__search_by_regex(
-                regex=r'!\s\w+.+', string=genkey_element)
+                regex=GENKEY_FIRST_LEVEL_KEY_PATTERN, string=genkey_element)
 
             if first_level_key:
 
