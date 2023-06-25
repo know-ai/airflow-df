@@ -156,7 +156,16 @@ class Genkey(dict):
         return clean_line
 
     @staticmethod
-    def __group_key_and_vals(keys: list, vals: list) -> list:
+    def group_key_and_vals(keys: list, vals: list) -> list:
+        """Zips together dictionary keys and their values.
+        Returns a list of tuples where the first element in each tuple is the key
+        and the second one is its value.
+
+    **Parameters**
+
+        **keys:** (list) List of keys.
+        **vals:** (list) List of values.
+        """
         return list(zip(keys, vals))
 
     def __list_of_strings_2_dict(self, key_values: list):
@@ -174,7 +183,7 @@ class Genkey(dict):
         keys = [element.split('=')[0].strip() for element in key_values]
         vals = [element.split('=')[1].strip() for element in key_values]
 
-        key_vals_list = self.__group_key_and_vals(keys=keys, vals=vals)
+        key_vals_list = self.group_key_and_vals(keys=keys, vals=vals)
         third_level_dict = self.__build_dictionary(key_vals_list=key_vals_list)
 
         THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
@@ -194,6 +203,7 @@ class Genkey(dict):
         for key, val in third_level_dict.items():
 
             if THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN.search(val):
+                breakpoint()
                 val = [e.replace('"', '').replace('(', '').replace(')', '').strip()
                        for e in val.split(',')]
                 val = tuple(val)
@@ -307,7 +317,7 @@ class Genkey(dict):
         values = list(map(self.__list_of_strings_2_dict,
                           dict_elements[1]))
 
-        key_vals_list = self.__group_key_and_vals(
+        key_vals_list = self.group_key_and_vals(
             keys=dict_elements[0], vals=values)
 
         return self.__build_dictionary(key_vals_list=key_vals_list)
@@ -328,7 +338,14 @@ class Genkey(dict):
         return second_level_keys, second_level_values
 
     @staticmethod
-    def __clean_empty_spaces(string: str, join_by: str = '') -> str:
+    def clean_empty_spaces(string: str, join_by: str = '') -> str:
+        """Cleans the empty spaces in a string. Returns a string without empty spaces.
+
+    **Parameters**
+
+        **string:** (str) String with empty spaces.
+        **join_by:** (str) String to join the stripped string.
+        """
 
         return join_by.join([character.strip() for character
                             in string.split(join_by)])
@@ -367,7 +384,7 @@ class Genkey(dict):
         for element in genkey_elements:
 
             # Finding first-level keys in the genkey file's splitted line
-            genkey_element = self.__clean_empty_spaces(
+            genkey_element = self.clean_empty_spaces(
                 string=element, join_by=' ')
             first_level_key = GENKEY_FIRST_LEVEL_KEY_PATTERN.search(
                 genkey_element)
@@ -390,7 +407,7 @@ class Genkey(dict):
                 second_level_keys_and_vals.append(second_level_dict)
 
         # Putting together first and second level keys
-        genkey_keys = self.__group_key_and_vals(
+        genkey_keys = self.group_key_and_vals(
             keys=first_level_keys, vals=second_level_keys_and_vals)
 
         return self.__build_dictionary(key_vals_list=genkey_keys)
