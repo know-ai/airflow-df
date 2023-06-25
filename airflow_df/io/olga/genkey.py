@@ -102,13 +102,10 @@ class Genkey(dict):
                 previous_element = ''
                 continue
 
-            if element.strip():
-                complete_lines.append(element.strip())
+            if element:
+                complete_lines.append(element)
 
         del lines
-
-        complete_lines = list(
-            filter(self.regex.GENKEY_SECOND_LEVEL_KEY_PATTERN.match, complete_lines))
 
         third_level_key_elements = list(
             filter(self.regex.GENKEY_THIRD_LEVEL_KEY_PATTERN.match, complete_lines))
@@ -117,6 +114,11 @@ class Genkey(dict):
             complete_lines = self.__fix_lines_when_starts_with_3_lvl_key(
                 lines=complete_lines)
 
+            return complete_lines
+
+        complete_lines = list(
+            filter(self.regex.GENKEY_SECOND_LEVEL_KEY_PATTERN.match, complete_lines))
+
         return complete_lines
 
     def __fix_lines_when_starts_with_3_lvl_key(self, lines: list) -> list:
@@ -124,7 +126,11 @@ class Genkey(dict):
         fixed_lines = []
 
         for line in lines:
-            previous_line = line
+            if self.regex.GENKEY_SECOND_LEVEL_KEY_PATTERN.search(line):
+                previous_line = line
+                fixed_lines.append(line)
+                continue
+
             if self.regex.GENKEY_THIRD_LEVEL_KEY_PATTERN.search(line):
                 line = ' ' + line
                 previous_line += line
@@ -422,11 +428,11 @@ class Genkey(dict):
                 first_level_key = first_level_key.group().replace('!', '').strip()
                 first_level_keys.append(first_level_key)
 
-                lines = self.__clean_lines(element)
+                element = self.__clean_lines(element)
 
                 # Convert each line into a dictionary
                 second_level_elements = self.__get_second_level_key_val_lists(
-                    lines=lines)
+                    lines=element)
                 second_level_dict = self.__get_second_level_dictionary(
                     dict_elements=second_level_elements)
 
