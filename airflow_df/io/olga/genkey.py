@@ -3,6 +3,22 @@ import re
 import ast
 import numpy as np
 
+# Genkey regex as constants
+GENKEY_PRINCIPAL_ELEMENT_PATTERN = re.compile(r'\s\n')
+GENKEY_FIRST_LEVEL_KEY_PATTERN = re.compile(r'!\s\w+.+')
+
+THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
+THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
+THIRD_LEVEL_KEY_PVTFILE_PATTERN = re.compile(r'PVTFILE')
+
+THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN = re.compile(
+    r'\(\"\.\./|\(\"\w+')
+THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN = re.compile(r'\(\w+')
+THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN = re.compile(
+    r'\d+\.\d+|^[0-9]*$|\(\d+')
+THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT = re.compile(
+    r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+|\d+\ \W+')
+
 
 class Genkey(dict):
     """This class takes the genkey file and saves it into a Python dictionary.
@@ -198,18 +214,6 @@ class Genkey(dict):
         third_level_dict = self.__build_dictionary(key_vals_list=key_vals_list)
         del key_vals_list, keys, vals
 
-        THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
-        THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
-        THIRD_LEVEL_KEY_PVTFILE_PATTERN = re.compile(r'PVTFILE')
-
-        THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN = re.compile(
-            r'\(\"\.\./|\(\"\w+')
-        THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN = re.compile(r'\(\w+')
-        THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN = re.compile(
-            r'\d+\.\d+|^[0-9]*$|\(\d+')
-        THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT = re.compile(
-            r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+|\d+\ \W+')
-
         def remove_parentheses_and_split(value: str, split_by: str = '') -> list:
 
             value = self.remove_string_quotes(value)
@@ -373,9 +377,6 @@ class Genkey(dict):
             filepath, str), f'filepath must be a string! Not {type(filepath)}'
 
         file = self.__read_file(filepath=filepath)
-
-        GENKEY_PRINCIPAL_ELEMENT_PATTERN = re.compile(r'\s\n')
-        GENKEY_FIRST_LEVEL_KEY_PATTERN = re.compile(r'!\s\w+.+')
 
         # Splitting Genkey in principal elements
         genkey_elements = []
