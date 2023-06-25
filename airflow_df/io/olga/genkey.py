@@ -107,16 +107,24 @@ class Genkey(dict):
 
         del lines
 
-        # Append lines when it starts with third level key
+        complete_lines = list(
+            filter(self.regex.GENKEY_SECOND_LEVEL_KEY_PATTERN.match, complete_lines))
+
+        third_level_key_elements = list(
+            filter(self.regex.GENKEY_THIRD_LEVEL_KEY_PATTERN.match, complete_lines))
+
+        if any(third_level_key_elements):
+            complete_lines = self.__fix_lines_when_starts_with_3_lvl_key(
+                lines=complete_lines)
+
+        return complete_lines
+
+    def __fix_lines_when_starts_with_3_lvl_key(self, lines: list) -> list:
         previous_line = ''
         fixed_lines = []
 
-        for line in complete_lines:
-            if self.regex.GENKEY_SECOND_LEVEL_KEY_PATTERN.search(line):
-                previous_line = line
-                fixed_lines.append(line)
-                continue
-
+        for line in lines:
+            previous_line = line
             if self.regex.GENKEY_THIRD_LEVEL_KEY_PATTERN.search(line):
                 line = ' ' + line
                 previous_line += line
