@@ -1,6 +1,7 @@
 import os
 import re
 import ast
+import numpy as np
 
 
 class Genkey(dict):
@@ -195,6 +196,7 @@ class Genkey(dict):
 
         key_vals_list = self.group_key_and_vals(keys=keys, vals=vals)
         third_level_dict = self.__build_dictionary(key_vals_list=key_vals_list)
+        del key_vals_list, keys, vals
 
         THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
         THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
@@ -214,6 +216,13 @@ class Genkey(dict):
 
             return [element.replace('(', '').replace(')', '').strip()
                     for element in value.split(split_by)]
+
+        def join_terminals_value_elements(value: list, sections_by_element: int = 2, join_by=' ') -> list:
+
+            elements_number = int(len(value)/sections_by_element)
+            value = np.array_split(value, elements_number)
+
+            return list(map(join_by.join, value))
 
         for key, val in third_level_dict.items():
 
@@ -239,23 +248,8 @@ class Genkey(dict):
                     val = list(
                         map(lambda element: element.replace(',', ''), val))
 
-                    _val = []
-                    _el = ''
-                    n = 0
-                    for el in val:
-                        n += 1
-                        if n == 1:
-                            _el = el
-                            continue
-
-                        if n == 2:
-                            el = ' ' + el
-                            _el += el
-                            _val.append(_el)
-                            n = 0
-                            continue
-                    VALUE = tuple(_val)
-                    third_level_dict[key] = VALUE
+                    val = join_terminals_value_elements(value=val)
+                    third_level_dict[key] = tuple(val)
                     continue
 
                 val = val.strip().split(' ')
