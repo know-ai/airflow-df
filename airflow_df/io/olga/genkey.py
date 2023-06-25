@@ -245,13 +245,10 @@ class Genkey(dict):
                 third_level_dict[key] = val
                 continue
 
-            if THIRD_LEVEL_KEY_INFO_PATTERN.search(key):
+            if THIRD_LEVEL_KEY_INFO_PATTERN.search(key) or \
+                    THIRD_LEVEL_KEY_PVTFILE_PATTERN.search(key):
                 val = self.remove_string_quotes(string=val)
                 third_level_dict[key] = val
-                continue
-
-            if THIRD_LEVEL_KEY_PVTFILE_PATTERN.search(key):
-                third_level_dict[key] = self.remove_string_quotes(string=val)
                 continue
 
             if THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT.search(val):
