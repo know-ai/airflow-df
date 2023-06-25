@@ -224,6 +224,15 @@ class Genkey(dict):
 
             return list(map(join_by.join, value))
 
+        def split_number_and_unit(value: str) -> tuple:
+
+            val = value.strip().split(' ')
+            value = ' '.join(list(val[:-1]))
+            value = ast.literal_eval(value)
+            unit = val[-1]
+
+            return value, unit
+
         for key, val in third_level_dict.items():
 
             if THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN.search(val):
@@ -252,18 +261,15 @@ class Genkey(dict):
                     third_level_dict[key] = tuple(val)
                     continue
 
-                val = val.strip().split(' ')
-                VALUE = ' '.join([el for el in val[:-1]])
-                UNIT = val[-1]
+                value, unit = split_number_and_unit(value=val)
                 plural = False
-                VALUE = ast.literal_eval(VALUE)
 
-                if isinstance(VALUE, tuple):
+                if isinstance(value, tuple):
                     plural = True
 
                 third_level_dict[key] = {
-                    f'VALUE{"S" if plural else ""}': VALUE,
-                    'UNIT': UNIT.strip(',')
+                    f'VALUE{"S" if plural else ""}': value,
+                    'UNIT': unit.strip(',')
                 }
                 continue
 
@@ -272,8 +278,7 @@ class Genkey(dict):
                 continue
 
             if THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN.search(val):
-                val = val.strip('(').strip(')')
-                val = [el.strip() for el in val.split(',') if el]
+                val = remove_parentheses_and_split(value=val, split_by=',')
                 third_level_dict[key] = tuple(val)
                 continue
 
