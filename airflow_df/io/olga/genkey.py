@@ -156,6 +156,16 @@ class Genkey(dict):
         return clean_line
 
     @staticmethod
+    def remove_string_quotes(string: str) -> str:
+        """Removes quotes from string.
+
+    **Parameters**
+
+        **string:** (str) String with quotes.
+        """
+        return string.replace('"', '')
+
+    @staticmethod
     def group_key_and_vals(keys: list, vals: list) -> list:
         """Zips together dictionary keys and their values.
         Returns a list of tuples where the first element in each tuple is the key
@@ -193,37 +203,42 @@ class Genkey(dict):
         THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN = re.compile(
             r'\(\"\.\./|\(\"\w+')
         THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN = re.compile(r'\(\w+')
-        # THIRD_LEVEL_NUMBER_PLUS_CHARACTER_VALUE_PATTERN = re.compile(
-        #     r'\d+\ \W+')
         THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN = re.compile(
             r'\d+\.\d+|^[0-9]*$|\(\d+')
         THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT = re.compile(
             r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+|\d+\ \W+')
 
+        def remove_parentheses_and_split(value: str, split_by: str = '') -> list:
+
+            value = self.remove_string_quotes(value)
+
+            return [element.replace('(', '').replace(')', '').strip()
+                    for element in value.split(split_by)]
+
         for key, val in third_level_dict.items():
 
             if THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN.search(val):
-                breakpoint()
-                val = [e.replace('"', '').replace('(', '').replace(')', '').strip()
-                       for e in val.split(',')]
+                val = remove_parentheses_and_split(value=val, split_by=',')
                 val = tuple(val)
                 third_level_dict[key] = val
                 continue
 
             if THIRD_LEVEL_KEY_INFO_PATTERN.search(key):
-                val = val.replace('"', '')
+                val = self.remove_string_quotes(string=val)
                 third_level_dict[key] = val
                 continue
 
             if THIRD_LEVEL_KEY_PVTFILE_PATTERN.search(key):
-                third_level_dict[key] = val.replace('"', '')
+                third_level_dict[key] = self.remove_string_quotes(string=val)
                 continue
 
             if THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT.search(val):
                 if THIRD_LEVEL_KEY_TERMINALS_PATTERN.search(key):
-                    val = val.replace('(', '').replace(')',
-                                                       '').replace(',', '')
-                    val = [e.strip() for e in val.split(' ')]
+                    val = remove_parentheses_and_split(
+                        value=val, split_by=' ')
+                    val = list(
+                        map(lambda element: element.replace(',', ''), val))
+
                     _val = []
                     _el = ''
                     n = 0
@@ -268,17 +283,7 @@ class Genkey(dict):
                 third_level_dict[key] = tuple(val)
                 continue
 
-            # if THIRD_LEVEL_NUMBER_PLUS_CHARACTER_VALUE_PATTERN.search(val):
-            #     val = val.strip().split()
-            #     VALUE = eval(val[0])
-            #     UNIT = val[-1]
-            #     self[key] = {
-            #         'VALUE': VALUE,
-            #         'UNIT': UNIT
-            #     }
-            #     continue
-
-            third_level_dict[key] = val.replace('"', '')
+            third_level_dict[key] = self.remove_string_quotes(string=val)
 
         return third_level_dict
 
