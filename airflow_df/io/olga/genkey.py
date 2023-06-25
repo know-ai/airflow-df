@@ -139,8 +139,7 @@ class Genkey(dict):
 
         return fixed_lines
 
-    @staticmethod
-    def __split_elements(line: str) -> list:
+    def __split_line_elements(self, line: str) -> list:
         """Documentation here
         """
         _info = ''
@@ -199,7 +198,7 @@ class Genkey(dict):
                     clean_line.append(_el)
                     _el = ''
                     flag = False
-
+        # breakpoint()
         return clean_line
 
     @staticmethod
@@ -366,7 +365,7 @@ class Genkey(dict):
 
         **lines:** (list) List of lines of the text block belonging to the genkey's first-level key. 
         """
-        elements = list(map(self.__split_elements, lines))
+        elements = list(map(self.__split_line_elements, lines))
         second_level_keys = [el[0] for el in elements]
         second_level_values = [el[1:] for el in elements]
 
