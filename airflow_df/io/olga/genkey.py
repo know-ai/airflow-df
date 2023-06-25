@@ -3,21 +3,24 @@ import re
 import ast
 import numpy as np
 
-# Genkey regex as constants
-GENKEY_PRINCIPAL_ELEMENT_PATTERN = re.compile(r'\s\n')
-GENKEY_FIRST_LEVEL_KEY_PATTERN = re.compile(r'!\s\w+.+')
 
-THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
-THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
-THIRD_LEVEL_KEY_PVTFILE_PATTERN = re.compile(r'PVTFILE')
+class GenkeyRegex:
+    """This class store regex needed to process the genkey file
+    """
+    GENKEY_PRINCIPAL_ELEMENT_PATTERN = re.compile(r'\s\n')
+    GENKEY_FIRST_LEVEL_KEY_PATTERN = re.compile(r'!\s\w+.+')
 
-THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN = re.compile(
-    r'\(\"\.\./|\(\"\w+')
-THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN = re.compile(r'\(\w+')
-THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN = re.compile(
-    r'\d+\.\d+|^[0-9]*$|\(\d+')
-THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT = re.compile(
-    r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+|\d+\ \W+')
+    THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
+    THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
+    THIRD_LEVEL_KEY_PVTFILE_PATTERN = re.compile(r'PVTFILE')
+
+    THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN = re.compile(
+        r'\(\"\.\./|\(\"\w+')
+    THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN = re.compile(r'\(\w+')
+    THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN = re.compile(
+        r'\d+\.\d+|^[0-9]*$|\(\d+')
+    THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT = re.compile(
+        r'\d\s\w|\d\)\s\w+|\d\)\s\%|\d\s\%|\(\"\w+|\d+\ \W+')
 
 
 class Genkey(dict):
@@ -25,6 +28,7 @@ class Genkey(dict):
     """
 
     def __init__(self, *args, **kwargs):
+        self.regex = GenkeyRegex()
         self.__previous_line = None
         self.__previous_item = None
         self._keys = list()
@@ -239,20 +243,20 @@ class Genkey(dict):
 
         for key, val in third_level_dict.items():
 
-            if THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN.search(val):
+            if self.regex.THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN.search(val):
                 val = remove_parentheses_and_split(value=val, split_by=',')
                 val = tuple(val)
                 third_level_dict[key] = val
                 continue
 
-            if THIRD_LEVEL_KEY_INFO_PATTERN.search(key) or \
-                    THIRD_LEVEL_KEY_PVTFILE_PATTERN.search(key):
+            if self.regex.THIRD_LEVEL_KEY_INFO_PATTERN.search(key) or \
+                    self.regex.THIRD_LEVEL_KEY_PVTFILE_PATTERN.search(key):
                 val = self.remove_string_quotes(string=val)
                 third_level_dict[key] = val
                 continue
 
-            if THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT.search(val):
-                if THIRD_LEVEL_KEY_TERMINALS_PATTERN.search(key):
+            if self.regex.THIRD_LEVEL_NUMBER_PLUS_PHYSICS_UNIT.search(val):
+                if self.regex.THIRD_LEVEL_KEY_TERMINALS_PATTERN.search(key):
                     val = remove_parentheses_and_split(
                         value=val, split_by=' ')
                     val = list(
@@ -274,11 +278,11 @@ class Genkey(dict):
                 }
                 continue
 
-            if THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN.search(val):
+            if self.regex.THIRD_LEVEL_NUMBERS_AND_NUMERIC_STRING_TUPLE_VALUE_PATTERN.search(val):
                 third_level_dict[key] = ast.literal_eval(val)
                 continue
 
-            if THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN.search(val):
+            if self.regex.THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN.search(val):
                 val = remove_parentheses_and_split(value=val, split_by=',')
                 third_level_dict[key] = tuple(val)
                 continue
@@ -377,7 +381,7 @@ class Genkey(dict):
 
         # Splitting Genkey in principal elements
         genkey_elements = []
-        for element in GENKEY_PRINCIPAL_ELEMENT_PATTERN.split(file):
+        for element in self.regex.GENKEY_PRINCIPAL_ELEMENT_PATTERN.split(file):
             genkey_elements.append(element)
 
         first_level_keys = []
@@ -388,7 +392,7 @@ class Genkey(dict):
             # Finding first-level keys in the genkey file's splitted line
             genkey_element = self.clean_empty_spaces(
                 string=element, join_by=' ')
-            first_level_key = GENKEY_FIRST_LEVEL_KEY_PATTERN.search(
+            first_level_key = self.regex.GENKEY_FIRST_LEVEL_KEY_PATTERN.search(
                 genkey_element)
 
             if first_level_key:
