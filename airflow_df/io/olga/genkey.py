@@ -9,6 +9,10 @@ class GenkeyRegex:
     """
     GENKEY_PRINCIPAL_ELEMENT_PATTERN = re.compile(r'\s\n')
     GENKEY_FIRST_LEVEL_KEY_PATTERN = re.compile(r'!\s\w+.+')
+    GENKEY_SECOND_LEVEL_KEY_PATTERN = re.compile(r'^[a-zA-Z]+\s\w+')
+    GENKEY_THIRD_LEVEL_KEY_PATTERN = re.compile(r'^[a-zA-Z]+\=|^[a-zA-Z]+\s\=')
+
+    GENKEY_LINE_CONTINUATION = re.compile('\\\\')
 
     THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
     THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
@@ -68,47 +72,55 @@ class Genkey(dict):
 
         return self._keys
 
-    @staticmethod
-    def __clean_lines(lines: str) -> list:
-        """Documentation here
+    def __clean_lines(self, lines: str) -> list:
+        """This method converts a principal genkey-text block into a list of lines (strings) containing second and third-level keys and values.
+        It removes the first level key.
+
+    **Parameters**
+
+        **lines:** (str) Principal genkey-text block.
         """
         # Append lines when it has \\
-        _el = ''
-        broken_lines = []
-        for el in lines.split('\n'):
-            if re.search('\\\\', el):
-                if not _el:
-                    _el = el
+        lines = lines.split('\n')
+        previous_element = ''
+        complete_lines = []
+
+        for element in lines:
+            element = element.strip()
+            if self.regex.GENKEY_LINE_CONTINUATION.search(element):
+                if not previous_element:
+                    previous_element = element
                     continue
-                _el += el
+                previous_element += element
                 continue
 
-            if el.find('\\\\') == -1 and _el and bool(el.strip()):
-                _el += el
-                _el = ' '.join([e.strip() for e in _el.split('\\')])
-                broken_lines.append(_el.strip())
-                _el = ''
+            if previous_element and element:
+                previous_element += element
+                previous_element = self.clean_empty_spaces(
+                    string=previous_element, join_by=' ', split_by='\\')
+                complete_lines.append(previous_element)
+                previous_element = ''
                 continue
 
-            if bool(el.strip()):
-                broken_lines.append(el.strip())
+            if element.strip():
+                complete_lines.append(element.strip())
+
+        del lines
 
         # Append lines when it starts with third level key
-        _el = ''
+        previous_line = ''
         fixed_lines = []
-        second_key_pattern = re.compile(r'^[a-zA-Z]+\s\w+')
-        third_key_pattern = re.compile(r'^[a-zA-Z]+\=|^[a-zA-Z]+\s\=')
 
-        for line in broken_lines:
-            if second_key_pattern.search(line):
-                _el = line
+        for line in complete_lines:
+            if self.regex.GENKEY_SECOND_LEVEL_KEY_PATTERN.search(line):
+                previous_line = line
                 fixed_lines.append(line)
                 continue
 
-            if third_key_pattern.search(line):
+            if self.regex.GENKEY_THIRD_LEVEL_KEY_PATTERN.search(line):
                 line = ' ' + line
-                _el += line
-                fixed_lines.append(_el)
+                previous_line += line
+                fixed_lines.append(previous_line)
                 continue
 
         return fixed_lines
@@ -347,7 +359,7 @@ class Genkey(dict):
         return second_level_keys, second_level_values
 
     @staticmethod
-    def clean_empty_spaces(string: str, join_by: str = '') -> str:
+    def clean_empty_spaces(string: str, join_by: str = '', split_by: str = '') -> str:
         """Cleans the empty spaces in a string. Returns a string without empty spaces.
 
     **Parameters**
@@ -357,7 +369,7 @@ class Genkey(dict):
         """
 
         return join_by.join([character.strip() for character
-                            in string.split(join_by)])
+                            in string.split(split_by)])
 
     @staticmethod
     def __read_file(filepath: str) -> str:
@@ -391,7 +403,7 @@ class Genkey(dict):
 
             # Finding first-level keys in the genkey file's splitted line
             genkey_element = self.clean_empty_spaces(
-                string=element, join_by=' ')
+                string=element, join_by=' ', split_by=' ')
             first_level_key = self.regex.GENKEY_FIRST_LEVEL_KEY_PATTERN.search(
                 genkey_element)
 
