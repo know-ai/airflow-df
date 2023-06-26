@@ -35,44 +35,7 @@ class Genkey(dict):
 
     def __init__(self, *args, **kwargs):
         self.regex = GenkeyRegex()
-        self.__previous_line = None
-        self.__previous_item = None
-        self._keys = list()
         super().__init__(*args, **kwargs)
-
-    def set_previous_item(self, item: str):
-
-        self.__previous_item = item
-
-    def get_previous_item(self) -> str:
-
-        return self.__previous_item
-
-    def set_previous_line(self, line: str):
-
-        self.__previous_line = line
-
-    def get_previous_line(self):
-
-        return self.__previous_line
-
-    def __append_key(self, key: str):
-
-        if key not in self.__get_keys():
-
-            self._keys.append(key)
-
-    def __clean_keys(self):
-
-        self._keys = list()
-
-    def __clean_last_key(self):
-
-        self._keys.pop(-1)
-
-    def __get_keys(self):
-
-        return self._keys
 
     def __clean_lines(self, lines: str) -> list:
         """This method converts a principal genkey-text block into a list of lines (strings) containing second and third-level keys and values.
