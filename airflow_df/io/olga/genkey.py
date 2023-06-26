@@ -8,16 +8,18 @@ class GenkeyRegex:
     """This class store regex needed to process the genkey file
     """
     GENKEY_PRINCIPAL_ELEMENT_PATTERN = re.compile(r'\s\n')
+    GENKEY_LINE_CONTINUATION = re.compile('\\\\')
+
     GENKEY_FIRST_LEVEL_KEY_PATTERN = re.compile(r'!\s\w+.+')
     GENKEY_SECOND_LEVEL_KEY_PATTERN = re.compile(r'^[a-zA-Z]+\s\w+')
     GENKEY_THIRD_LEVEL_KEY_PATTERN = re.compile(r'^[a-zA-Z]+\=|^[a-zA-Z]+\s\=')
 
-    GENKEY_LINE_CONTINUATION = re.compile('\\\\')
-
+    THIRD_LEVEL_PARENTHESES_OPENING_VALUE_PATTERN = re.compile(
+        r'^[A-Z]+\=\(|^[A-Z]+\s\=\s\(')
+    THIRD_LEVEL_PARENTHESES_CLOSING_VALUE_PATTERN = re.compile(r'\)$|\)\s.+$')
     THIRD_LEVEL_KEY_INFO_PATTERN = re.compile(r'INFO')
     THIRD_LEVEL_KEY_TERMINALS_PATTERN = re.compile(r'TERMINALS')
     THIRD_LEVEL_KEY_PVTFILE_PATTERN = re.compile(r'PVTFILE')
-
     THIRD_LEVEL_TUPLE_OF_STRINGS_VALUE_PATTERN = re.compile(
         r'\(\"\.\./|\(\"\w+')
     THIRD_LEVEL_STRING_TUPLE_VALUE_PATTERN = re.compile(r'\(\w+')
@@ -140,26 +142,26 @@ class Genkey(dict):
         return fixed_lines
 
     def __split_line_elements(self, line: str) -> list:
-        """Documentation here
+        """This method split a genkey file line into its different elements.
+        Returns a list containing a second-level key and third-level keys and values elements.
+
+    **Parameters**
+
+        **line:** (str) Line belonging to a principal genkey-text block. 
         """
         _info = ''
         _el = ''
         clean_line = []
         flag = False
-        second_key_pattern = re.compile(r'^[A-Z]+\s')
-        opening_third_key_pattern_1 = re.compile(
-            r'^[A-Z]+\=\(|^[A-Z]+\s\=\s\(')
-        opening_third_key_pattern_2 = re.compile(r'^[A-Z]+\=\(')
-        third_key_pattern = re.compile(r'^[A-Z]+\=')
-        closing_third_key_pattern = re.compile(r'\)$|\)\s.+$')
 
         for n, el in enumerate(line.split(', ')):
-            if second_key_pattern.search(el):
+
+            if self.regex.GENKEY_SECOND_LEVEL_KEY_PATTERN.search(el):
                 splited_line = el.split(' ')
                 clean_line.append(splited_line[0])
                 second_key = ' '.join([e for e in splited_line[1:]])
 
-                if opening_third_key_pattern_1.search(second_key):
+                if self.regex.THIRD_LEVEL_PARENTHESES_OPENING_VALUE_PATTERN.search(second_key):
                     _el = second_key
                     flag = True
                     continue
@@ -167,24 +169,24 @@ class Genkey(dict):
                 clean_line.append(el)
                 continue
 
-            if opening_third_key_pattern_2.search(el):
+            if self.regex.THIRD_LEVEL_PARENTHESES_OPENING_VALUE_PATTERN.search(el):
                 _el = el
                 flag = True
                 continue
 
-            if third_key_pattern.search(el):
+            if self.regex.GENKEY_THIRD_LEVEL_KEY_PATTERN.search(el):
                 if n + 1 == len(line.split(', ')):
                     clean_line.append(el)
                     continue
 
-                if re.search(r'^INFO', el):
+                if self.regex.THIRD_LEVEL_KEY_INFO_PATTERN.search(el):
                     _info = el
                     continue
 
                 clean_line.append(el)
                 continue
 
-            if re.search(r'^INFO', _info):
+            if self.regex.THIRD_LEVEL_KEY_INFO_PATTERN.search(_info):
                 _info = _info + ', ' + el
                 clean_line.append(_info)
                 _info = ''
@@ -194,11 +196,11 @@ class Genkey(dict):
                 el = ', ' + el
                 _el += el
 
-                if closing_third_key_pattern.search(el):
+                if self.regex.THIRD_LEVEL_PARENTHESES_CLOSING_VALUE_PATTERN.search(el):
                     clean_line.append(_el)
                     _el = ''
                     flag = False
-        # breakpoint()
+
         return clean_line
 
     @staticmethod
