@@ -12,8 +12,8 @@ def suite():
     suite = TestSuite()
     # tests.append(TestLoader().loadTestsFromTestCase(TestIO))
     tests.append(TestLoader().loadTestsFromTestCase(TestTPL))
-    tests.append(TestLoader().loadTestsFromTestCase(TestOlga))
     tests.append(TestLoader().loadTestsFromTestCase(TestGenkey))
+    tests.append(TestLoader().loadTestsFromTestCase(TestOlga))
 
     suite = TestSuite(tests)
     return suite

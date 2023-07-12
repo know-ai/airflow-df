@@ -1,77 +1,103 @@
 import os
 import glob
-import pandas as pd
-
 from . import TPL
+from . import Genkey
+from collections import namedtuple
+from os.path import dirname, basename, splitext
 
-
-class OlgaFormatter(list):
+class Olga:
     """Reads and saves the tpl files into a list of TPL objects.
     """
 
     def __init__(self):
-        self.tpl = TPL()
+        self.__file = namedtuple("File", "tpl genkey")
+        self.__extensions = ['.tpl', '.genkey']
 
-    def __reset(self):
-        self.__init__()
-
-    def append(self, tpl: TPL):
-        """Add tpl to the OlgaFormatter list.
-
-    **Parameters**
-
-        **tpl:** (TPL) tpl object to be appended.
+    def append(self, tpl: TPL, genkey: Genkey):
+        """Documentation here
         """
-        if isinstance(tpl, TPL):
-            super().append(tpl)
+        if isinstance(tpl, TPL) & isinstance(genkey, Genkey):
 
-        self.__reset()
-
-    def __read_file(self, filepath: str) -> TPL:
-        """Reads one tpl file. Retunrs a TPL object.
-
-    **Parameters**
-
-        **filepath:** (str) Path to the file.
-        """
-        if os.path.isfile(filepath) & filepath.endswith('.tpl'):
-            self.tpl.read(filepath=filepath)
-
-        else:
-            self.tpl = None
+            file = self.__file(tpl, genkey)
+            return file
+            # super(Olga, self).append(file)
 
     @staticmethod
-    def get_files(filepath: str) -> list:
+    def get_files(filepath: str, ext:str=".tpl") -> list:
         """Gets all the files contained in a folder. Returns a list of files.
 
     **Parameters**
 
-        **filepath:** (str) Path to the folder.
+        - **filepath:** (str) Path to the folder.
+        - **ext:** (str) 
         """
+        if not ext.startswith("."):
+            ext = f".{ext}"
+
         filepath = filepath.split(os.sep)
-        filepath.append("*")
+        filepath.append(f"*{ext}")
         filepath = os.sep.join(filepath)
 
         return glob.glob(filepath)
+    
+    def __check_filename(self, path:str):
+        """Documentation here
+        """
+        folder_name, filename = dirname(path), basename(path)
+        filename, ext = splitext(filename)
 
-    def read(self, filepath) -> TPL | list:
-        """Read .tpl file into a TPL Object Structure
+        if ext:
+
+            if ext not in self.__extensions:
+
+                raise NameError(f"{ext} file is not allowed - Only use {self.__extensions}")
+
+        return os.path.join(folder_name, filename)
+    
+    def __read_tpl(self, filename:str):
+        """Documentation here
+        """
+        tpl = TPL()
+        tpl.read(filename + '.tpl')
+        return tpl
+    
+    def __read_genkey(self, filename:str):
+        """Documentation here
+        """
+        genkey = Genkey()
+        genkey.read(filename + '.genkey')
+        return genkey
+    
+    def __read_folder(self, path:str):
+        """Documentation here
+        """
+        files = self.get_files(filepath=path)
+            
+        for file in files:
+
+            yield self.__read_file(file)
+
+    def __read_file(self, filename:str):
+        """Documentation here
+        """
+        filename = self.__check_filename(filename)
+        tpl = self.__read_tpl(filename)
+        genkey = self.__read_genkey(filename)
+        return self.append(tpl, genkey)
+
+    def read(self, filepath):
+        """Read olga files into a Olga Object Structure
 
     **Parameters**
 
--       **filepath:** (str) .tpl file location
+-       **filepath:** (str) file location
         """
+        
         if os.path.isdir(filepath):
-            files = self.get_files(filepath=filepath)
 
-            for file in files:
-                self.__read_file(filepath=file)
+            return self.__read_folder(filepath)
 
-                self.append(tpl=self.tpl)
+        else:
 
-            return self
+            yield self.__read_file(filepath)
 
-        self.__read_file(filepath=filepath)
-        self.append(tpl=self.tpl)
-
-        return self[0]

@@ -1,6 +1,6 @@
 from ..helpers import Helpers
 from .csv import CSVFormatter
-from .olga import OlgaFormatter
+from .olga import Olga
 import pandas as pd
 
 @Helpers.as_airflow_tasks()
