@@ -1,8 +1,7 @@
 import os
 import unittest
-from ..io.olga.tpl import TPL
-from ..io.olga.genkey import Genkey
-from ..io.olga.olga import Olga
+from ..io.olga import TPL, Genkey
+from ..io import Olga
 from types import GeneratorType
 
 class TestOlga(unittest.TestCase):
@@ -25,7 +24,7 @@ class TestOlga(unittest.TestCase):
 
         olga = Olga()
         filepath = os.path.join("data", "olga", "1")
-        files = olga.read(filepath=filepath)
+        files = olga.read(filepath)
 
         for file in files:
             
