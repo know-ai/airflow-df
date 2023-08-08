@@ -42,6 +42,7 @@ class TestOlga(unittest.TestCase):
                     'geometry': '(M)',
                     'branch': 'PIPELINE'
                 }
+                breakpoint()
                 self.assertDictEqual(file.tpl.info.serialize(), expected_info)
 
             with self.subTest(f"Test Profile Item"):
