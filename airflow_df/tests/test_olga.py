@@ -123,24 +123,24 @@ class TestOlga(unittest.TestCase):
             with self.subTest(f"Test Global Keywords Integration"):
                 expected = {
                     "ENDTIME": {
-                        "VALUE": 5,
+                        "VALUE": (5,),
                         "UNIT": "s"
                     }, 
                     "MAXDT": {
-                        "VALUE": 10,
+                        "VALUE": (10,),
                         "UNIT": "s"
                     },
                     "MINDT": {
-                        "VALUE": 0.02,
+                        "VALUE": (0.02,),
                         "UNIT": "s"
                     },
                     "MAXLAGFACT": 0,
                     "STARTTIME": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "s"
                     },
                     "DTSTART": {
-                        "VALUE": 0.02,
+                        "VALUE": (0.02,),
                         "UNIT": "s"
                     }
                 }
@@ -155,7 +155,7 @@ class TestOlga(unittest.TestCase):
             with self.subTest(f"Test Global Keywords TREND"):
                 expected = {
                     "DTPLOT": {
-                        "VALUE": 1,
+                        "VALUE": (1,),
                         "UNIT": "s"
                     }
                 }
@@ -165,11 +165,11 @@ class TestOlga(unittest.TestCase):
                 expected = {
                     "WRITEFILE": "ON",
                     "DTPLOT": {
-                        "VALUE": 1,
+                        "VALUE": (1,),
                         "UNIT": "s"
                     },
                     "DTTIME": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "s"
                     }
                 }
@@ -185,7 +185,7 @@ class TestOlga(unittest.TestCase):
             with self.subTest(f"Test Global Keywords Animate"):
                 expected = {
                     "DTPLOT": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "s"
                     }
                 }
@@ -204,57 +204,57 @@ class TestOlga(unittest.TestCase):
                     {
                         "LABEL": "Stainless Steel",
                         "CAPACITY": {
-                            "VALUE": 450,
+                            "VALUE": (450,),
                             "UNIT": "J/kg-C"
                         },
                         "CONDUCTIVITY": {
-                            "VALUE": 20,
+                            "VALUE": (20,),
                             "UNIT": "W/m-K"
                         },
                         "DENSITY": {
-                            "VALUE": 7850,
+                            "VALUE": (7850,),
                             "UNIT": "kg/m3"
                         },
                         "EMOD": {
-                            "VALUE": 210000000000,
+                            "VALUE": (210000000000,),
                             "UNIT": "Pa"
                         }
                     },
                     {
                         "LABEL": "Fibra de vidrio",
                         "CAPACITY": {
-                            "VALUE": 450,
+                            "VALUE": (450,),
                             "UNIT": "J/kg-C"
                         },
                         "CONDUCTIVITY": {
-                            "VALUE": 20,
+                            "VALUE": (20,),
                             "UNIT": "W/m-C"
                         },
                         "DENSITY": {
-                            "VALUE": 7850,
+                            "VALUE": (7850,),
                             "UNIT": "kg/m3"
                         },
                         "EMOD": {
-                            "VALUE": 400000000000,
+                            "VALUE": (400000000000,),
                             "UNIT": "Pa"
                         }
                     },
                     {
                         "LABEL": "Concrete Coating HD",
                         "CAPACITY": {
-                            "VALUE": 880,
+                            "VALUE": (880,),
                             "UNIT": "J/kg-C"
                         },
                         "CONDUCTIVITY": {
-                            "VALUE": 2.7,
+                            "VALUE": (2.7,),
                             "UNIT": "W/m-K"
                         }, 
                         "DENSITY": {
-                            "VALUE": 3000,
+                            "VALUE": (3000,),
                             "UNIT": "kg/m3"
                         },
                         "EMOD": {
-                            "VALUE": 500000000000,
+                            "VALUE": (500000000000,),
                             "UNIT": "Pa"
                         }
                     }
@@ -321,189 +321,189 @@ class TestOlga(unittest.TestCase):
                         'PIPE': [
                             {
                                 'ROUGHNESS': {
-                                    'VALUE': 0.0053,
+                                    'VALUE': (0.0053,),
                                     'UNIT': 'mm'
                                 },
                                 'LABEL': 'Pipe-1',
                                 'WALL': 'WALL-1',
                                 'NSEGMENT': 2,
                                 'LENGTH': {
-                                    'VALUE': 3,
+                                    "VALUE": (3,),
                                     'UNIT': 'm'
                                 },
                                 'ELEVATION': {
-                                    'VALUE': 0,
+                                    'VALUE': (0,),
                                     'UNIT': 'm'
                                 },
                                 'DIAMETER': {
-                                    'VALUE': 304.8, 
+                                    "VALUE": (304.8,), 
                                     'UNIT': 'mm'
                                 }
                             },
                             {
                                 'ROUGHNESS': {
-                                    'VALUE': 0.0053,
+                                    'VALUE': (0.0053,),
                                     'UNIT': 'mm'
                                 },
                                 'LABEL': 'Pipe-2',
                                 'WALL': 'WALL-1',
                                 'NSEGMENT': 2,
                                 'LENGTH': {
-                                    'VALUE': 13.7,
+                                    "VALUE": (13.7,),
                                     'UNIT': 'm'
                                 },
                                 'ELEVATION': {
-                                    'VALUE': 13.7,
+                                    "VALUE": (13.7,),
                                     'UNIT': 'm'
                                 },
                                 'DIAMETER': {
-                                    'VALUE': 304.8,
+                                    "VALUE": (304.8,),
                                     'UNIT': 'mm'
                                 }
                             }, 
                             {
                                 'ROUGHNESS': {
-                                    'VALUE': 0.0053,
+                                    'VALUE': (0.0053,),
                                     'UNIT': 'mm'
                                 },
                                 'LABEL': 'Pipe-3',
                                 'WALL': 'WALL-1',
                                 'NSEGMENT': 2,
                                 'LENGTH': {
-                                    'VALUE': 4,
+                                    "VALUE": (4,),
                                     'UNIT': 'm'
                                 },
                                 'ELEVATION': {
-                                    'VALUE': 0,
+                                    'VALUE': (0,),
                                     'UNIT': 'm'
                                 }, 
                                 'DIAMETER': {
-                                    'VALUE': 304.8,
+                                    "VALUE": (304.8,),
                                     'UNIT': 'mm'
                                 }
                             },
                             {
                                 'ROUGHNESS': {
-                                    'VALUE': 0.0053,
+                                    'VALUE': (0.0053,),
                                     'UNIT': 'mm'
                                 },
                                 'LABEL': 'Pipe-4',
                                 'WALL': 'WALL-1',
                                 'NSEGMENT': 2,
                                 'LENGTH': {
-                                    'VALUE': 17.2,
+                                    "VALUE": (17.2,),
                                     'UNIT': 'm'
                                 },
                                 'ELEVATION': {
-                                    'VALUE': -17.2,
+                                    "VALUE": (-17.2,),
                                     'UNIT': 'm'
                                 },
                                 'DIAMETER': {
-                                    'VALUE': 203.2,
+                                    "VALUE": (203.2,),
                                     'UNIT': 'mm'
                                 }
                             },
                             {
                                 'ROUGHNESS': {
-                                    'VALUE': 0.0053,
+                                    'VALUE': (0.0053,),
                                     'UNIT': 'mm'
                                 }, 
                                 'LABEL': 'Pipe-5',
                                 'WALL': 'WALL-1',
                                 'NSEGMENT': 2, 
                                 'LENGTH': {
-                                    'VALUE': 15, 
+                                    "VALUE": (15,), 
                                     'UNIT': 'm'
                                 },
                                 'ELEVATION': {
-                                    'VALUE': 0, 'UNIT': 'm'
+                                    'VALUE': (0,), 'UNIT': 'm'
                                 },
                                 'DIAMETER': {
-                                    'VALUE': 203.2,
+                                    "VALUE": (203.2,),
                                     'UNIT': 'mm'
                                 }
                             },
                             {
                                 'ROUGHNESS': {
-                                    'VALUE': 0.0053,
+                                    'VALUE': (0.0053,),
                                     'UNIT': 'mm'
                                 }, 
                                 'LABEL': 'Pipe-6',
                                 'WALL': 'WALL-1', 
                                 'NSEGMENT': 2, 
                                 'LENGTH': {
-                                    'VALUE': 1026.48, 
+                                    "VALUE": (1026.48,), 
                                     'UNIT': 'm'
                                 }, 
                                 'ELEVATION': {
-                                    'VALUE': 12.5, 
+                                    "VALUE": (12.5,), 
                                     'UNIT': 'm'
                                 },
                                 'DIAMETER': {
-                                    'VALUE': 283.999999999999, 
+                                    'VALUE': (283.999999999999,), 
                                     'UNIT': 'mm'
                                 }
                             },
                             {
                                 'ROUGHNESS': {
-                                    'VALUE': 0.0053,
+                                    'VALUE': (0.0053,),
                                     'UNIT': 'mm'
                                 },
                                 'LABEL': 'Pipe-7',
                                 'WALL': 'WALL-1',
                                 'NSEGMENT': 2,
                                 'LENGTH': {
-                                    'VALUE': 285.3,
+                                    'VALUE': (285.3,),
                                     'UNIT': 'm'
                                 },
                                 'ELEVATION': {
-                                    'VALUE': 0,
+                                    'VALUE': (0,),
                                     'UNIT': 'm'
                                 }, 
                                 'DIAMETER': {
-                                    'VALUE': 283.999999999999,
+                                    'VALUE': (283.999999999999,),
                                     'UNIT': 'mm'
                                 }
                             },
                             {
                                 'ROUGHNESS': {
-                                    'VALUE': 0.0053, 
+                                    'VALUE': (0.0053,), 
                                     'UNIT': 'mm'
                                 },
                                 'LABEL': 'Pipe-8',
                                 'WALL': 'WALL-1',
                                 'NSEGMENT': 2,
                                 'LENGTH': {
-                                    'VALUE': 2,
+                                    'VALUE': (2,),
                                     'UNIT': 'm'
                                 },
                                 'ELEVATION': {
-                                    'VALUE': 2, 
+                                    'VALUE': (2,), 
                                     'UNIT': 'm'
                                 },
                                 'DIAMETER': {
-                                    'VALUE': 283.999999999999,
+                                    'VALUE': (283.999999999999,),
                                     'UNIT': 'mm'
                                 }
                             },
                             {
                                 'ROUGHNESS': {
-                                    'VALUE': 0.0053,
+                                    'VALUE': (0.0053,),
                                     'UNIT': 'mm'
                                 },
                                 'LABEL': 'Pipe-9',
                                 'WALL': 'WALL-1',
                                 'NSEGMENT': 2,
                                 'LENGTH': {
-                                    'VALUE': 126.7,
+                                    'VALUE': (126.7,),
                                     'UNIT': 'm'
                                 },
                                 'ELEVATION': {
-                                    'VALUE': 0, 
+                                    'VALUE': (0,), 
                                     'UNIT': 'm'
                                 },
                                 'DIAMETER': {
-                                    'VALUE': 283.999999999999, 
+                                    'VALUE': (283.999999999999,), 
                                     'UNIT': 'mm'
                                 }
                             }
@@ -511,14 +511,14 @@ class TestOlga(unittest.TestCase):
                         'TRENDDATA': [
                             {
                                 'ABSPOSITION': {
-                                    'VALUE': 1378, 
+                                    'VALUE': (1378,), 
                                     'UNIT': 'm'
                                 },
                                 'VARIABLE': 'PT'
                             },
                             {
                                 'ABSPOSITION': {
-                                    'VALUE': 1378,
+                                    'VALUE': (1378,),
                                     'UNIT': 'm'
                                 },
                                 'VARIABLE': 'GT'
@@ -536,12 +536,12 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'Air', 
                                 'PIPE': ('PIPE-15', 'PIPE-16', 'PIPE-17', 'PIPE-18', 'PIPE-19', 'PIPE-20', 'PIPE-21', 'PIPE-22', 'PIPE-23', 'PIPE-24', 'PIPE-25', 'PIPE-26'),
                                 'HMININNERWALL': {
-                                    'VALUE': 10,
+                                    'VALUE': (10,),
                                     'UNIT': 'W/m2-C'
                                 },
                                 'HOUTEROPTION': 'AIR', 
                                 'TAMBIENT': {
-                                    'VALUE': 21, 
+                                    'VALUE': (21,), 
                                     'UNIT': 'C'
                                 }
                             },
@@ -549,12 +549,12 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'Water',
                                 'PIPE': ('PIPE-5', 'PIPE-6', 'PIPE-1', 'PIPE-2', 'PIPE-3', 'PIPE-4'),
                                 'HMININNERWALL': {
-                                    'VALUE': 10, 
+                                    'VALUE': (10,), 
                                     'UNIT': 'W/m2-C'
                                 },
                                 'HOUTEROPTION': 'WATER',
                                 'TAMBIENT': {
-                                    'VALUE': 21, 
+                                    'VALUE': (21,), 
                                     'UNIT': 'C'
                                 }
                             }, 
@@ -563,11 +563,11 @@ class TestOlga(unittest.TestCase):
                                 'PIPE': ('PIPE-7', 'PIPE-8', 'PIPE-9', 'PIPE-10', 'PIPE-11', 'PIPE-12', 'PIPE-13', 'PIPE-14'),
                                 'HOUTEROPTION': 'HGIVEN',
                                 'TAMBIENT': {
-                                    'VALUE': 21, 
+                                    'VALUE': (21,), 
                                     'UNIT': 'C'
                                 },
                                 'HAMBIENT': {
-                                    'VALUE': 10000,
+                                    'VALUE': (10000,),
                                     'UNIT': 'W/m2-C'
                                 }
                             }
@@ -576,19 +576,19 @@ class TestOlga(unittest.TestCase):
                             'LABEL': 'LEAK', 
                             'VALVETYPE': 'OLGAVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 1000, 
+                                'VALUE': (1000,), 
                                 'UNIT': 'm'
                             },
                             'TIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             },
                             'BACKPRESSURE': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 'psig'
                             },
                             'DIAMETER': {
-                                'VALUE': 0.5, 
+                                'VALUE': (0.5,), 
                                 'UNIT': 'in'
                             }
                         }, 
@@ -597,11 +597,11 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'C-1', 
                                 'MODEL': 'HYDROVALVE',
                                 'ABSPOSITION': {
-                                    'VALUE': 16.7, 
+                                    'VALUE': (16.7,), 
                                     'UNIT': 'm'
                                 },
                                 'DIAMETER': {
-                                    'VALUE': 12, 
+                                    'VALUE': (12,), 
                                     'UNIT': 'in'
                                 }
                             },
@@ -609,11 +609,11 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'C-2',
                                 'MODEL': 'HYDROVALVE', 
                                 'ABSPOSITION': {
-                                    'VALUE': 20, 
+                                    'VALUE': (20,), 
                                     'UNIT': 'm'
                                 }, 
                                 'DIAMETER': {
-                                    'VALUE': 20.32, 
+                                    'VALUE': (20.32,), 
                                     'UNIT': 'cm'
                                 }
                             },
@@ -621,11 +621,11 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'C-4', 
                                 'MODEL': 'HYDROVALVE', 
                                 'ABSPOSITION': {
-                                    'VALUE': 1145, 
+                                    'VALUE': (1145,), 
                                     'UNIT': 'm'
                                 }, 
                                 'DIAMETER': {
-                                    'VALUE': 28.4, 
+                                    'VALUE': (28.4,), 
                                     'UNIT': 'cm'
                                 }
                             },
@@ -633,11 +633,11 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'C-7', 
                                 'MODEL': 'HYDROVALVE', 
                                 'ABSPOSITION': {
-                                    'VALUE': 1364, 
+                                    'VALUE': (1364,), 
                                     'UNIT': 'm'
                                 }, 
                                 'DIAMETER': {
-                                    'VALUE': 28.4, 
+                                    'VALUE': (28.4,), 
                                     'UNIT': 'cm'
                                 }
                             }, 
@@ -645,11 +645,11 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'C-8', 
                                 'MODEL': 'HYDROVALVE', 
                                 'ABSPOSITION': {
-                                    'VALUE': 1366, 
+                                    'VALUE': (1366,), 
                                     'UNIT': 'm'
                                 }, 
                                 'DIAMETER': {
-                                    'VALUE': 28.4, 
+                                    'VALUE': (28.4,), 
                                     'UNIT': 'cm'
                                 }
                             }, 
@@ -657,20 +657,20 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'V-in', 
                                 'MODEL': 'HYDROVALVE', 
                                 'TIME': {
-                                    'VALUE': 0, 
+                                    'VALUE': (0,), 
                                     'UNIT': 's'
                                 }, 
                                 'STROKETIME': {
-                                    'VALUE': 0, 
+                                    'VALUE': (0,), 
                                     'UNIT': 's'
                                 }, 
                                 'ABSPOSITION': {
-                                    'VALUE': 40, 
+                                    'VALUE': (40,), 
                                     'UNIT': 'm'
                                 }, 
                                 'SLIPMODEL': 'NOSLIP', 
                                 'DIAMETER': {
-                                    'VALUE': 20.32, 
+                                    'VALUE': (20.32,), 
                                     'UNIT': 'cm'
                                 }, 
                                 'OPENING': 1
@@ -679,19 +679,19 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'V-out', 
                                 'MODEL': 'HYDROVALVE', 
                                 'TIME': {
-                                    'VALUE': 0, 
+                                    'VALUE': (0,), 
                                     'UNIT': 's'
                                 }, 
                                 'STROKETIME': {
-                                    'VALUE': 0, 
+                                    'VALUE': (0,), 
                                     'UNIT': 's'
                                 }, 
                                 'ABSPOSITION': {
-                                    'VALUE': 1410, 
+                                    "VALUE": (1410,), 
                                     'UNIT': 'm'
                                 }, 
                                 'DIAMETER': {
-                                    'VALUE': 20.32, 
+                                    'VALUE': (20.32,), 
                                     'UNIT': 'cm'
                                 }, 
                                 'OPENING': 1
@@ -700,11 +700,11 @@ class TestOlga(unittest.TestCase):
                                 'LABEL': 'C-9', 
                                 'MODEL': 'HYDROVALVE', 
                                 'ABSPOSITION': {
-                                    'VALUE': 1382, 
+                                    'VALUE': (1382,), 
                                     'UNIT': 'm'
                                 }, 
                                 'DIAMETER': {
-                                    'VALUE': 28.4, 
+                                    'VALUE': (28.4,), 
                                     'UNIT': 'cm'
                                 }
                             }
@@ -712,7 +712,7 @@ class TestOlga(unittest.TestCase):
                         'SHUTIN': {
                             'LABEL': 'SHUTIN-1', 
                             'TIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'ACTIVATE': 'ON'
@@ -725,32 +725,32 @@ class TestOlga(unittest.TestCase):
                         'SOURCE': {
                             'LABEL': 'Entrada', 
                             'TIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'SOURCETYPE': 'PRESSUREDRIVEN', 
                             'ABSPOSITION': {
-                                'VALUE': 1000, 
+                                'VALUE': (1000,), 
                                 'UNIT': 'm'
                             }, 
                             'TOTALWATERFRACTION': {
-                                'VALUE': 100, 
+                                'VALUE': (100,), 
                                 'UNIT': '%'
                             }, 
                             'TEMPERATURE': {
-                                'VALUE': 21, 
+                                'VALUE': (21,), 
                                 'UNIT': 'C'
                             }, 
                             'PRESSURE': {
-                                'VALUE': 20, 
+                                'VALUE': (20,), 
                                 'UNIT': 'psig'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 1, 
+                                'VALUE': (1,), 
                                 'UNIT': 'in'
                             }, 
                             'STROKETIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }
                         }, 
@@ -761,14 +761,14 @@ class TestOlga(unittest.TestCase):
                         'POSITION': {
                             'LABEL': 'POS-1', 
                             'ABSPOSITION': {
-                                'VALUE': 1380, 
+                                'VALUE': (1380,), 
                                 'UNIT': 'm'
                             }
                         }, 
                         'CROSSDATA': {
                             'VARIABLE': 'U-PROFILE', 
                             'ABSPOSITION': {
-                                'VALUE': 1380, 
+                                'VALUE': (1380,), 
                                 'UNIT': 'm'
                             }
                         }
@@ -781,16 +781,16 @@ class TestOlga(unittest.TestCase):
                         'PARAMETERS': {
                             'LABEL': 'Control-Vout',
                             'TIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             },
                             'SETPOINT': 0.2727, 
                             'OPENINGTIME': {
-                                'VALUE': 10, 
+                                'VALUE': (10,), 
                                 'UNIT': 's'
                             },
                             'CLOSINGTIME': {
-                                'VALUE': 30,
+                                'VALUE': (30,),
                                 'UNIT': 's'
                             }
                         }
@@ -803,12 +803,12 @@ class TestOlga(unittest.TestCase):
                         'PARAMETERS': {
                             'LABEL': 'Control-Leak',
                             'TIME': {
-                                'VALUES': (0, 2),
+                                'VALUE': (0, 2),
                                 'UNIT': 's'
                             },
                             'SETPOINT': (0, 1),
                             'STROKETIME': {
-                                'VALUE': 1,
+                                'VALUE': (1,),
                                 'UNIT': 's'
                             }
                         }
@@ -821,16 +821,16 @@ class TestOlga(unittest.TestCase):
                         'PARAMETERS': {
                             'LABEL': 'Control-Vin',
                             'TIME': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 's'
                             },
                             'SETPOINT': 1,
                             'OPENINGTIME': {
-                                'VALUE': 10,
+                                'VALUE': (10,),
                                 'UNIT': 's'
                             },
                             'CLOSINGTIME': {
-                                'VALUE': 60,
+                                'VALUE': (60,),
                                 'UNIT': 's'
                             }
                         }
@@ -843,16 +843,16 @@ class TestOlga(unittest.TestCase):
                         'PARAMETERS': {
                             'LABEL': 'Control-TKin', 
                             'TIME': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 's'
                             },
                             'SETPOINT': 0.7884,
                             'OPENINGTIME': {
-                                'VALUE': 10,
+                                'VALUE': (10,),
                                 'UNIT': 's'
                             },
                             'CLOSINGTIME': {
-                                'VALUE': 124.24933,
+                                'VALUE': (124.24933,),
                                 'UNIT': 's'
                             }
                         }
@@ -865,12 +865,12 @@ class TestOlga(unittest.TestCase):
                         'PARAMETERS': {
                             'LABEL': 'Control-Source', 
                             'TIME': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 's'
                             },
                             'SETPOINT': 0,
                             'STROKETIME': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 's'
                             }
                         }
@@ -884,28 +884,28 @@ class TestOlga(unittest.TestCase):
                             'LABEL': 'TK-in',
                             'TYPE': 'PRESSURE',
                             'GASFRACEQ': {
-                                "VALUE": 1,
+                                'VALUE': (1,),
                                 "UNIT": "-"
                             },
                             'WATERFRACEQ': {
-                                "VALUE": 1,
+                                'VALUE': (1,),
                                 "UNIT": "-"
                             },
                             'FEEDNAME': 'P500',
                             'FEEDVOLFRACTION': {
-                                "VALUE": 1,
+                                'VALUE': (1,),
                                 "UNIT": "-"
                             },
                             'TEMPERATURE': {
-                                'VALUE': 30, 
+                                'VALUE': (30,), 
                                 'UNIT': 'C'
                             },
                             'PRESSURE': {
-                                'VALUE': 130,
+                                'VALUE': (130,),
                                 'UNIT': 'psig'
                             },
                             'TIME': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 'M'
                             },
                             'FLUID': 'Diesel_1'
@@ -920,28 +920,28 @@ class TestOlga(unittest.TestCase):
                             'LABEL': 'TK-Out',
                             'TYPE': 'PRESSURE',
                             'GASFRACEQ': {
-                                "VALUE": 1,
+                                'VALUE': (1,),
                                 "UNIT": "-"
                             },
                             'WATERFRACEQ': {
-                                "VALUE": 1,
+                                'VALUE': (1,),
                                 "UNIT": "-"
                             },
                             'FEEDNAME': 'P500',
                             'FEEDVOLFRACTION': {
-                                "VALUE": 1,
+                                'VALUE': (1,),
                                 "UNIT": "-"
                             },
                             'TEMPERATURE': {
-                                'VALUE': 30,
+                                'VALUE': (30,),
                                 'UNIT': 'C'
                             },
                             'PRESSURE': {
-                                'VALUE': 10,
+                                'VALUE': (10,),
                                 'UNIT': 'psig'
                             },
                             'TIME': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 's'
                             }, 
                             'FLUID': 'Diesel_1'

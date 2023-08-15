@@ -208,9 +208,10 @@ class Genkey(dict):
 
                     if isinstance(VALUE, tuple):
                         plural = True
-
+                  
                     k_v[key] = {
-                        f'VALUE{"S" if plural else ""}': VALUE,
+                        # f'VALUE{"S" if plural else ""}': VALUE,
+                        'VALUE': tuple(VALUE) if plural else tuple([VALUE]),
                         'UNIT': UNIT.strip(',')
                     }
                     continue
@@ -226,11 +227,17 @@ class Genkey(dict):
                 continue
 
             if re.search(r'\d+\ \W+', val):
+                plural = False
                 val = val.strip().split()
                 VALUE = eval(val[0])
                 UNIT = val[-1]
+
+                if isinstance(VALUE, tuple):
+                    plural = True
+                  
                 k_v[key] = {
-                    'VALUE': VALUE,
+                    # 'VALUE': VALUE,
+                    'VALUE': tuple(VALUE) if plural else tuple([VALUE]),
                     'UNIT': UNIT
                 }
                 continue
