@@ -253,14 +253,19 @@ class Genkey(dict):
             filepath, str), f'filepath must be a string! Not {type(filepath)}'
 
         try:
-
             with open(filepath, 'r') as f:
                 file = f.read()
+        except FileNotFoundError:
+            # Modify the filepath by joining the parent directory path
+            parent_directory = os.path.dirname(os.path.dirname(os.path.abspath(filepath)))
+            modified_filepath = os.path.join(parent_directory, os.path.basename(filepath))
+            
+            try:
+                with open(modified_filepath, 'r') as f:
+                    file = f.read()
+            except FileNotFoundError:
+                print("File not found in both locations.")
 
-        except:
-
-            with open(os.path.sep + os.path.join(filepath), 'r') as f:
-                file = f.read()
 
         # Splitting Genkey in principal elements
         split_genkey_elements_pattern = re.compile('\s\n')
