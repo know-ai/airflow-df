@@ -59,24 +59,24 @@ class TestGenkey(unittest.TestCase):
         with self.subTest(f"Test Global Keywords Integration"):
             expected = {
                 "ENDTIME": {
-                    "VALUE": 5,
+                    "VALUE": (5,),
                     "UNIT": "s"
                 }, 
                 "MAXDT": {
-                    "VALUE": 10,
+                    "VALUE": (10,),
                     "UNIT": "s"
                 },
                 "MINDT": {
-                    "VALUE": 0.02,
+                    "VALUE": (0.02,),
                     "UNIT": "s"
                 },
                 "MAXLAGFACT": 0,
                 "STARTTIME": {
-                    "VALUE": 0,
+                    "VALUE": (0,),
                     "UNIT": "s"
                 },
                 "DTSTART": {
-                    "VALUE": 0.02,
+                    "VALUE": (0.02,),
                     "UNIT": "s"
                 }
             }
@@ -91,7 +91,7 @@ class TestGenkey(unittest.TestCase):
         with self.subTest(f"Test Global Keywords TREND"):
             expected = {
                 "DTPLOT": {
-                    "VALUE": 1,
+                    "VALUE": (1,),
                     "UNIT": "s"
                 }
             }
@@ -101,11 +101,11 @@ class TestGenkey(unittest.TestCase):
             expected = {
                 "WRITEFILE": "ON",
                 "DTPLOT": {
-                    "VALUE": 1,
+                    "VALUE": (1,),
                     "UNIT": "s"
                 },
                 "DTTIME": {
-                    "VALUE": 0,
+                    "VALUE": (0,),
                     "UNIT": "s"
                 }
             }
@@ -121,7 +121,7 @@ class TestGenkey(unittest.TestCase):
         with self.subTest(f"Test Global Keywords Animate"):
             expected = {
                 "DTPLOT": {
-                    "VALUE": 0,
+                    "VALUE": (0,),
                     "UNIT": "s"
                 }
             }
@@ -138,57 +138,57 @@ class TestGenkey(unittest.TestCase):
                 {
                     "LABEL": "Stainless Steel",
                     "CAPACITY": {
-                        "VALUE": 450,
+                        "VALUE": (450,),
                         "UNIT": "J/kg-C"
                     },
                     "CONDUCTIVITY": {
-                        "VALUE": 20,
+                        "VALUE": (20,),
                         "UNIT": "W/m-K"
                     },
                     "DENSITY": {
-                        "VALUE": 7850,
+                        "VALUE": (7850,),
                         "UNIT": "kg/m3"
                     },
                     "EMOD": {
-                        "VALUE": 210000000000,
+                        "VALUE": (210000000000,),
                         "UNIT": "Pa"
                     }
                 },
                 {
                     "LABEL": "Fibra de vidrio",
                     "CAPACITY": {
-                        "VALUE": 450,
+                        "VALUE": (450,),
                         "UNIT": "J/kg-C"
                     },
                     "CONDUCTIVITY": {
-                        "VALUE": 20,
+                        "VALUE": (20,),
                         "UNIT": "W/m-C"
                     },
                     "DENSITY": {
-                        "VALUE": 7850,
+                        "VALUE": (7850,),
                         "UNIT": "kg/m3"
                     },
                     "EMOD": {
-                        "VALUE": 400000000000,
+                        "VALUE": (400000000000,),
                         "UNIT": "Pa"
                     }
                 },
                 {
                     "LABEL": "Concrete Coating HD",
                     "CAPACITY": {
-                        "VALUE": 880,
+                        "VALUE": (880,),
                         "UNIT": "J/kg-C"
                     },
                     "CONDUCTIVITY": {
-                        "VALUE": 2.7,
+                        "VALUE": (2.7,),
                         "UNIT": "W/m-K"
                     }, 
                     "DENSITY": {
-                        "VALUE": 3000,
+                        "VALUE": (3000,),
                         "UNIT": "kg/m3"
                     },
                     "EMOD": {
-                        "VALUE": 500000000000,
+                        "VALUE": (500000000000,),
                         "UNIT": "Pa"
                     }
                 }
@@ -199,7 +199,7 @@ class TestGenkey(unittest.TestCase):
             expected = {
                 "LABEL": "WALL-1",
                 "THICKNESS": {
-                    "VALUES": (1, 1.5875, 1),
+                    "VALUE": (1, 1.5875, 1),
                     "UNIT": "cm"
                 },
                 "MATERIAL": ("Fibra de vidrio", "Stainless Steel", "Concrete Coating HD"), 
@@ -212,81 +212,81 @@ class TestGenkey(unittest.TestCase):
                 {
                     "LABEL": "C-1",
                     "VOLUMEFLOW": {
-                        "VALUES": (0, 181.9067, 363.6619, 545.2656, 681.582, 817.8984, 954.2148, 1090.531),
+                        "VALUE": (0, 181.9067, 363.6619, 545.2656, 681.582, 817.8984, 954.2148, 1090.531),
                         "UNIT": "m3/h"
                     },
                     "SPEED": {
-                        "VALUES": (3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76),
+                        "VALUE": (3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76),
                         "UNIT": "rpm"
                     },
                     "GVF": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "%"
                     },
                     "DENSITY": {
-                        "VALUE": 997,
+                        "VALUE": (997,),
                         "UNIT": "kg/m3"
                     },
                     "EFFICIENCY": {
-                        "VALUES": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
+                        "VALUE": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
                         "UNIT": "%"
                     }, 
                     "HEAD": {
-                        "VALUES": (103.0491, 99.92642, 96.80372, 93.68102, 78.1651, 57.37963, 31.32459, 0),
+                        "VALUE": (103.0491, 99.92642, 96.80372, 93.68102, 78.1651, 57.37963, 31.32459, 0),
                         "UNIT": "m"
                     }
                 },
                 {
                     "LABEL": "C-2",
                     "VOLUMEFLOW": {
-                        "VALUES": (0, 188.5352, 376.9134, 565.1346, 706.4182, 847.7018, 988.9855, 1130.269),
+                        "VALUE": (0, 188.5352, 376.9134, 565.1346, 706.4182, 847.7018, 988.9855, 1130.269),
                         "UNIT": "m3/h"
                     },
                     "SPEED": {
-                        "VALUES": (3420, 3420, 3420, 3420, 3420, 3420, 3420, 3420),
+                        "VALUE": (3420, 3420, 3420, 3420, 3420, 3420, 3420, 3420),
                         "UNIT": "rpm"
                     },
                     "GVF": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "%"
                     },
                     "DENSITY": {
-                        "VALUE": 997,
+                        "VALUE": (997,),
                         "UNIT": "kg/m3"
                     },
                     "EFFICIENCY": {
-                        "VALUES": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
+                        "VALUE": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
                         "UNIT": "%"
                     },
                     "HEAD": {
-                        "VALUES": (110.696, 107.3415, 103.9871, 100.6327, 83.96541, 61.63753, 33.64906, 0),
+                        "VALUE": (110.696, 107.3415, 103.9871, 100.6327, 83.96541, 61.63753, 33.64906, 0),
                         "UNIT": "m"
                     }
                 },
                 {
                     "LABEL": "C-3",
                     "VOLUMEFLOW": {
-                        "VALUES": (0, 198.4581, 396.7509, 594.8785, 743.5981, 892.3177, 1041.037, 1189.757),
+                        "VALUE": (0, 198.4581, 396.7509, 594.8785, 743.5981, 892.3177, 1041.037, 1189.757),
                         "UNIT": "m3/h"
                     },
                     "SPEED": {
-                        "VALUES": (3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600),
+                        "VALUE": (3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600),
                         "UNIT": "rpm"
                     },
                     "GVF": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "%"
                     },
                     "DENSITY": {
-                        "VALUE": 997,
+                        "VALUE": (997,),
                         "UNIT": "kg/m3"
                     },
                     "EFFICIENCY": {
-                        "VALUES": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
+                        "VALUE": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
                         "UNIT": "%"
                     },
                     "HEAD": {
-                        "VALUES": (122.6548, 118.938, 115.2212, 111.5044, 93.03646, 68.29643, 37.28428, 0),
+                        "VALUE": (122.6548, 118.938, 115.2212, 111.5044, 93.03646, 68.29643, 37.28428, 0),
                         "UNIT": "m"
                     }
                 }
@@ -299,16 +299,16 @@ class TestGenkey(unittest.TestCase):
                     "LABEL": "Clima aire",
                     "TYPE": "POINTS",
                     "TIME": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "M"
                     },
                     "AMPLITUDE": 2, 
                     "PERIOD": {
-                        "VALUE": 48,
+                        "VALUE": (48,),
                         "UNIT": "h"
                     },
                     "TIME": {
-                        "VALUES": (0, 150, 300),
+                        "VALUE": (0, 150, 300),
                         "UNIT": "s"
                     },
                     "SERIES": (0, 0, 49)
@@ -317,7 +317,7 @@ class TestGenkey(unittest.TestCase):
                     "LABEL": "Clima mar",
                     "AMPLITUDE": 2,
                     "PERIOD": {
-                        "VALUE": 2,
+                        "VALUE": (2,),
                         "UNIT": "d"
                     }
                 },
@@ -325,7 +325,7 @@ class TestGenkey(unittest.TestCase):
                     "LABEL": "clima suelo",
                     "AMPLITUDE": 2,
                     "PERIOD": {
-                        "VALUE": 2,
+                        "VALUE": (2,),
                         "UNIT": "d"
                     }
                 }
@@ -389,189 +389,189 @@ class TestGenkey(unittest.TestCase):
                     'PIPE': [
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-1',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 3,
+                                'VALUE': (3,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 304.8, 
+                                'VALUE': (304.8,), 
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-2',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 13.7,
+                                'VALUE': (13.7,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 13.7,
+                                'VALUE': (13.7,),
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 304.8,
+                                'VALUE': (304.8,),
                                 'UNIT': 'mm'
                             }
                         }, 
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-3',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 4,
+                                'VALUE': (4,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 304.8,
+                                'VALUE': (304.8,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-4',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 17.2,
+                                'VALUE': (17.2,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': -17.2,
+                                'VALUE': (-17.2,),
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 203.2,
+                                'VALUE': (203.2,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             }, 
                             'LABEL': 'Pipe-5',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2, 
                             'LENGTH': {
-                                'VALUE': 15, 
+                                'VALUE': (15,), 
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0, 'UNIT': 'm'
+                                'VALUE': (0,), 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 203.2,
+                                'VALUE': (203.2,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             }, 
                             'LABEL': 'Pipe-6',
                             'WALL': 'WALL-1', 
                             'NSEGMENT': 2, 
                             'LENGTH': {
-                                'VALUE': 1026.48, 
+                                'VALUE': (1026.48,), 
                                 'UNIT': 'm'
                             }, 
                             'ELEVATION': {
-                                'VALUE': 12.5, 
+                                'VALUE': (12.5,), 
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 283.999999999999, 
+                                'VALUE': (283.999999999999,), 
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-7',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 285.3,
+                                'VALUE': (285.3,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 283.999999999999,
+                                'VALUE': (283.999999999999,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053, 
+                                'VALUE': (0.0053,), 
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-8',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 2,
+                                'VALUE': (2,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 2, 
+                                'VALUE': (2,), 
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 283.999999999999,
+                                'VALUE': (283.999999999999,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-9',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 126.7,
+                                'VALUE': (126.7,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 283.999999999999, 
+                                'VALUE': (283.999999999999,), 
                                 'UNIT': 'mm'
                             }
                         }
@@ -579,14 +579,14 @@ class TestGenkey(unittest.TestCase):
                     'TRENDDATA': [
                         {
                             'ABSPOSITION': {
-                                'VALUE': 1378, 
+                                'VALUE': (1378,), 
                                 'UNIT': 'm'
                             },
                             'VARIABLE': 'PT'
                         },
                         {
                             'ABSPOSITION': {
-                                'VALUE': 1378,
+                                'VALUE': (1378,),
                                 'UNIT': 'm'
                             },
                             'VARIABLE': 'GT'
@@ -604,12 +604,12 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'Air', 
                             'PIPE': ('PIPE-15', 'PIPE-16', 'PIPE-17', 'PIPE-18', 'PIPE-19', 'PIPE-20', 'PIPE-21', 'PIPE-22', 'PIPE-23', 'PIPE-24', 'PIPE-25', 'PIPE-26'),
                             'HMININNERWALL': {
-                                'VALUE': 10,
+                                'VALUE': (10,),
                                 'UNIT': 'W/m2-C'
                             },
                             'HOUTEROPTION': 'AIR', 
                             'TAMBIENT': {
-                                'VALUE': 21, 
+                                'VALUE': (21,), 
                                 'UNIT': 'C'
                             }
                         },
@@ -617,12 +617,12 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'Water',
                             'PIPE': ('PIPE-5', 'PIPE-6', 'PIPE-1', 'PIPE-2', 'PIPE-3', 'PIPE-4'),
                             'HMININNERWALL': {
-                                'VALUE': 10, 
+                                'VALUE': (10,), 
                                 'UNIT': 'W/m2-C'
                             },
                             'HOUTEROPTION': 'WATER',
                             'TAMBIENT': {
-                                'VALUE': 21, 
+                                'VALUE': (21,), 
                                 'UNIT': 'C'
                             }
                         }, 
@@ -631,11 +631,11 @@ class TestGenkey(unittest.TestCase):
                             'PIPE': ('PIPE-7', 'PIPE-8', 'PIPE-9', 'PIPE-10', 'PIPE-11', 'PIPE-12', 'PIPE-13', 'PIPE-14'),
                             'HOUTEROPTION': 'HGIVEN',
                             'TAMBIENT': {
-                                'VALUE': 21, 
+                                'VALUE': (21,), 
                                 'UNIT': 'C'
                             },
                             'HAMBIENT': {
-                                'VALUE': 10000,
+                                'VALUE': (10000,),
                                 'UNIT': 'W/m2-C'
                             }
                         }
@@ -644,19 +644,19 @@ class TestGenkey(unittest.TestCase):
                         'LABEL': 'LEAK', 
                         'VALVETYPE': 'OLGAVALVE', 
                         'ABSPOSITION': {
-                            'VALUE': 1000, 
+                            'VALUE': (1000,), 
                             'UNIT': 'm'
                         },
                         'TIME': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 's'
                         },
                         'BACKPRESSURE': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 'psig'
                         },
                         'DIAMETER': {
-                            'VALUE': 0.5, 
+                            'VALUE': (0.5,), 
                             'UNIT': 'in'
                         }
                     }, 
@@ -665,11 +665,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-1', 
                             'MODEL': 'HYDROVALVE',
                             'ABSPOSITION': {
-                                'VALUE': 16.7, 
+                                'VALUE': (16.7,), 
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 12, 
+                                'VALUE': (12,), 
                                 'UNIT': 'in'
                             }
                         },
@@ -677,11 +677,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-2',
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 20, 
+                                'VALUE': (20,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 20.32, 
+                                'VALUE': (20.32,), 
                                 'UNIT': 'cm'
                             }
                         },
@@ -689,11 +689,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-4', 
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 1145, 
+                                'VALUE': (1145,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 28.4, 
+                                'VALUE': (28.4,), 
                                 'UNIT': 'cm'
                             }
                         },
@@ -701,11 +701,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-7', 
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 1364, 
+                                'VALUE': (1364,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 28.4, 
+                                'VALUE': (28.4,), 
                                 'UNIT': 'cm'
                             }
                         }, 
@@ -713,11 +713,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-8', 
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 1366, 
+                                'VALUE': (1366,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 28.4, 
+                                'VALUE': (28.4,), 
                                 'UNIT': 'cm'
                             }
                         }, 
@@ -725,20 +725,20 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'V-in', 
                             'MODEL': 'HYDROVALVE', 
                             'TIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'STROKETIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'ABSPOSITION': {
-                                'VALUE': 40, 
+                                'VALUE': (40,), 
                                 'UNIT': 'm'
                             }, 
                             'SLIPMODEL': 'NOSLIP', 
                             'DIAMETER': {
-                                'VALUE': 20.32, 
+                                'VALUE': (20.32,), 
                                 'UNIT': 'cm'
                             }, 
                             'OPENING': 1
@@ -747,19 +747,19 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'V-out', 
                             'MODEL': 'HYDROVALVE', 
                             'TIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'STROKETIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'ABSPOSITION': {
-                                'VALUE': 1410, 
+                                'VALUE': (1410,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 20.32, 
+                                'VALUE': (20.32,), 
                                 'UNIT': 'cm'
                             }, 
                             'OPENING': 1
@@ -768,11 +768,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-9', 
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 1382, 
+                                'VALUE': (1382,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 28.4, 
+                                'VALUE': (28.4,), 
                                 'UNIT': 'cm'
                             }
                         }
@@ -780,7 +780,7 @@ class TestGenkey(unittest.TestCase):
                     'SHUTIN': {
                         'LABEL': 'SHUTIN-1', 
                         'TIME': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 's'
                         }, 
                         'ACTIVATE': 'ON'
@@ -793,32 +793,32 @@ class TestGenkey(unittest.TestCase):
                     'SOURCE': {
                         'LABEL': 'Entrada', 
                         'TIME': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 's'
                         }, 
                         'SOURCETYPE': 'PRESSUREDRIVEN', 
                         'ABSPOSITION': {
-                            'VALUE': 1000, 
+                            'VALUE': (1000,), 
                             'UNIT': 'm'
                         }, 
                         'TOTALWATERFRACTION': {
-                            'VALUE': 100, 
+                            'VALUE': (100,), 
                             'UNIT': '%'
                         }, 
                         'TEMPERATURE': {
-                            'VALUE': 21, 
+                            'VALUE': (21,), 
                             'UNIT': 'C'
                         }, 
                         'PRESSURE': {
-                            'VALUE': 20, 
+                            'VALUE': (20,), 
                             'UNIT': 'psig'
                         }, 
                         'DIAMETER': {
-                            'VALUE': 1, 
+                            'VALUE': (1,), 
                             'UNIT': 'in'
                         }, 
                         'STROKETIME': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 's'
                         }
                     }, 
@@ -829,14 +829,14 @@ class TestGenkey(unittest.TestCase):
                     'POSITION': {
                         'LABEL': 'POS-1', 
                         'ABSPOSITION': {
-                            'VALUE': 1380, 
+                            'VALUE': (1380,), 
                             'UNIT': 'm'
                         }
                     }, 
                     'CROSSDATA': {
                         'VARIABLE': 'U-PROFILE', 
                         'ABSPOSITION': {
-                            'VALUE': 1380, 
+                            'VALUE': (1380,), 
                             'UNIT': 'm'
                         }
                     }
@@ -849,16 +849,16 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-Vout',
                         'TIME': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 's'
                         },
                         'SETPOINT': 0.2727, 
                         'OPENINGTIME': {
-                            'VALUE': 10, 
+                            'VALUE': (10,), 
                             'UNIT': 's'
                         },
                         'CLOSINGTIME': {
-                            'VALUE': 30,
+                            'VALUE': (30,),
                             'UNIT': 's'
                         }
                     }
@@ -871,12 +871,12 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-Leak',
                         'TIME': {
-                            'VALUES': (0, 2),
+                            'VALUE': (0, 2),
                             'UNIT': 's'
                         },
                         'SETPOINT': (0, 1),
                         'STROKETIME': {
-                            'VALUE': 1,
+                            'VALUE': (1,),
                             'UNIT': 's'
                         }
                     }
@@ -889,16 +889,16 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-Vin',
                         'TIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 's'
                         },
                         'SETPOINT': 1,
                         'OPENINGTIME': {
-                            'VALUE': 10,
+                            'VALUE': (10,),
                             'UNIT': 's'
                         },
                         'CLOSINGTIME': {
-                            'VALUE': 60,
+                            'VALUE': (60,),
                             'UNIT': 's'
                         }
                     }
@@ -911,16 +911,16 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-TKin', 
                         'TIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 's'
                         },
                         'SETPOINT': 0.7884,
                         'OPENINGTIME': {
-                            'VALUE': 10,
+                            'VALUE': (10,),
                             'UNIT': 's'
                         },
                         'CLOSINGTIME': {
-                            'VALUE': 124.24933,
+                            'VALUE': (124.24933,),
                             'UNIT': 's'
                         }
                     }
@@ -933,12 +933,12 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-Source', 
                         'TIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 's'
                         },
                         'SETPOINT': 0,
                         'STROKETIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 's'
                         }
                     }
@@ -952,28 +952,28 @@ class TestGenkey(unittest.TestCase):
                         'LABEL': 'TK-in',
                         'TYPE': 'PRESSURE',
                         'GASFRACEQ': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'WATERFRACEQ': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'FEEDNAME': 'P500',
                         'FEEDVOLFRACTION': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'TEMPERATURE': {
-                            'VALUE': 30, 
+                            'VALUE': (30,), 
                             'UNIT': 'C'
                         },
                         'PRESSURE': {
-                            'VALUE': 130,
+                            'VALUE': (130,),
                             'UNIT': 'psig'
                         },
                         'TIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 'M'
                         },
                         'FLUID': 'Diesel_1'
@@ -988,28 +988,28 @@ class TestGenkey(unittest.TestCase):
                         'LABEL': 'TK-Out',
                         'TYPE': 'PRESSURE',
                         'GASFRACEQ': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'WATERFRACEQ': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'FEEDNAME': 'P500',
                         'FEEDVOLFRACTION': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'TEMPERATURE': {
-                            'VALUE': 30,
+                            'VALUE': (30,),
                             'UNIT': 'C'
                         },
                         'PRESSURE': {
-                            'VALUE': 10,
+                            'VALUE': (10,),
                             'UNIT': 'psig'
                         },
                         'TIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 's'
                         }, 
                         'FLUID': 'Diesel_1'
@@ -1069,24 +1069,24 @@ class TestGenkey(unittest.TestCase):
         with self.subTest(f"Test Global Keywords Integration"):
             expected = {
                 "ENDTIME": {
-                    "VALUE": 3,
+                    "VALUE": (3,),
                     "UNIT": "s"
                 }, 
                 "MAXDT": {
-                    "VALUE": 10,
+                    "VALUE": (10,),
                     "UNIT": "s"
                 },
                 "MINDT": {
-                    "VALUE": 0.02,
+                    "VALUE": (0.02,),
                     "UNIT": "s"
                 },
                 "MAXLAGFACT": 0,
                 "STARTTIME": {
-                    "VALUE": 0,
+                    "VALUE": (0,),
                     "UNIT": "s"
                 },
                 "DTSTART": {
-                    "VALUE": 0.02,
+                    "VALUE": (0.02,),
                     "UNIT": "s"
                 }
             }
@@ -1101,7 +1101,7 @@ class TestGenkey(unittest.TestCase):
         with self.subTest(f"Test Global Keywords TREND"):
             expected = {
                 "DTPLOT": {
-                    "VALUE": 1,
+                    "VALUE": (1,),
                     "UNIT": "s"
                 }
             }
@@ -1111,11 +1111,11 @@ class TestGenkey(unittest.TestCase):
             expected = {
                 "WRITEFILE": "ON",
                 "DTPLOT": {
-                    "VALUE": 1,
+                    "VALUE": (1,),
                     "UNIT": "s"
                 },
                 "DTTIME": {
-                    "VALUE": 0,
+                    "VALUE": (0,),
                     "UNIT": "s"
                 }
             }
@@ -1131,7 +1131,7 @@ class TestGenkey(unittest.TestCase):
         with self.subTest(f"Test Global Keywords Animate"):
             expected = {
                 "DTPLOT": {
-                    "VALUE": 0,
+                    "VALUE": (0,),
                     "UNIT": "s"
                 }
             }
@@ -1148,57 +1148,57 @@ class TestGenkey(unittest.TestCase):
                 {
                     "LABEL": "Stainless Steel",
                     "CAPACITY": {
-                        "VALUE": 450,
+                        "VALUE": (450,),
                         "UNIT": "J/kg-C"
                     },
                     "CONDUCTIVITY": {
-                        "VALUE": 20,
+                        "VALUE": (20,),
                         "UNIT": "W/m-K"
                     },
                     "DENSITY": {
-                        "VALUE": 7850,
+                        "VALUE": (7850,),
                         "UNIT": "kg/m3"
                     },
                     "EMOD": {
-                        "VALUE": 210000000000,
+                        "VALUE": (210000000000,),
                         "UNIT": "Pa"
                     }
                 },
                 {
                     "LABEL": "Fibra de vidrio",
                     "CAPACITY": {
-                        "VALUE": 450,
+                        "VALUE": (450,),
                         "UNIT": "J/kg-C"
                     },
                     "CONDUCTIVITY": {
-                        "VALUE": 20,
+                        "VALUE": (20,),
                         "UNIT": "W/m-C"
                     },
                     "DENSITY": {
-                        "VALUE": 7850,
+                        "VALUE": (7850,),
                         "UNIT": "kg/m3"
                     },
                     "EMOD": {
-                        "VALUE": 400000000000,
+                        "VALUE": (400000000000,),
                         "UNIT": "Pa"
                     }
                 },
                 {
                     "LABEL": "Concrete Coating HD",
                     "CAPACITY": {
-                        "VALUE": 880,
+                        "VALUE": (880,),
                         "UNIT": "J/kg-C"
                     },
                     "CONDUCTIVITY": {
-                        "VALUE": 2.7,
+                        "VALUE": (2.7,),
                         "UNIT": "W/m-K"
                     }, 
                     "DENSITY": {
-                        "VALUE": 3000,
+                        "VALUE": (3000,),
                         "UNIT": "kg/m3"
                     },
                     "EMOD": {
-                        "VALUE": 500000000000,
+                        "VALUE": (500000000000,),
                         "UNIT": "Pa"
                     }
                 }
@@ -1209,7 +1209,7 @@ class TestGenkey(unittest.TestCase):
             expected = {
                 "LABEL": "WALL-1",
                 "THICKNESS": {
-                    "VALUES": (1, 1.5875, 1),
+                    "VALUE": (1, 1.5875, 1),
                     "UNIT": "cm"
                 },
                 "MATERIAL": ("Fibra de vidrio", "Stainless Steel", "Concrete Coating HD"), 
@@ -1222,81 +1222,81 @@ class TestGenkey(unittest.TestCase):
                 {
                     "LABEL": "C-1",
                     "VOLUMEFLOW": {
-                        "VALUES": (0, 181.9067, 363.6619, 545.2656, 681.582, 817.8984, 954.2148, 1090.531),
+                        "VALUE": (0, 181.9067, 363.6619, 545.2656, 681.582, 817.8984, 954.2148, 1090.531),
                         "UNIT": "m3/h"
                     },
                     "SPEED": {
-                        "VALUES": (3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76),
+                        "VALUE": (3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76, 3299.76),
                         "UNIT": "rpm"
                     },
                     "GVF": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "%"
                     },
                     "DENSITY": {
-                        "VALUE": 997,
+                        "VALUE": (997,),
                         "UNIT": "kg/m3"
                     },
                     "EFFICIENCY": {
-                        "VALUES": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
+                        "VALUE": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
                         "UNIT": "%"
                     }, 
                     "HEAD": {
-                        "VALUES": (103.0491, 99.92642, 96.80372, 93.68102, 78.1651, 57.37963, 31.32459, 0),
+                        "VALUE": (103.0491, 99.92642, 96.80372, 93.68102, 78.1651, 57.37963, 31.32459, 0),
                         "UNIT": "m"
                     }
                 },
                 {
                     "LABEL": "C-2",
                     "VOLUMEFLOW": {
-                        "VALUES": (0, 188.5352, 376.9134, 565.1346, 706.4182, 847.7018, 988.9855, 1130.269),
+                        "VALUE": (0, 188.5352, 376.9134, 565.1346, 706.4182, 847.7018, 988.9855, 1130.269),
                         "UNIT": "m3/h"
                     },
                     "SPEED": {
-                        "VALUES": (3420, 3420, 3420, 3420, 3420, 3420, 3420, 3420),
+                        "VALUE": (3420, 3420, 3420, 3420, 3420, 3420, 3420, 3420),
                         "UNIT": "rpm"
                     },
                     "GVF": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "%"
                     },
                     "DENSITY": {
-                        "VALUE": 997,
+                        "VALUE": (997,),
                         "UNIT": "kg/m3"
                     },
                     "EFFICIENCY": {
-                        "VALUES": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
+                        "VALUE": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
                         "UNIT": "%"
                     },
                     "HEAD": {
-                        "VALUES": (110.696, 107.3415, 103.9871, 100.6327, 83.96541, 61.63753, 33.64906, 0),
+                        "VALUE": (110.696, 107.3415, 103.9871, 100.6327, 83.96541, 61.63753, 33.64906, 0),
                         "UNIT": "m"
                     }
                 },
                 {
                     "LABEL": "C-3",
                     "VOLUMEFLOW": {
-                        "VALUES": (0, 198.4581, 396.7509, 594.8785, 743.5981, 892.3177, 1041.037, 1189.757),
+                        "VALUE": (0, 198.4581, 396.7509, 594.8785, 743.5981, 892.3177, 1041.037, 1189.757),
                         "UNIT": "m3/h"
                     },
                     "SPEED": {
-                        "VALUES": (3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600),
+                        "VALUE": (3600, 3600, 3600, 3600, 3600, 3600, 3600, 3600),
                         "UNIT": "rpm"
                     },
                     "GVF": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "%"
                     },
                     "DENSITY": {
-                        "VALUE": 997,
+                        "VALUE": (997,),
                         "UNIT": "kg/m3"
                     },
                     "EFFICIENCY": {
-                        "VALUES": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
+                        "VALUE": (63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63),
                         "UNIT": "%"
                     },
                     "HEAD": {
-                        "VALUES": (122.6548, 118.938, 115.2212, 111.5044, 93.03646, 68.29643, 37.28428, 0),
+                        "VALUE": (122.6548, 118.938, 115.2212, 111.5044, 93.03646, 68.29643, 37.28428, 0),
                         "UNIT": "m"
                     }
                 }
@@ -1309,16 +1309,16 @@ class TestGenkey(unittest.TestCase):
                     "LABEL": "Clima aire",
                     "TYPE": "POINTS",
                     "TIME": {
-                        "VALUE": 0,
+                        "VALUE": (0,),
                         "UNIT": "M"
                     },
                     "AMPLITUDE": 2, 
                     "PERIOD": {
-                        "VALUE": 48,
+                        "VALUE": (48,),
                         "UNIT": "h"
                     },
                     "TIME": {
-                        "VALUES": (0, 150, 300),
+                        "VALUE": (0, 150, 300),
                         "UNIT": "s"
                     },
                     "SERIES": (0, 0, 49)
@@ -1327,7 +1327,7 @@ class TestGenkey(unittest.TestCase):
                     "LABEL": "Clima mar",
                     "AMPLITUDE": 2,
                     "PERIOD": {
-                        "VALUE": 2,
+                        "VALUE": (2,),
                         "UNIT": "d"
                     }
                 },
@@ -1335,7 +1335,7 @@ class TestGenkey(unittest.TestCase):
                     "LABEL": "clima suelo",
                     "AMPLITUDE": 2,
                     "PERIOD": {
-                        "VALUE": 2,
+                        "VALUE": (2,),
                         "UNIT": "d"
                     }
                 }
@@ -1400,189 +1400,189 @@ class TestGenkey(unittest.TestCase):
                     'PIPE': [
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-1',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 3,
+                                'VALUE': (3,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 304.8, 
+                                'VALUE': (304.8,), 
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-2',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 13.7,
+                                'VALUE': (13.7,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 13.7,
+                                'VALUE': (13.7,),
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 304.8,
+                                'VALUE': (304.8,),
                                 'UNIT': 'mm'
                             }
                         }, 
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-3',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 4,
+                                'VALUE': (4,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 304.8,
+                                'VALUE': (304.8,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-4',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 17.2,
+                                'VALUE': (17.2,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': -17.2,
+                                'VALUE': (-17.2,),
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 203.2,
+                                'VALUE': (203.2,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             }, 
                             'LABEL': 'Pipe-5',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2, 
                             'LENGTH': {
-                                'VALUE': 15, 
+                                'VALUE': (15,), 
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0, 'UNIT': 'm'
+                                'VALUE': (0,), 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 203.2,
+                                'VALUE': (203.2,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             }, 
                             'LABEL': 'Pipe-6',
                             'WALL': 'WALL-1', 
                             'NSEGMENT': 2, 
                             'LENGTH': {
-                                'VALUE': 1026.48, 
+                                'VALUE': (1026.48,), 
                                 'UNIT': 'm'
                             }, 
                             'ELEVATION': {
-                                'VALUE': 12.5, 
+                                'VALUE': (12.5,), 
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 283.999999999999, 
+                                'VALUE': (283.999999999999,), 
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-7',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 285.3,
+                                'VALUE': (285.3,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0,
+                                'VALUE': (0,),
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 283.999999999999,
+                                'VALUE': (283.999999999999,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053, 
+                                'VALUE': (0.0053,), 
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-8',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 2,
+                                'VALUE': (2,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 2, 
+                                'VALUE': (2,), 
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 283.999999999999,
+                                'VALUE': (283.999999999999,),
                                 'UNIT': 'mm'
                             }
                         },
                         {
                             'ROUGHNESS': {
-                                'VALUE': 0.0053,
+                                'VALUE': (0.0053,),
                                 'UNIT': 'mm'
                             },
                             'LABEL': 'Pipe-9',
                             'WALL': 'WALL-1',
                             'NSEGMENT': 2,
                             'LENGTH': {
-                                'VALUE': 126.7,
+                                'VALUE': (126.7,),
                                 'UNIT': 'm'
                             },
                             'ELEVATION': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 283.999999999999, 
+                                'VALUE': (283.999999999999,), 
                                 'UNIT': 'mm'
                             }
                         }
@@ -1591,14 +1591,14 @@ class TestGenkey(unittest.TestCase):
                         {
                             'VARIABLE': 'PT',
                             'ABSPOSITION': {
-                                'VALUE': 1378, 
+                                'VALUE': (1378,), 
                                 'UNIT': 'm'
                             }                            
                         },
                         {
                             'VARIABLE': 'GT',
                             'ABSPOSITION': {
-                                'VALUE': 1378,
+                                'VALUE': (1378,),
                                 'UNIT': 'm'
                             }
                         }, 
@@ -1615,12 +1615,12 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'Air', 
                             'PIPE': ('PIPE-15', 'PIPE-16', 'PIPE-17', 'PIPE-18', 'PIPE-19', 'PIPE-20', 'PIPE-21', 'PIPE-22', 'PIPE-23', 'PIPE-24', 'PIPE-25', 'PIPE-26'),
                             'HMININNERWALL': {
-                                'VALUE': 10,
+                                'VALUE': (10,),
                                 'UNIT': 'W/m2-C'
                             },
                             'HOUTEROPTION': 'AIR', 
                             'TAMBIENT': {
-                                'VALUE': 21, 
+                                'VALUE': (21,), 
                                 'UNIT': 'C'
                             }
                         },
@@ -1628,12 +1628,12 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'Water',
                             'PIPE': ('PIPE-5', 'PIPE-6', 'PIPE-1', 'PIPE-2', 'PIPE-3', 'PIPE-4'),
                             'HMININNERWALL': {
-                                'VALUE': 10, 
+                                'VALUE': (10,), 
                                 'UNIT': 'W/m2-C'
                             },
                             'HOUTEROPTION': 'WATER',
                             'TAMBIENT': {
-                                'VALUE': 21, 
+                                'VALUE': (21,), 
                                 'UNIT': 'C'
                             }
                         }, 
@@ -1642,11 +1642,11 @@ class TestGenkey(unittest.TestCase):
                             'PIPE': ('PIPE-7', 'PIPE-8', 'PIPE-9', 'PIPE-10', 'PIPE-11', 'PIPE-12', 'PIPE-13', 'PIPE-14'),
                             'HOUTEROPTION': 'HGIVEN',
                             'TAMBIENT': {
-                                'VALUE': 21, 
+                                'VALUE': (21,), 
                                 'UNIT': 'C'
                             },
                             'HAMBIENT': {
-                                'VALUE': 10000,
+                                'VALUE': (10000,),
                                 'UNIT': 'W/m2-C'
                             }
                         }
@@ -1655,19 +1655,19 @@ class TestGenkey(unittest.TestCase):
                         'LABEL': 'LEAK', 
                         'VALVETYPE': 'OLGAVALVE', 
                         'ABSPOSITION': {
-                            'VALUE': 250, 
+                            'VALUE': (250,), 
                             'UNIT': 'm'
                         },
                         'TIME': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 's'
                         },
                         'BACKPRESSURE': {
-                            'VALUE': 15,
+                            'VALUE': (15,),
                             'UNIT': 'psig'
                         },
                         'DIAMETER': {
-                            'VALUE': 0.0001, 
+                            'VALUE': (0.0001,), 
                             'UNIT': 'in'
                         }
                     }, 
@@ -1676,11 +1676,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-1', 
                             'MODEL': 'HYDROVALVE',
                             'ABSPOSITION': {
-                                'VALUE': 16.7, 
+                                'VALUE': (16.7,), 
                                 'UNIT': 'm'
                             },
                             'DIAMETER': {
-                                'VALUE': 12, 
+                                'VALUE': (12,), 
                                 'UNIT': 'in'
                             }
                         },
@@ -1688,11 +1688,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-2',
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 20, 
+                                'VALUE': (20,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 20.32, 
+                                'VALUE': (20.32,), 
                                 'UNIT': 'cm'
                             }
                         },
@@ -1700,11 +1700,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-4', 
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 1145, 
+                                'VALUE': (1145,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 28.4, 
+                                'VALUE': (28.4,), 
                                 'UNIT': 'cm'
                             }
                         },
@@ -1712,11 +1712,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-7', 
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 1364, 
+                                'VALUE': (1364,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 28.4, 
+                                'VALUE': (28.4,), 
                                 'UNIT': 'cm'
                             }
                         }, 
@@ -1724,11 +1724,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-8', 
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 1366, 
+                                'VALUE': (1366,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 28.4, 
+                                'VALUE': (28.4,), 
                                 'UNIT': 'cm'
                             }
                         }, 
@@ -1736,21 +1736,21 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'V-in', 
                             'MODEL': 'HYDROVALVE', 
                             'TIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'STROKETIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'ABSPOSITION': {
-                                'VALUE': 40, 
+                                'VALUE': (40,), 
                                 'UNIT': 'm'
                             }, 
                             'SLIPMODEL': 'NOSLIP', 
                             'OPENING': 1, 
                             'DIAMETER': {
-                                'VALUE': 20.32, 
+                                'VALUE': (20.32,), 
                                 'UNIT': 'cm'
                             }
                         }, 
@@ -1758,20 +1758,20 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'V-out', 
                             'MODEL': 'HYDROVALVE', 
                             'TIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'STROKETIME': {
-                                'VALUE': 0, 
+                                'VALUE': (0,), 
                                 'UNIT': 's'
                             }, 
                             'ABSPOSITION': {
-                                'VALUE': 1410, 
+                                'VALUE': (1410,), 
                                 'UNIT': 'm'
                             }, 
                             'OPENING': 1, 
                             'DIAMETER': {
-                                'VALUE': 20.32, 
+                                'VALUE': (20.32,), 
                                 'UNIT': 'cm'
                             }
                         }, 
@@ -1779,11 +1779,11 @@ class TestGenkey(unittest.TestCase):
                             'LABEL': 'C-9', 
                             'MODEL': 'HYDROVALVE', 
                             'ABSPOSITION': {
-                                'VALUE': 1382, 
+                                'VALUE': (1382,), 
                                 'UNIT': 'm'
                             }, 
                             'DIAMETER': {
-                                'VALUE': 28.4, 
+                                'VALUE': (28.4,), 
                                 'UNIT': 'cm'
                             }
                         }
@@ -1791,7 +1791,7 @@ class TestGenkey(unittest.TestCase):
                     'SHUTIN': {
                         'LABEL': 'SHUTIN-1', 
                         'TIME': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 's'
                         }, 
                         'ACTIVATE': 'ON'
@@ -1804,32 +1804,32 @@ class TestGenkey(unittest.TestCase):
                     'SOURCE': {
                         'LABEL': 'Entrada', 
                         'TIME': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 's'
                         }, 
                         'SOURCETYPE': 'PRESSUREDRIVEN', 
                         'ABSPOSITION': {
-                            'VALUE': 1000, 
+                            'VALUE': (1000,), 
                             'UNIT': 'm'
                         }, 
                         'TOTALWATERFRACTION': {
-                            'VALUE': 100, 
+                            'VALUE': (100,), 
                             'UNIT': '%'
                         }, 
                         'TEMPERATURE': {
-                            'VALUE': 21, 
+                            'VALUE': (21,), 
                             'UNIT': 'C'
                         }, 
                         'PRESSURE': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 'psig'
                         }, 
                         'STROKETIME': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 's'
                         }, 
                         'DIAMETER': {
-                            'VALUE': 0, 
+                            'VALUE': (0,), 
                             'UNIT': 'in'
                         }
                     }, 
@@ -1839,21 +1839,21 @@ class TestGenkey(unittest.TestCase):
                     'POSITION': {
                         'LABEL': 'POS-1', 
                         'ABSPOSITION': {
-                            'VALUE': 1380, 
+                            'VALUE': (1380,), 
                             'UNIT': 'm'
                         }
                     }, 
                     'CROSSDATA': {
                         'VARIABLE': 'U-PROFILE', 
                         'ABSPOSITION': {
-                            'VALUE': 1380, 
+                            'VALUE': (1380,), 
                             'UNIT': 'm'
                         }
                     },
                     'SERVERDATA': {
                         'VARIABLE': 'PT', 
                         'ABSPOSITION': {
-                            'VALUE': 1378, 
+                            'VALUE': (1378,), 
                             'UNIT': 'm'
                         }
                     }
@@ -1866,16 +1866,16 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-Vout',
                         'TIME': {
-                            'VALUES': (0, 86),
+                            'VALUE': (0, 86),
                             'UNIT': 's'
                         },
                         'SETPOINT': (0.13, 0), 
                         'OPENINGTIME': {
-                            'VALUE': 10, 
+                            'VALUE': (10,), 
                             'UNIT': 's'
                         },
                         'CLOSINGTIME': {
-                            'VALUE': 30.769231,
+                            'VALUE': (30.769231,),
                             'UNIT': 's'
                         }
                     }
@@ -1888,12 +1888,12 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-Leak',
                         'TIME': {
-                            'VALUES': (0, 75, 135),
+                            'VALUE': (0, 75, 135),
                             'UNIT': 's'
                         },
                         'SETPOINT': (0, 1, 0),
                         'STROKETIME': {
-                            'VALUE': 9.75,
+                            'VALUE': (9.75,),
                             'UNIT': 's'
                         }
                     }
@@ -1906,16 +1906,16 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-Vin',
                         'TIME': {
-                            'VALUES': (0, 88),
+                            'VALUE': (0, 88),
                             'UNIT': 's'
                         },
                         'SETPOINT': (1, 0),
                         'OPENINGTIME': {
-                            'VALUE': 10,
+                            'VALUE': (10,),
                             'UNIT': 's'
                         },
                         'CLOSINGTIME': {
-                            'VALUE': 2,
+                            'VALUE': (2,),
                             'UNIT': 's'
                         }
                     }
@@ -1928,16 +1928,16 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-TKin', 
                         'TIME': {
-                            'VALUES': (0, 60),
+                            'VALUE': (0, 60),
                             'UNIT': 's'
                         },
                         'SETPOINT': (1, 0.14),
                         'OPENINGTIME': {
-                            'VALUE': 10,
+                            'VALUE': (10,),
                             'UNIT': 's'
                         },
                         'CLOSINGTIME': {
-                            'VALUE': 25,
+                            'VALUE': (25,),
                             'UNIT': 's'
                         }
                     }
@@ -1950,12 +1950,12 @@ class TestGenkey(unittest.TestCase):
                     'PARAMETERS': {
                         'LABEL': 'Control-Source', 
                         'TIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 's'
                         },
                         'SETPOINT': 0,
                         'STROKETIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 's'
                         }
                     }
@@ -1969,28 +1969,28 @@ class TestGenkey(unittest.TestCase):
                         'LABEL': 'TK-in',
                         'TYPE': 'PRESSURE',
                         'GASFRACEQ': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'WATERFRACEQ': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'FEEDNAME': 'P500',
                         'FEEDVOLFRACTION': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'TEMPERATURE': {
-                            'VALUE': 21, 
+                            'VALUE': (21,), 
                             'UNIT': 'C'
                         },
                         'PRESSURE': {
-                            'VALUE': 130,
+                            'VALUE': (130,),
                             'UNIT': 'psig'
                         },
                         'TIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 'M'
                         },
                         'FLUID': 'Diesel_1'
@@ -2005,28 +2005,28 @@ class TestGenkey(unittest.TestCase):
                         'LABEL': 'TK-Out',
                         'TYPE': 'PRESSURE',
                         'GASFRACEQ': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'WATERFRACEQ': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'FEEDNAME': 'P500',
                         'FEEDVOLFRACTION': {
-                            "VALUE": 1,
+                            "VALUE": (1,),
                             "UNIT": "-"
                         },
                         'TEMPERATURE': {
-                            'VALUE': 30,
+                            'VALUE': (30,),
                             'UNIT': 'C'
                         },
                         'PRESSURE': {
-                            'VALUE': 10,
+                            'VALUE': (10,),
                             'UNIT': 'psig'
                         },
                         'TIME': {
-                            'VALUE': 0,
+                            'VALUE': (0,),
                             'UNIT': 's'
                         }, 
                         'FLUID': 'Diesel_1'

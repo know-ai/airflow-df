@@ -208,9 +208,10 @@ class Genkey(dict):
 
                     if isinstance(VALUE, tuple):
                         plural = True
-
+                  
                     k_v[key] = {
-                        f'VALUE{"S" if plural else ""}': VALUE,
+                        # f'VALUE{"S" if plural else ""}': VALUE,
+                        'VALUE': tuple(VALUE) if plural else tuple([VALUE]),
                         'UNIT': UNIT.strip(',')
                     }
                     continue
@@ -226,11 +227,17 @@ class Genkey(dict):
                 continue
 
             if re.search(r'\d+\ \W+', val):
+                plural = False
                 val = val.strip().split()
                 VALUE = eval(val[0])
                 UNIT = val[-1]
+
+                if isinstance(VALUE, tuple):
+                    plural = True
+                  
                 k_v[key] = {
-                    'VALUE': VALUE,
+                    # 'VALUE': VALUE,
+                    'VALUE': tuple(VALUE) if plural else tuple([VALUE]),
                     'UNIT': UNIT
                 }
                 continue
@@ -246,14 +253,19 @@ class Genkey(dict):
             filepath, str), f'filepath must be a string! Not {type(filepath)}'
 
         try:
-
             with open(filepath, 'r') as f:
                 file = f.read()
+        except FileNotFoundError:
+            # Modify the filepath by joining the parent directory path
+            parent_directory = os.path.dirname(os.path.dirname(os.path.abspath(filepath)))
+            modified_filepath = os.path.join(parent_directory, os.path.basename(filepath))
+            
+            try:
+                with open(modified_filepath, 'r') as f:
+                    file = f.read()
+            except FileNotFoundError:
+                print("File not found in both locations.")
 
-        except:
-
-            with open(os.path.sep + os.path.join(filepath), 'r') as f:
-                file = f.read()
 
         # Splitting Genkey in principal elements
         split_genkey_elements_pattern = re.compile('\s\n')
