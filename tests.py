@@ -3,6 +3,7 @@ from unittest import TestLoader, TestSuite, TextTestRunner
 from airflow_df.tests.test_tpl import TestTPL
 from airflow_df.tests.test_olga import TestOlga
 from airflow_df.tests.test_genkey import TestGenkey
+# from airflow_df.tests.test_drive import TestDrive
 
 def suite():
     r"""
@@ -14,6 +15,7 @@ def suite():
     tests.append(TestLoader().loadTestsFromTestCase(TestTPL))
     tests.append(TestLoader().loadTestsFromTestCase(TestGenkey))
     tests.append(TestLoader().loadTestsFromTestCase(TestOlga))
+    # tests.append(TestLoader().loadTestsFromTestCase(TestDrive))
 
     suite = TestSuite(tests)
     return suite

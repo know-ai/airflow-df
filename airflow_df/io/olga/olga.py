@@ -4,32 +4,49 @@ from . import TPL
 from . import Genkey
 from collections import namedtuple
 from os.path import dirname, basename, splitext
+from types import GeneratorType
 
 class Olga:
-    """Reads and saves the tpl files into a list of TPL objects.
+    """
+    Reads .tpl and .genkey files.
     """
 
     def __init__(self):
+        
         self.__file = namedtuple("File", "tpl genkey")
         self.__extensions = ['.tpl', '.genkey']
 
-    def append(self, tpl: TPL, genkey: Genkey):
-        """Documentation here
+    def group_olga_files(self, tpl: TPL, genkey: Genkey)->namedtuple:
+        """
+        Groups Olga files (.tpl and .genkey) into an structure
+    
+        **Parameters**
+
+        - **tpl:** (TPL) A TPL Object
+        - **genkey:** (Genkey) An Genkey Object
+
+        **Returns**
+
+        - **object:** (namedtuple) With object.tpl / object.genkey
         """
         if isinstance(tpl, TPL) & isinstance(genkey, Genkey):
 
             file = self.__file(tpl, genkey)
             return file
-            # super(Olga, self).append(file)
 
     @staticmethod
     def get_files(filepath: str, ext:str=".tpl") -> list:
-        """Gets all the files contained in a folder. Returns a list of files.
+        """
+        Gets all the files contained in a folder. Returns a list of files.
 
-    **Parameters**
+        **Parameters**
 
         - **filepath:** (str) Path to the folder.
         - **ext:** (str) 
+
+        **Returns**
+
+        - **filenames:** (list) List of filenames with "ext" inside "filepath"
         """
         if not ext.startswith("."):
             ext = f".{ext}"
@@ -40,10 +57,20 @@ class Olga:
 
         return glob.glob(filepath)
     
-    def __check_filename(self, path:str):
-        """Documentation here
+    def remove_file_extension(self, filename:str)->str:
         """
-        folder_name, filename = dirname(path), basename(path)
+        Check if the filename has an extension section valid (.tpl or .genkey), 
+        if extension is not provided, return the same filename
+
+        **Parameters**
+
+        - **filename:** (str) Filename with or without extension file
+
+        **Returns**
+
+        - **filename:** (str) filename without extension, so another method read "filename.tpl and filename.genkey" file
+        """
+        folder_name, filename = dirname(filename), basename(filename)
         filename, ext = splitext(filename)
 
         if ext:
@@ -54,22 +81,51 @@ class Olga:
 
         return os.path.join(folder_name, filename)
     
-    def __read_tpl(self, filename:str):
-        """Documentation here
+    def read_tpl(self, filename:str)->TPL:
         """
+        Reads .tpl olga file given its filename
+
+        **Parameters**
+
+        - **filename:** (str) Filename with or without its entension file.
+
+        **Returns**
+
+        - **object:** (Genkey) Genkey object
+        """
+        filename = self.remove_file_extension(filename)
         tpl = TPL()
         tpl.read(filename + '.tpl')
         return tpl
     
-    def __read_genkey(self, filename:str):
-        """Documentation here
+    def read_genkey(self, filename:str)->Genkey:
         """
+        Reads .genkey olga file given its filename
+
+        **Parameters**
+
+        - **filename:** (str) Filename with or without its entension file.
+
+        **Returns**
+
+        - **object:** (Genkey) Genkey object
+        """
+        filename = self.remove_file_extension(filename)
         genkey = Genkey()
         genkey.read(filename + '.genkey')
         return genkey
     
-    def __read_folder(self, path:str):
-        """Documentation here
+    def read_folder(self, path:str):
+        """
+        Reads all olga file located in a path
+
+        **Parameters**
+
+        - **path:** (str) path where Ola files are.
+        
+        **Returns**
+
+        - **object:** (GeneratorType) with 'tpl' and 'genkey' attributes
         """
         files = self.get_files(filepath=path)
             
@@ -77,27 +133,49 @@ class Olga:
 
             yield self.__read_file(file)
 
-    def __read_file(self, filename:str):
-        """Documentation here
+    def read_file(self, filename:str)->GeneratorType:
         """
-        filename = self.__check_filename(filename)
-        tpl = self.__read_tpl(filename)
-        genkey = self.__read_genkey(filename)
-        return self.append(tpl, genkey)
+        Reads one group of files, only a .tpl and .genkey
+    
+        **Parameters**
 
-    def read(self, filepath):
-        """Read olga files into a Olga Object Structure
+        - **filename:** (str) Filename with or without its entension file.
 
-    **Parameters**
+        **Returns**
 
--       **filepath:** (str) file location
+        - **object:** (GeneratorType) with 'tpl' and 'genkey' attributes
+        """
+        filename = self.remove_file_extension(filename)
+        tpl = self.read_tpl(filename)
+        genkey = self.read_genkey(filename)
+        return self.group_olga_files(tpl, genkey)
+
+    def read(self, filepath)->GeneratorType:
+        """
+        Reads olga files (.tpl and .genkey) into a Olga Object Structure
+
+        **Parameters**
+
+        - **filepath:** (str) filename with/without olga exntesion (.tpl - .genkey) or foldername where are all olga files
+
+        **Returns**
+
+        - **object:** (GeneratorType) with 'tpl' and 'genkey' attributes
+
+        ```python
+        from airflow_df.IO import Olga
+        import os
+
+        olga = Olga()
+        filepath = os.path.join("data", "olga", "1")
+        files = olga.read(filepath)
+        ```
         """
         
         if os.path.isdir(filepath):
 
-            return self.__read_folder(filepath)
+            return self.read_folder(filepath)
 
         else:
 
-            yield self.__read_file(filepath)
-
+            yield self.read_file(filepath)
