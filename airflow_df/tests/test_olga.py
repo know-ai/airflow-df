@@ -42,7 +42,7 @@ class TestOlga(unittest.TestCase):
                     'geometry': '(M)',
                     'branch': 'PIPELINE'
                 }
-                breakpoint()
+                
                 self.assertDictEqual(file.tpl.info.serialize(), expected_info)
 
             with self.subTest(f"Test Profile Item"):
@@ -956,8 +956,8 @@ class TestOlga(unittest.TestCase):
         filepath = os.path.join("data", "olga")
         files = olga.read(filepath=filepath)
 
-        for _, item in enumerate(files):
-
+        for item in files:
+            
             with self.subTest(f"Test Read File"):
 
                 self.assertIsInstance(item.tpl, TPL)

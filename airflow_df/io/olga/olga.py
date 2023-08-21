@@ -131,7 +131,7 @@ class Olga:
             
         for file in files:
 
-            yield self.__read_file(file)
+            yield self.read_file(file)
 
     def read_file(self, filename:str)->GeneratorType:
         """
@@ -174,7 +174,10 @@ class Olga:
         
         if os.path.isdir(filepath):
 
-            return self.read_folder(filepath)
+            files = self.read_folder(filepath)
+            for file in files:
+
+                yield file
 
         else:
 
