@@ -51,12 +51,11 @@ class Olga:
         if not ext.startswith("."):
             ext = f".{ext}"
 
-        filepath = filepath.split(os.sep)
-        filepath.append(f"*{ext}")
-        filepath = os.sep.join(filepath)
+        file_pattern = f"**/*{ext}"
+        files_to_return = glob.glob(os.path.join(filepath, file_pattern), recursive=True)
 
-        return glob.glob(filepath)
-    
+        return files_to_return
+
     def remove_file_extension(self, filename:str)->str:
         """
         Check if the filename has an extension section valid (.tpl or .genkey), 
