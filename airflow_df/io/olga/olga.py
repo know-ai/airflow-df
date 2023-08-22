@@ -48,14 +48,19 @@ class Olga:
 
         - **filenames:** (list) List of filenames with "ext" inside "filepath"
         """
+        result = list()
         if not ext.startswith("."):
             ext = f".{ext}"
-
+        
         filepath = filepath.split(os.sep)
-        filepath.append(f"*{ext}")
         filepath = os.sep.join(filepath)
+        for root, dirnames, filenames in os.walk(filepath):
+            for filename in filenames:
+                if filename.endswith(ext):
 
-        return glob.glob(filepath)
+                    result.append(os.path.join(root,filename))
+        
+        return result
     
     def remove_file_extension(self, filename:str)->str:
         """
