@@ -5,6 +5,7 @@ from . import Genkey
 from collections import namedtuple
 from os.path import dirname, basename, splitext
 from types import GeneratorType
+from airflow_df.helpers import Helpers
 
 class Olga:
     """
@@ -33,34 +34,6 @@ class Olga:
 
             file = self.__file(tpl, genkey)
             return file
-
-    @staticmethod
-    def get_files(filepath: str, ext:str=".tpl") -> list:
-        """
-        Gets all the files contained in a folder. Returns a list of files.
-
-        **Parameters**
-
-        - **filepath:** (str) Path to the folder.
-        - **ext:** (str) 
-
-        **Returns**
-
-        - **filenames:** (list) List of filenames with "ext" inside "filepath"
-        """
-        result = list()
-        if not ext.startswith("."):
-            ext = f".{ext}"
-        
-        filepath = filepath.split(os.sep)
-        filepath = os.sep.join(filepath)
-        for root, dirnames, filenames in os.walk(filepath):
-            for filename in filenames:
-                if filename.endswith(ext):
-
-                    result.append(os.path.join(root,filename))
-        
-        return result
     
     def remove_file_extension(self, filename:str)->str:
         """
@@ -132,7 +105,7 @@ class Olga:
 
         - **object:** (GeneratorType) with 'tpl' and 'genkey' attributes
         """
-        files = self.get_files(filepath=path)
+        files = Helpers.get_files(filepath=path, ext=".tpl")
             
         for file in files:
 
@@ -180,10 +153,11 @@ class Olga:
         if os.path.isdir(filepath):
 
             files = self.read_folder(filepath)
+            
             for file in files:
 
                 yield file
 
         else:
-
+            
             yield self.read_file(filepath)
