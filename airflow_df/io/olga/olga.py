@@ -5,6 +5,7 @@ from . import Genkey
 from collections import namedtuple
 from os.path import dirname, basename, splitext
 from types import GeneratorType
+from airflow_df.helpers import Helpers
 
 class Olga:
     """
@@ -127,7 +128,7 @@ class Olga:
 
         - **object:** (GeneratorType) with 'tpl' and 'genkey' attributes
         """
-        files = self.get_files(filepath=path)
+        files = Helpers.get_files(filepath=path, ext=".tpl")
             
         for file in files:
 
@@ -175,10 +176,11 @@ class Olga:
         if os.path.isdir(filepath):
 
             files = self.read_folder(filepath)
+            
             for file in files:
 
                 yield file
 
         else:
-
+            
             yield self.read_file(filepath)

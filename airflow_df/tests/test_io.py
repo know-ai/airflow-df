@@ -25,39 +25,54 @@ class TestIO(unittest.TestCase):
             filepath = os.path.join("data", "csv", "Employee Sample Data.csv")
             task = IO.read_csv(filepath, encoding='unicode_escape')
             task = task.operator.python_callable
-            df = task(filepath, encoding='unicode_escape')
-            self.assertIsInstance(df, pd.DataFrame)
+            generator_iterable = task(filepath, encoding='unicode_escape')
+            for item in generator_iterable:
+                
+                self.assertIsInstance(item.csv.data.df, pd.DataFrame)
 
         with self.subTest(f"Read one file with no extension provided"):
 
             filepath = os.path.join("data", "csv", "Employee Sample Data")
             task = IO.read_csv(filepath, encoding='unicode_escape')
             task = task.operator.python_callable
-            df = task(filepath, encoding='unicode_escape')
-            self.assertIsInstance(df, pd.DataFrame)
+            generator_iterable = task(filepath, encoding='unicode_escape')
+            for item in generator_iterable:
+                
+                self.assertIsInstance(item.csv.data.df, pd.DataFrame)
 
         with self.subTest(f"Read all files in a directory"):
 
             filepath = os.path.join("data", "csv")
             task = IO.read_csv(filepath, encoding='unicode_escape')
             task = task.operator.python_callable
-            df = task(filepath, encoding='unicode_escape')
-            self.assertIsInstance(df, pd.DataFrame)
+            generator_iterable = task(filepath, encoding='unicode_escape')
+            for item in generator_iterable:
+                
+                self.assertIsInstance(item.csv.data.df, pd.DataFrame)
 
-    def test_read_tpl(self):
+    def test_read_olga(self):
 
-        with self.subTest(f"Has read_tpl method?"):
+        with self.subTest(f"Has read_olga method?"):
 
-            self.assertTrue(hasattr(IO, 'read_tpl'))
+            self.assertTrue(hasattr(IO, 'read_olga'))
 
         with self.subTest(f"Is instance of TaskDecorator?"):
 
-            self.assertIsInstance(IO.read_tpl, TaskDecorator)
+            self.assertIsInstance(IO.read_olga, TaskDecorator)
 
-        with self.subTest(f"Read one tpl file"):
+        with self.subTest(f"Read one olga file"):
 
-            filepath = os.path.join("data", "tpl", "Example1.tpl")
-            task = IO.read_tpl(filepath)
+            filepath = os.path.join("data", "olga", "1")
+            task = IO.read_olga(filepath)
             task = task.operator.python_callable
-            df = task(filepath)
-            self.assertIsInstance(df, pd.DataFrame)
+            generator_iterable = task(filepath)
+            for item in generator_iterable:
+
+                with self.subTest(f"Generator Item for Olga file hasattr tpl"):
+                    
+                    self.assertTrue(hasattr(item, 'tpl'))
+                
+                with self.subTest(f"Generator Item for Olga file hasattr genkey"):
+                    
+                    self.assertTrue(hasattr(item, 'genkey'))
+                
