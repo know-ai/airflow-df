@@ -310,9 +310,9 @@ class Transform:
         errors="raise",
     ) -> pd.DataFrame | None:
         """
-            Drop specified labels from rows or columns.
+            Keeps specified labels from rows or columns.
 
-            Remove rows or columns by specifying label names and corresponding
+            Remove rows or columns differents by specifying label names and corresponding
             axis, or by specifying directly index or column names. When using a
             multi-index, labels on different levels can be removed by specifying
             the level. See the :ref:`user guide <advanced.shown_levels>`
@@ -321,7 +321,7 @@ class Transform:
             Parameters
             ----------
             labels : single label or list-like
-                Index or column labels to drop. A tuple will be used as a single
+                Index or column labels to keep. A tuple will be used as a single
                 label and not treated as a list-like.
             axis : {0 or 'index', 1 or 'columns'}, default 0
                 Whether to drop labels from the index (0 or 'index') or
