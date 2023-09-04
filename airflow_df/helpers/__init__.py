@@ -117,6 +117,34 @@ class Helpers:
 
         return result
 
+    @decorator
+    @staticmethod
+    def hide_airflow_compatibility(func, args, kwargs):
+        r"""
+        This is a method decorator to hide airflow compatibility.
+
+        ```python
+        from utils.helpers import Helpers
+
+        @Helpers.hide_airflow_compatibility
+        @staticmethod
+        def read_csv(filepath:str, **kwargs)->pd.DataFrame:
+            
+            pass
+        ```
+        """
+        _kwargs = kwargs.copy()
+        default_args = dict()
+        for key in _kwargs.keys():
+
+            if key in Helpers.get_default_args_in_tasks():
+
+                default_args[key] = kwargs.pop(key)
+
+        task = func(*args, **kwargs)
+        task = task.operator.python_callable
+        return task(*args[1:], **kwargs)
+
     @staticmethod
     def get_files(filepath: str, ext:str=".tpl") -> list:
         """
