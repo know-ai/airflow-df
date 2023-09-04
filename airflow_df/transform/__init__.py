@@ -147,7 +147,6 @@ class Transform:
         index:bool=None,
         columns:bool=None,
         level=None,
-        inplace:bool=False,
         errors="raise",
     ) -> pd.DataFrame | None:
         """
@@ -287,6 +286,13 @@ class Transform:
         falcon  speed   320.0   250.0
                 weight  1.0     0.8
         """
+        df_columns = df.columns.values.tolist()
+                
+        not_in_df_columns = [column for column in labels if column not in df_columns]
+        
+        if(len(not_in_df_columns)>0):
+            raise IndexError(f'This labels are not in the dataframe {", ".join(not_in_df_columns)}')
+
         return df.drop(
             labels=labels,
             axis=axis,
@@ -445,8 +451,19 @@ class Transform:
         falcon  speed   320.0   250.0
                 weight  1.0     0.8
         """
+
+        df_columns = df.columns.values.tolist()
+                
+        not_in_df_columns = [column for column in labels if column not in df_columns]
+        
+        if(len(not_in_df_columns)>0):
+            raise IndexError(f'This labels are not in the dataframe {", ".join(not_in_df_columns)}')
+
+        df_columns = [column for column in df_columns if column not in labels]
+
+
         return df.drop(
-            labels=labels,
+            labels=df_columns,
             axis=axis,
             index=index,
             columns=columns,
