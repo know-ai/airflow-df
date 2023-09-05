@@ -7,18 +7,46 @@ class Transform:
     """Documentation here
 
     """
+
+    @staticmethod
+    def standarize_column_names(
+        df,
+        *,
+        errors="ignore"
+    )->pd.DataFrame | None:
+        """
+        Documentation here
+
+        """
+
+        __columns = df.columns.values.tolist()
+        column_mapping = dict()
+        for i in range(len(__columns)):
+            if(i==0):
+                column_mapping[__columns[i]] = __columns[i].split('  ')[0]
+
+            else:
+                column_separated = __columns[i].split(" ")
+                if('POS' in column_separated[4]):
+                    column_mapping[__columns[i]] = "{}_{}".format(__columns[0], __columns[4].strip('\'').replace('-', '@'))
+
+                elif('POS' in column_separated[3]):
+                    column_mapping[__columns[i]] = "{}_{}".format(__columns[0], __columns[3].strip('\'').replace('-', '@'))
+
+                elif('POS' in column_separated[2]):
+                    column_mapping[__columns[i]] = "{}_{}".format(__columns[0], __columns[2].strip('\'').replace('-', '@'))
+
+        return df.rename(
+                columns=column_mapping,
+                errors=errors
+            )
+
     @staticmethod
     def rename(
         df,
-        mapper:None=None,
         *,
-        index:None=None,
         columns:None=None,
-        axis:None=None,
-        copy:bool=None,
-        inplace:bool=False,
-        level=None,
-        errors="ignore",
+        errors="ignore"
     )->pd.DataFrame | None:
         """
             Rename columns or index labels.
@@ -129,14 +157,8 @@ class Transform:
         """
 
         return df.rename(
-            mapper=mapper,
-            index=index,
             columns=columns,
-            axis=axis,
-            copy=copy,
-            inplace=inplace,
-            level=level,
-            errors=errors,
+            errors=errors
         )
     
     @staticmethod
@@ -449,19 +471,19 @@ class Transform:
                     weight  1.0     0.8
         """
 
-        __columns = df.columns.values.tolist()
+        __df_columns = df.columns.values.tolist()
                 
-        not_in_df_columns = [column for column in labels if column not in __columns]
+        not_in_df_columns = [column for column in columns if column not in __df_columns]
         
         if(len(not_in_df_columns)>0):
             raise IndexError(f'This labels are not in the dataframe {", ".join(not_in_df_columns)}')
 
-        __columns = [column for column in __columns if column not in labels]
+        __df_columns = [column for column in __df_columns if column not in columns]
 
 
         return df.drop(
             index=index,
-            columns=__columns,
+            columns=__df_columns,
             level=level,
             errors=errors,
         )

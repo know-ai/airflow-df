@@ -2,6 +2,8 @@ from ..helpers import Helpers
 from .csv import CSVFormatter
 from .olga import Olga
 import pandas as pd
+import pickle
+
 olga = Olga()
 csv = CSVFormatter()
 
@@ -290,3 +292,13 @@ class IO:
         Documentation here
         """
         pass
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def save_pkl(filepath, filename, pkl_list,  **kwargs):
+        if(filename.endswith('.pkl')):
+            with open(os.path.join(filepath, filename), 'wb') as pkl_file:
+                pickle.dump(pkl_list, pkl_file, protocol=pickle.HIGHEST_PROTOCOL)
+        else:
+            raise NameError('The file name should end in .pkl')
+    
