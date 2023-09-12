@@ -1,13 +1,14 @@
 from ..helpers import Helpers
 import pandas as pd
 import re
-
-@Helpers.as_airflow_tasks()
+import numpy as np
+import math
+# @Helpers.as_airflow_tasks()
 class Transform:
     """Documentation here
 
     """
-
+    
     @Helpers.check_airflow_task_args
     @staticmethod
     def rename(
@@ -969,13 +970,13 @@ class Transform:
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def standarize_column_names(self, df:pd.DataFrame, *args)->pd.DataFrame | None:
+    def standarize_column_names(df:pd.DataFrame, *args, **kwargs)->pd.DataFrame | None:
 
         column_names = df.columns.to_list()
         column_standarize_names = dict()
         for i in column_names:
-            column_standarize_names[i] = self.concatenate_three_parts(i)
-        df = self.rename(df, columns=column_standarize_names)
+            column_standarize_names[i] = Transform.concatenate_three_parts(i)
+        df = Transform.rename(df, columns=column_standarize_names)
         return df
 
     @Helpers.check_airflow_task_args
@@ -983,9 +984,12 @@ class Transform:
     def add_leak_size(df, genkey):
         for i in genkey['Network Component']:
             if 'LABEL' in i['PARAMETERS']:
-                if('LB' == i['PARAMETERS']['LABEL']):   
+                if('LB' == i['PARAMETERS']['LABEL'] or 'LN' == i['PARAMETERS']['LABEL']):   
                     if('LEAK' in i):
                         LEAK_SIZE =  i['LEAK']['DIAMETER']['VALUE'][0]
+
+        if(LEAK_SIZE is None):
+            raise ValueError('There is no leak size in this genkey simulation.')
         df['LEAK_SIZE'] = LEAK_SIZE
 
         return df
@@ -995,9 +999,12 @@ class Transform:
     def add_leak_location(df, genkey):
         for i in genkey['Network Component']:
             if 'LABEL' in i['PARAMETERS']:
-                if('LB' == i['PARAMETERS']['LABEL']):   
+                if('LB' == i['PARAMETERS']['LABEL'] or 'LN' == i['PARAMETERS']['LABEL']):   
                     if('LEAK' in i):
                         LEAK_LOCATION =  i['LEAK']['ABSPOSITION']['VALUE'][0]
+        if(LEAK_LOCATION is None):
+            raise ValueError('There is no leak location in this genkey simulation.')
+
         df['LEAK_LOCATION'] = LEAK_LOCATION
 
         return df
@@ -1012,18 +1019,124 @@ class Transform:
                         setpoint = i['PARAMETERS']['SETPOINT']
                         time_values = i['PARAMETERS']['TIME']['VALUE']
                         break
+            if(type(setpoint)==int):
+                df['LEAK_STATUS'] = 'NO LEAK'
 
-            leak_ranges = list()
-            for i in range(len(setpoint)):
-                if(setpoint[i]):
-                    if(i+1 < len(time_values)):
-                        leak_ranges.append((time_values[i], time_values[i+1]))
-                    else:
-                        leak_ranges.append((time_values[i], float('inf')))
-            df['LEAK_STATUS'] = 'NO LEAK'
-            for i in leak_ranges:
-                df.loc[(i[0]<df['TIME_SERIES_S'])&(df['TIME_SERIES_S']<i[1]), 'LEAK_STATUS'] = 'LEAK'
+            elif(type(setpoint)==list):
+                leak_ranges = list()
+                for i in range(len(setpoint)):
+                    if(setpoint[i]):
+                        if(i+1 < len(time_values)):
+                            leak_ranges.append((time_values[i], time_values[i+1]))
+                        else:
+                            leak_ranges.append((time_values[i], float('inf')))
+                df['LEAK_STATUS'] = 'NO LEAK'
+                for i in leak_ranges:
+                    df.loc[(i[0]<df['TIME_SERIES_S'])&(df['TIME_SERIES_S']<i[1]), 'LEAK_STATUS'] = 'LEAK'
             
             return df 
         else:
             raise KeyError("You must have the column TIME_SERIES_S to do this transformation.\nPlease, don't remove it and make the standarize_name transformation")
+        
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def calculate_reynolds_number(total_mass_flow: pd.Series, pipe_diameter: float, oil_vicosity:pd.Series ):
+
+        reynolds_number = (4 * total_mass_flow)/(math.pi * pipe_diameter * oil_vicosity) 
+        reynolds_number = reynolds_number.apply(lambda x : x if x > 100 else 100)
+        return reynolds_number
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def calculate_alfa_reynolds_number(roughness, reynolds_number, pipe_diameter):
+        alpha_reynolds = np.log((roughness/(3.7*pipe_diameter))+(5.74/ reynolds_number ** 0.9))
+        return alpha_reynolds
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def get_pipe_roughness_by_position(parameters_pipe, position):
+        length_start_aux = -1
+        pipe_roughness_aux = -1
+
+        for parameters in parameters_pipe:
+            length_start = parameters['length_start']
+            pipe_roughness = parameters['pipe_roughness']
+            if(length_start_aux != -1):
+                if(length_start_aux<=position<length_start):
+                    
+                    pipe_roughness = pipe_roughness_aux
+                    return pipe_roughness
+                        
+            length_start_aux = length_start
+            pipe_roughness_aux = pipe_roughness
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def get_pipe_diameter_by_position(parameters_pipe, position):
+        length_start_aux = -1
+        pipe_diameter_aux = -1
+
+        for parameters in parameters_pipe:
+            length_start = parameters['length_start']
+            pipe_diameter = parameters['pipe_diameter']
+            if(length_start_aux != -1):
+                if(length_start_aux<=position<length_start):
+                    
+                    pipe_diameter = pipe_diameter_aux
+                    return pipe_diameter
+                        
+            length_start_aux = length_start
+            pipe_diameter_aux = pipe_diameter
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def get_pipe_diameters(genkey):
+
+        for i in genkey['Network Component']:
+            
+            if(i['PARAMETERS']['LABEL']=='LB' or i['PARAMETERS']['LABEL']=='LN'):
+                parameters_pipe = list()
+                pipe_length = 0
+                for j in i['PIPE']:
+                    parameters_pipe.append({'length_start':pipe_length, 'pipe_diameter': j['DIAMETER']['VALUE'][0], 'pipe_roughness': j['ROUGHNESS']['VALUE'][0]})
+                    pipe_length = pipe_length + j['LENGTH']['VALUE'][0]
+
+                return parameters_pipe
+        
+        
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def calculate_friction_factor(df: pd.DataFrame, genkey: dict ):
+
+        df_columns = df.columns.to_list()
+
+        positions = [int(column.split('@')[-1].split('M')[0])
+            for column in df_columns
+            if 'POS@' in column]
+
+        positions = list(set(positions))
+        positions.sort()
+        for position in positions: 
+            print(position)
+            if (f"VISHLTAB_POSITION_POS@{position}M_Oil_viscosity_from_fluid_tables_N-S/M2" not in df_columns):
+                raise ValueError(f'Oil viscosity from fluid column is not in the DF for the position {position} meters.')
+
+            if (f"GT_POSITION_POS@{position}M_Total_mass_flow_KG/S" not in df_columns):
+                raise ValueError(f'Total mass flow column is not in the DF for the position {position} meters.')
+
+            oil_vicosity = df[f"VISHLTAB_POSITION_POS@{position}M_Oil_viscosity_from_fluid_tables_N-S/M2"]
+            total_mass_flow = df[f"GT_POSITION_POS@{position}M_Total_mass_flow_KG/S"]
+
+            parameters_pipe = Transform.get_pipe_diameters(genkey)
+            pipe_diameter = Transform.get_pipe_diameter_by_position(parameters_pipe, position)
+            roughness = Transform.get_pipe_roughness_by_position(parameters_pipe, position)
+
+            reynolds_number = Transform.calculate_reynolds_number(total_mass_flow, pipe_diameter, oil_vicosity)
+            # df[f'REYNOLDS_NUMBER_POS@{position}'] = reynolds_number
+            alfa_reynolds = Transform.calculate_alfa_reynolds_number(roughness,reynolds_number,pipe_diameter)
+            # df[f'ALFA_REYNOLDS_NUMBER_POS@{position}'] = alfa_reynolds
+            friction_factor = ( ( (64/reynolds_number)**8) + (9.5*( (alfa_reynolds - ((2500/reynolds_number)**6) )** -16)))**(1/8)
+            # return df.head()
+            df[f'FRICTION_FACTOR_POS@{position}'] = friction_factor
+        # alfa_reynolds = 100
+        return df
