@@ -134,13 +134,9 @@ class Transform:
     @staticmethod
     def drop(
         df,
-        labels=None,
         *,
-        axis:bool=0,
-        index:bool=None,
-        columns:bool=None,
-        level=None,
-        errors="raise",
+        columns:None=None,
+        errors="ignore"
     ) -> pd.DataFrame | None:
         """
             Drop specified labels from rows or columns.
@@ -281,14 +277,13 @@ class Transform:
         """
         __columns = df.columns.values.tolist()
                 
-        not_in_df_columns = [column for column in labels if column not in df_columns]
+        __not_in_df_columns = [column for column in columns if column not in __columns]
         
-        if(len(not_in_df_columns)>0):
+        if(len(__not_in_df_columns)>0):
             raise IndexError(f'This labels are not in the dataframe {", ".join(not_in_df_columns)}')
 
         return df.drop(
-            columns=__columns,
-            level=level,
+            columns=columns,
             errors=errors,
         )
     
@@ -1103,19 +1098,47 @@ class Transform:
 
                 return parameters_pipe
         
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def _get_tranfer_positions(df_columns: list):
+
+        positions = [
+                        int(column.split('@')[-1].split('M')[0])
+                        for column in df_columns
+                        if 'POS@' in column
+                    ]
+
+        positions = list(set(positions))
+        positions.sort()
+
+        return positions  
+    
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def keep_columns_with_positions(df:pd.DataFrame, keep_positions: list):
+
+        df_columns = df.columns.to_list()
+        positions = Transform._get_tranfer_positions(df_columns)
+
+        for position in keep_positions:
+            if(position not in positions):
+                raise ValueError(f'Position {position} is not in the positions of the dataframe columns.')
         
+        remove_column_positions = [position for position in positions if position not in keep_positions] 
+        # remove_columns = [x  if f"@{position}M" in df_columns ]
+        remove_columns = [column for position in remove_column_positions for column in df_columns if f"@{position}" in column ]
+        df_columns_droped = Transform.drop(df,columns=remove_columns)
+
+        return df_columns_droped
+
     @Helpers.check_airflow_task_args
     @staticmethod
     def calculate_friction_factor(df: pd.DataFrame, genkey: dict ):
 
         df_columns = df.columns.to_list()
 
-        positions = [int(column.split('@')[-1].split('M')[0])
-            for column in df_columns
-            if 'POS@' in column]
+        positions = Transform._get_tranfer_positions(df_columns)
 
-        positions = list(set(positions))
-        positions.sort()
         for position in positions: 
             print(position)
             if (f"VISHLTAB_POSITION_POS@{position}M_Oil_viscosity_from_fluid_tables_N-S/M2" not in df_columns):
