@@ -1116,20 +1116,32 @@ class Transform:
     @Helpers.check_airflow_task_args
     @staticmethod
     def keep_columns_with_positions(df:pd.DataFrame, keep_positions: list):
+        """
+        Keep columns in a DataFrame based on specified positions.
 
+        Args:
+            df (pd.DataFrame): The input DataFrame.
+            keep_positions (list): A list of positions to keep.
+
+        Returns:
+            pd.DataFrame: The DataFrame with columns filtered based on positions.
+        """
         df_columns = df.columns.to_list()
         positions = Transform._get_tranfer_positions(df_columns)
 
+        if not keep_positions:
+            raise ValueError('The list of positions you provided should have at least one element.')
+
         for position in keep_positions:
-            if(position not in positions):
+            if position not in positions:
                 raise ValueError(f'Position {position} is not in the positions of the dataframe columns.')
         
-        remove_column_positions = [position for position in positions if position not in keep_positions] 
-        # remove_columns = [x  if f"@{position}M" in df_columns ]
-        remove_columns = [column for position in remove_column_positions for column in df_columns if f"@{position}" in column ]
-        df_columns_droped = Transform.drop(df,columns=remove_columns)
+        remove_column_positions = [position for position in positions if position not in keep_positions]
 
-        return df_columns_droped
+        remove_columns = [column for position in remove_column_positions for column in df_columns if f"@{position}" in column]
+        df_columns_dropped = Transform.drop(df, columns=remove_columns)
+
+        return df_columns_dropped
 
     @Helpers.check_airflow_task_args
     @staticmethod
@@ -1140,7 +1152,7 @@ class Transform:
         positions = Transform._get_tranfer_positions(df_columns)
 
         for position in positions: 
-            print(position)
+
             if (f"VISHLTAB_POSITION_POS@{position}M_Oil_viscosity_from_fluid_tables_N-S/M2" not in df_columns):
                 raise ValueError(f'Oil viscosity from fluid column is not in the DF for the position {position} meters.')
 
