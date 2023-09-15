@@ -977,11 +977,15 @@ class Transform:
     @Helpers.check_airflow_task_args
     @staticmethod
     def add_leak_size(df, genkey):
+        
+        LEAK_SIZE = None
+
         for i in genkey['Network Component']:
-            if 'LABEL' in i['PARAMETERS']:
-                if('LB' == i['PARAMETERS']['LABEL'] or 'LN' == i['PARAMETERS']['LABEL']):   
-                    if('LEAK' in i):
-                        LEAK_SIZE =  i['LEAK']['DIAMETER']['VALUE'][0]
+            if 'NETWORKCOMPONENT' in i:
+                if 'TYPE' in i['NETWORKCOMPONENT']:
+                    if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
+                        if('LEAK' in i):
+                            LEAK_SIZE =  i['LEAK']['DIAMETER']['VALUE'][0]
 
         if(LEAK_SIZE is None):
             raise ValueError('There is no leak size in this genkey simulation.')
@@ -992,11 +996,17 @@ class Transform:
     @Helpers.check_airflow_task_args
     @staticmethod
     def add_leak_location(df, genkey):
+    
+        LEAK_LOCATION = None
+
         for i in genkey['Network Component']:
-            if 'LABEL' in i['PARAMETERS']:
-                if('LB' == i['PARAMETERS']['LABEL'] or 'LN' == i['PARAMETERS']['LABEL']):   
-                    if('LEAK' in i):
-                        LEAK_LOCATION =  i['LEAK']['ABSPOSITION']['VALUE'][0]
+            if 'NETWORKCOMPONENT' in i:
+                if 'TYPE' in i['NETWORKCOMPONENT']:
+                    if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
+                        if('LEAK' in i):
+
+                            LEAK_LOCATION =  i['LEAK']['ABSPOSITION']['VALUE'][0]
+
         if(LEAK_LOCATION is None):
             raise ValueError('There is no leak location in this genkey simulation.')
 
@@ -1087,17 +1097,21 @@ class Transform:
     @staticmethod
     def get_pipe_diameters(genkey):
 
-        for i in genkey['Network Component']:
-            
-            if(i['PARAMETERS']['LABEL']=='LB' or i['PARAMETERS']['LABEL']=='LN'):
-                parameters_pipe = list()
-                pipe_length = 0
-                for j in i['PIPE']:
-                    parameters_pipe.append({'length_start':pipe_length, 'pipe_diameter': j['DIAMETER']['VALUE'][0], 'pipe_roughness': j['ROUGHNESS']['VALUE'][0]})
-                    pipe_length = pipe_length + j['LENGTH']['VALUE'][0]
 
-                return parameters_pipe
-        
+        for i in genkey['Network Component']:
+            if 'NETWORKCOMPONENT' in i:
+                if 'TYPE' in i['NETWORKCOMPONENT']:
+                    if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
+                        parameters_pipe = list()
+                        pipe_length = 0
+                        for j in i['PIPE']:
+                            parameters_pipe.append({'length_start':pipe_length, 'pipe_diameter': j['DIAMETER']['VALUE'][0], 'pipe_roughness': j['ROUGHNESS']['VALUE'][0]})
+                            pipe_length = pipe_length + j['LENGTH']['VALUE'][0]
+
+                        return parameters_pipe
+
+        raise ValueError("There isn't any Network Component with FLOWPATH type.")
+
     @Helpers.check_airflow_task_args
     @staticmethod
     def _get_tranfer_positions(df_columns: list):
