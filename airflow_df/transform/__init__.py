@@ -909,19 +909,39 @@ class Transform:
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def concatenate_three_parts(input_string)->str:
+    def _concatenate_three_parts(input_string)->str:
         """
-        This concatenates the three "special" parts of the column names from a TPL
-        It transforms names as such as SSP 'POSITION:' 'POS-19M' '(M/S)' 'Speed of sound in fluid'
-        to SSP_POSITION_POS@19M_Speed_of_sound_in_fluid_M/S.
+        Concatenate and format three parts of a column name from a TPL.
 
-        It takes the label name the string position and the position for the first  part
-        then adds the name of the variable and at the end appends the measure unit.
-        
-        for the common uses makes this 
-        LABEL_NAME_POS@XXM_Variable_name_MEASURE_UNIT
+        This function takes an input string that represents a column name in a specific format,
+        typically used in data processing pipelines. It extracts and concatenates three parts
+        from the input string to create a standardized column name. The three parts typically
+        include a label name, a position specifier, and a variable name, with an optional
+        measurement unit enclosed in parentheses.
 
-        If there is not any variable name nor measure unit, it just doesn't add it
+        The function transforms the input string format from:
+        'LABEL_NAME_POS:' 'POS-XXM' 'VARIABLE_NAME_MEASURE_UNIT'
+        to a standardized format:
+        'LABEL_NAME_POS@XXM_VARIABLE_NAME_MEASURE_UNIT'
+
+        If the input string does not contain a variable name or a measurement unit, those parts
+        are omitted from the standardized format.
+
+        Args:
+            input_string (str): The input string representing the column name.
+
+        Returns:
+            str: The standardized and concatenated column name.
+
+        Example:
+            >>> input_string = "SSP 'POSITION:' 'POS-19M' '(M/S)' 'Speed of sound in fluid'"
+            >>> result = concatenate_three_parts(input_string)
+            >>> result
+            'SSP_POSITION_POS@19M_Speed_of_sound_in_fluid_M/S'
+
+        Note:
+            - The function replaces spaces with underscores and converts hyphens to '@' for position specifiers.
+            - The measurement unit, if present, is appended to the standardized name.
         """
         # Split the input string into parts using single quotes as separators
         unit_match = re.search(r'\((.*?)\)', input_string)
@@ -966,17 +986,46 @@ class Transform:
     @Helpers.check_airflow_task_args
     @staticmethod
     def standarize_column_names(df:pd.DataFrame, *args, **kwargs)->pd.DataFrame | None:
+        """
+        Standardize column names in a DataFrame.
 
+        This function standardizes the column names of a given DataFrame by applying the
+        'Transform.concatenate_three_parts' function to each column name. It renames the
+        columns using the standardized names and returns the updated DataFrame.
+
+        Args:
+            df (pd.DataFrame): The DataFrame whose column names need standardization.
+            *args: Additional positional arguments (ignored).
+            **kwargs: Additional keyword arguments (ignored).
+
+        Returns:
+            pd.DataFrame | None: The DataFrame with standardized column names or None if no changes were made.
+
+        Example:
+            >>> import pandas as pd
+            >>> data = {
+            ...     "SSP 'POSITION:' 'POS-19M' '(M/S)' 'Speed of sound in fluid'": [1, 2, 3],
+            ...     "Another_Column": [4, 5, 6]
+            ... }
+            >>> df = pd.DataFrame(data)
+            >>> result = standarize_column_names(df)
+            >>> result.columns
+            Index(['SSP_POSITION_POS@19M_Speed_of_sound_in_fluid_M/S', 'Another_Column'], dtype='object')
+
+        Note:
+            - The function relies on 'Transform.concatenate_three_parts' for standardization.
+            - Any additional positional or keyword arguments passed to the function are ignored.
+        """
         column_names = df.columns.to_list()
         column_standarize_names = dict()
         for i in column_names:
-            column_standarize_names[i] = Transform.concatenate_three_parts(i)
+            column_standarize_names[i] = Transform._concatenate_three_parts(i)
         df = Transform.rename(df, columns=column_standarize_names)
         return df
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def add_leak_size(df, genkey):
+    def add_leak_size(df: pd.DataFrame, genkey: dict)->pd.DataFrame:
         
         LEAK_SIZE = None
 
@@ -995,8 +1044,54 @@ class Transform:
     
     @Helpers.check_airflow_task_args
     @staticmethod
-    def add_leak_location(df, genkey):
-    
+    def add_leak_location(df, genkey)->pd.DataFrame:
+        """
+        Add leak size information to a DataFrame based on the provided genkey.
+
+        This function searches for information about a leak size in the provided 'genkey' dictionary,
+        which contains parameters related to network components. If it finds a leak size associated
+        with a network component of type 'FLOWPATH', it adds this leak size information as a new
+        column 'LEAK_SIZE' to the DataFrame.
+
+        Args:
+            df (pd.DataFrame): The DataFrame to which the leak size information will be added.
+            genkey (dict): The dictionary containing network component information.
+
+        Returns:
+            pd.DataFrame: The DataFrame with the 'LEAK_SIZE' column added.
+
+        Raises:
+            ValueError: If there is no leak size information found in the 'genkey' simulation.
+
+        Example:
+            >>> import pandas as pd
+            >>> genkey = {
+            ...     'Network Component': [
+            ...         {
+            ...             'NETWORKCOMPONENT': {
+            ...                 'TYPE': 'FLOWPATH'
+            ...             },
+            ...             'LEAK': {
+            ...                 'DIAMETER': {'VALUE': [0.005]}
+            ...             }
+            ...         }
+            ...     ]
+            ... }
+            >>> data = {
+            ...     'Other_Column': [1, 2, 3]
+            ... }
+            >>> df = pd.DataFrame(data)
+            >>> df = add_leak_size(df, genkey)
+            >>> df
+            Other_Column  LEAK_SIZE
+            0             1      0.005
+            1             2      0.005
+            2             3      0.005
+
+        Note:
+            - The function searches for leak size information in the 'genkey' dictionary.
+            - It raises a ValueError if no leak size information is found.
+        """
         LEAK_LOCATION = None
 
         for i in genkey['Network Component']:
@@ -1016,7 +1111,56 @@ class Transform:
     
     @Helpers.check_airflow_task_args
     @staticmethod
-    def add_leak_status(df, genkey):
+    def add_leak_status(df: pd.DataFrame, genkey: dict) -> pd.DataFrame:
+        """
+        Add leak status information to a DataFrame based on the provided genkey.
+
+        This function determines the leak status for each time point in the DataFrame 'df' based on the
+        information provided in the 'genkey' dictionary. If the DataFrame contains a 'TIME_SERIES_S' column,
+        and the 'genkey' includes information about a 'Control-Leak' with setpoints and time values, it adds
+        a 'LEAK_STATUS' column to the DataFrame. The 'LEAK_STATUS' column indicates whether there is a leak
+        at each time point ('LEAK') or not ('NO LEAK').
+
+        Args:
+            df (pd.DataFrame): The DataFrame to which the leak status information will be added.
+            genkey (dict): The dictionary containing network component information, including leak control data.
+
+        Returns:
+            pd.DataFrame: The DataFrame with the 'LEAK_STATUS' column added.
+
+        Raises:
+            KeyError: If the 'TIME_SERIES_S' column is not present in the DataFrame.
+
+        Example:
+            >>> import pandas as pd
+            >>> genkey = {
+            ...     'Network Component': [
+            ...         {
+            ...             'PARAMETERS': {
+            ...                 'LABEL': 'Control-Leak',
+            ...                 'SETPOINT': [0, 1],
+            ...                 'TIME': {'VALUE': [0, 10]}
+            ...             }
+            ...         }
+            ...     ]
+            ... }
+            >>> data = {
+            ...     'TIME_SERIES_S': [2, 5, 8, 15]
+            ... }
+            >>> df = pd.DataFrame(data)
+            >>> df = add_leak_status(df, genkey)
+            >>> df
+            TIME_SERIES_S LEAK_STATUS
+            0              2      NO LEAK
+            1              5        LEAK
+            2              8        LEAK
+            3             15      NO LEAK
+
+        Note:
+            - The function looks for 'TIME_SERIES_S' in the DataFrame and uses it for time comparisons.
+            - The 'genkey' dictionary should include information about 'Control-Leak' with setpoints and time values.
+            - It raises a KeyError if 'TIME_SERIES_S' is not present in the DataFrame.
+        """
         if('TIME_SERIES_S' in df):
             for i in genkey['Network Component']:
                 if 'LABEL' in i['PARAMETERS']:
@@ -1046,20 +1190,100 @@ class Transform:
     @Helpers.check_airflow_task_args
     @staticmethod
     def calculate_reynolds_number(total_mass_flow: pd.Series, pipe_diameter: float, oil_vicosity:pd.Series ):
+        """
+            Calculate the Reynolds number for fluid flow in a pipe.
 
+            This function computes the Reynolds number for fluid flow in a pipe using the given total mass flow,
+            pipe diameter, and oil viscosity. The Reynolds number is a dimensionless quantity used to predict
+            the flow regime (e.g., laminar or turbulent) in fluid dynamics.
+
+            Args:
+                total_mass_flow (pd.Series): A pandas Series containing total mass flow values.
+                pipe_diameter (float): The diameter of the pipe (in meters).
+                oil_viscosity (pd.Series): A pandas Series containing oil viscosity values.
+
+            Returns:
+                pd.Series: A pandas Series containing the calculated Reynolds numbers.
+
+            Example:
+                >>> total_mass_flow = pd.Series([100, 200, 150])
+                >>> pipe_diameter = 0.1
+                >>> oil_viscosity = pd.Series([0.01, 0.02, 0.015])
+                >>> reynolds_numbers = calculate_reynolds_number(total_mass_flow, pipe_diameter, oil_viscosity)
+                >>> reynolds_numbers
+                0    400000.0
+                1    200000.0
+                2    266666.67
+                dtype: float64
+        """
         reynolds_number = (4 * total_mass_flow)/(math.pi * pipe_diameter * oil_vicosity) 
         reynolds_number = reynolds_number.apply(lambda x : x if x > 100 else 100)
         return reynolds_number
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def calculate_alfa_reynolds_number(roughness, reynolds_number, pipe_diameter):
+    def calculate_alfa_reynolds_number(roughness: float, reynolds_number: pd.Series, pipe_diameter: float):
+        """
+        Calculate the alpha-Reynolds number for fluid flow in a pipe.
+
+        This function computes the alpha-Reynolds number for fluid flow in a pipe using the given pipe roughness,
+        Reynolds number, and pipe diameter. The alpha-Reynolds number is used to characterize the pipe flow
+        and is related to the pipe roughness and Reynolds number.
+
+        Args:
+            roughness (float): The roughness of the pipe (in meters).
+            reynolds_number (pd.Series): A pandas Series containing Reynolds number values.
+            pipe_diameter (float): The diameter of the pipe (in meters).
+
+        Returns:
+            pd.Series: A pandas Series containing the calculated alpha-Reynolds numbers.
+
+        Example:
+            >>> roughness = 0.005
+            >>> reynolds_numbers = pd.Series([100000, 200000, 150000])
+            >>> pipe_diameter = 0.1
+            >>> alpha_reynolds_numbers = calculate_alfa_reynolds_number(roughness, reynolds_numbers, pipe_diameter)
+            >>> alpha_reynolds_numbers
+            0    3.574334
+            1    3.405992
+            2    3.501679
+            dtype: float64
+        """    
+        
         alpha_reynolds = np.log((roughness/(3.7*pipe_diameter))+(5.74/ reynolds_number ** 0.9))
         return alpha_reynolds
 
     @Helpers.check_airflow_task_args
     @staticmethod
     def get_pipe_roughness_by_position(parameters_pipe, position):
+        """
+        Get the pipe roughness at a specific position along a pipe based on provided parameters.
+
+        This function calculates the pipe roughness at a given position along a pipe based on a list of
+        pipe parameters and the specified position. It iterates through the provided parameters to find
+        the appropriate pipe roughness corresponding to the position.
+
+        Args:
+            parameters_pipe (list): A list of dictionaries, each containing 'length_start' and 'pipe_roughness'.
+                These parameters define the pipe roughness changes along the pipe.
+            position (float): The position along the pipe for which to retrieve the pipe roughness.
+
+        Returns:
+            float: The pipe roughness at the specified position.
+
+        Example:
+            >>> parameters_pipe = [
+            ...     {'length_start': 0, 'pipe_roughness': 0.005},
+            ...     {'length_start': 100, 'pipe_roughness': 0.006},
+            ...     {'length_start': 200, 'pipe_roughness': 0.004}
+            ... ]
+            >>> position = 150
+            >>> roughness = get_pipe_roughness_by_position(parameters_pipe, position)
+            >>> roughness
+            0.006
+        Note:
+            You have had ran the function get_pipe_diameters to pass the argument parameters_pipe.
+        """
         length_start_aux = -1
         pipe_roughness_aux = -1
 
@@ -1078,6 +1302,35 @@ class Transform:
     @Helpers.check_airflow_task_args
     @staticmethod
     def get_pipe_diameter_by_position(parameters_pipe, position):
+
+        """
+        Get the pipe diameter at a specific position along a pipe based on provided parameters.
+
+        This function calculates the pipe diameter at a given position along a pipe based on a list of
+        pipe parameters and the specified position. It iterates through the provided parameters to find
+        the appropriate pipe diameter corresponding to the position.
+
+        Args:
+            parameters_pipe (list): A list of dictionaries, each containing 'length_start' and 'pipe_diameter'.
+                These parameters define the pipe diameter changes along the pipe.
+            position (float): The position along the pipe for which to retrieve the pipe diameter.
+
+        Returns:
+            float: The pipe diameter at the specified position.
+
+        Example:
+            >>> parameters_pipe = [
+            ...     {'length_start': 0, 'pipe_diameter': 0.2},
+            ...     {'length_start': 100, 'pipe_diameter': 0.3},
+            ...     {'length_start': 200, 'pipe_diameter': 0.25}
+            ... ]
+            >>> position = 150
+            >>> diameter = get_pipe_diameter_by_position(parameters_pipe, position)
+            >>> diameter
+            0.3
+        Note:
+            You have had ran the function get_pipe_diameters to pass the argument parameters_pipe.
+        """
         length_start_aux = -1
         pipe_diameter_aux = -1
 
@@ -1096,7 +1349,52 @@ class Transform:
     @Helpers.check_airflow_task_args
     @staticmethod
     def get_pipe_diameters(genkey):
+        """
+        Get pipe diameter and roughness parameters from the given genkey dictionary.
 
+        This function extracts pipe diameter and roughness information from the 'genkey' dictionary,
+        which contains information about network components. It specifically looks for network components
+        of type 'FLOWPATH' and extracts relevant data.
+
+        Args:
+            genkey (dict): The dictionary containing network component information.
+
+        Returns:
+            list: A list of dictionaries, each containing 'length_start', 'pipe_diameter', and 'pipe_roughness'.
+                This information is extracted from the 'genkey' dictionary for the FLOWPATH network component.
+
+        Raises:
+            ValueError: If there are no network components of type 'FLOWPATH' in the 'genkey' dictionary.
+
+        Example:
+            >>> genkey = {
+            ...     'Network Component': [
+            ...         {
+            ...             'NETWORKCOMPONENT': {
+            ...                 'TYPE': 'FLOWPATH'
+            ...             },
+            ...             'PIPE': [
+            ...                 {
+            ...                     'DIAMETER': {'VALUE': [0.2]},
+            ...                     'ROUGHNESS': {'VALUE': [0.005]},
+            ...                     'LENGTH': {'VALUE': [100]}
+            ...                 },
+            ...                 {
+            ...                     'DIAMETER': {'VALUE': [0.3]},
+            ...                     'ROUGHNESS': {'VALUE': [0.006]},
+            ...                     'LENGTH': {'VALUE': [50]}
+            ...                 }
+            ...             ]
+            ...         }
+            ...     ]
+            ... }
+            >>> pipe_parameters = get_pipe_diameters(genkey)
+            >>> pipe_parameters
+            [{'length_start': 0, 'pipe_diameter': 0.2, 'pipe_roughness': 0.005},
+            {'length_start': 100, 'pipe_diameter': 0.3, 'pipe_roughness': 0.006}]
+        Note:
+            This is mainly used to get the friction factor getting 
+        """
 
         for i in genkey['Network Component']:
             if 'NETWORKCOMPONENT' in i:
@@ -1115,7 +1413,26 @@ class Transform:
     @Helpers.check_airflow_task_args
     @staticmethod
     def _get_tranfer_positions(df_columns: list):
+        """
+            Retrieve and return a sorted list of transfer positions from a list of DataFrame columns.
 
+            This function parses column names to extract transfer positions marked with 'POS@'.
+            It then removes duplicates, sorts the positions in ascending order, and returns the result.
+
+            Args:
+                df_columns (list): A list of column names to extract transfer positions from.
+
+            Returns:
+                list: A sorted list of unique transfer positions found in the column names.
+
+            Example:
+                >>> columns = ['ROHL_POSITION_POS@19M_Oil_density_KG/M3', 'SSP_POSITION_POS@19M_Speed_of_sound_in_fluid_M/S', 'GT_POSITION_POS@50M_Total_mass_flow_KG/S', 'SSP_POSITION_POS@660M_Speed_of_sound_in_fluid_M/S', 'Goals@POS@3M']
+                >>> _get_transfer_positions(columns)
+                [19, 50, 660]
+
+            Note:
+                This function assumes that transfer positions are marked in column names with 'POS@'
+        """
         positions = [
                         int(column.split('@')[-1].split('M')[0])
                         for column in df_columns
@@ -1159,8 +1476,43 @@ class Transform:
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def calculate_friction_factor(df: pd.DataFrame, genkey: dict ):
+    def calculate_friction_factor(df: pd.DataFrame, genkey: dict, add_reynolds_number: bool = False, add_alfa_reynolds_number: bool = False ):
+        
+        """
+        Calculate the friction factor for fluid flow in pipes at different positions.
 
+        This function computes the friction factor for fluid flow in pipes at specified positions based on
+        the given DataFrame and additional parameters. It can optionally add the Reynolds number and
+        alpha-Reynolds number to the DataFrame for each position.
+
+        Args:
+            df (pd.DataFrame): The DataFrame containing relevant data for fluid flow analysis.
+            genkey (dict): A dictionary containing general parameters for the analysis.
+            add_reynolds_number (bool, optional): Whether to add the Reynolds number to the DataFrame.
+                Defaults to False.
+            add_alfa_reynolds_number (bool, optional): Whether to add the alpha-Reynolds number to the DataFrame.
+                Defaults to False.
+
+        Returns:
+            pd.DataFrame: The DataFrame with computed friction factors and optionally added Reynolds and
+                alpha-Reynolds numbers.
+
+        Raises:
+            ValueError: If required columns for oil viscosity and total mass flow are not present in the DataFrame.
+
+        Example:
+            >>> import pandas as pd
+            >>> data = {
+            ...     'VISHLTAB_POSITION_POS@1M_Oil_viscosity_from_fluid_tables_N-S/M2': [0.01, 0.02],
+            ...     'GT_POSITION_POS@1M_Total_mass_flow_KG/S': [100, 200],
+            ...     # Add other required columns
+            ... }
+            >>> df = pd.DataFrame(data)
+            >>> genkey = {'other_parameters': 'values'}
+            >>> df = Transform.calculate_friction_factor(df, genkey, add_reynolds_number=True, add_alfa_reynolds_number=True)
+        
+        """
+        
         df_columns = df.columns.to_list()
 
         positions = Transform._get_tranfer_positions(df_columns)
@@ -1181,18 +1533,60 @@ class Transform:
             roughness = Transform.get_pipe_roughness_by_position(parameters_pipe, position)
 
             reynolds_number = Transform.calculate_reynolds_number(total_mass_flow, pipe_diameter, oil_vicosity)
-            # df[f'REYNOLDS_NUMBER_POS@{position}'] = reynolds_number
+            if(add_reynolds_number):
+                df[f'REYNOLDS_NUMBER_POS@{position}'] = reynolds_number
+            
             alfa_reynolds = Transform.calculate_alfa_reynolds_number(roughness,reynolds_number,pipe_diameter)
-            # df[f'ALFA_REYNOLDS_NUMBER_POS@{position}'] = alfa_reynolds
+            if(add_alfa_reynolds_number):
+                df[f'ALFA_REYNOLDS_NUMBER_POS@{position}'] = alfa_reynolds
+
             friction_factor = ( ( (64/reynolds_number)**8) + (9.5*( (alfa_reynolds - ((2500/reynolds_number)**6) )** -16)))**(1/8)
-            # return df.head()
             df[f'FRICTION_FACTOR_POS@{position}'] = friction_factor
-        # alfa_reynolds = 100
+
         return df
 
 
-    def convert_mass_fluid_barrel_per_hour_to_KG_per_second(df: pd.DataFrame, density_columns: list | None = None, mass_flow_columns: list | None = None):
-        
+    def convert_mass_fluid_barrel_per_hour_to_KG_per_second(df: pd.DataFrame, density_columns: list | None = None, mass_flow_columns: list | None = None) -> pd.DataFrame:
+        """
+            Convert mass flow rates from fluid barrels per hour to kilograms per second in a DataFrame.
+
+            This function performs the conversion of mass flow rates in a DataFrame from units of fluid barrels per hour
+            to units of kilograms per second. It requires specifying the columns containing mass flow rates and the
+            corresponding columns containing fluid density values. The conversion formula used is based on the
+            relationship between fluid barrels and kilograms.
+
+            Args:
+                df (pd.DataFrame): The DataFrame containing mass flow rates and density values.
+                density_columns (list | None): A list of column names containing fluid density values in kg/m³.
+                    If None, the function will attempt to identify density columns from the DataFrame by looking into the positions of the transfer.
+                mass_flow_columns (list | None): A list of column names containing mass flow rates in barrels per hour.
+                    If None, the function will attempt to identify mass flow columns from the DataFrame by looking into the positions of the transfer.
+
+            Returns:
+                pd.DataFrame: The DataFrame with mass flow rates converted to kilograms per second.
+
+            Raises:
+                ValueError: If the number of density columns and mass flow columns do not match.
+
+            Example:
+                >>> import pandas as pd
+                >>> data = {
+                ...     'GT_POSITION_POS@10M_Total_mass_flow_KG/S': [100, 200, 150],
+                ...     'ROHL_POSITION_POS@10M_Oil_density_KG/M3': [800, 900, 750],
+                ... }
+                >>> df = pd.DataFrame(data)
+                >>> df = convert_mass_fluid_barrel_per_hour_to_KG_per_second(df)
+                >>> df
+                GT_POSITION_POS@10M_Total_mass_flow_KG/S  ROHL_POSITION_POS@10M_Oil_density_KG/M3
+                0                                      3.530374                                  800
+                1                                      7.060748                                  900
+                2                                      5.295561                                  750
+
+            Note:
+                - The conversion factor used is 0.158787, based on the relationship between fluid barrels and kilograms.
+                - The function identifies density and mass flow columns from the DataFrame if they are not provided.
+                - It raises a ValueError if the number of density columns and mass flow columns does not match.
+        """        
 
         positions = list()
         df_columns = list()
@@ -1226,8 +1620,43 @@ class Transform:
 
         return df
 
-    def convert_pressure_psig_to_pascal(df: pd.DataFrame, pressure_columns: list | None = None):
+    def convert_pressure_psig_to_pascal(df: pd.DataFrame, pressure_columns: list | None = None)-> pd.DataFrame:
+        """
+        Convert pressure values from psig (pounds per square inch gauge) to pascals in a DataFrame.
 
+        This function performs the conversion of pressure values in a DataFrame from units of pounds per square inch
+        gauge (psig) to units of pascals (Pa). It requires specifying the columns containing pressure values.
+        The conversion factor used is 6894.75728, which is the approximate conversion factor from psig to pascals.
+
+        Args:
+            df (pd.DataFrame): The DataFrame containing pressure values to be converted.
+            pressure_columns (list | None): A list of column names containing pressure values in psig.
+                If None, the function will attempt to identify pressure columns from the DataFrame by looking into the positions of the transfer.
+
+        Returns:
+            pd.DataFrame: The DataFrame with pressure values converted to pascals.
+
+        Raises:
+            ValueError: If the pressure columns are not provided, or if a pressure column is not found for a position.
+
+        Example:
+            >>> import pandas as pd
+            >>> data = {
+            ...     'PT_POSITION_POS@10M_Pressure_PA': [1000, 2000, 1500],
+            ... }
+            >>> df = pd.DataFrame(data)
+            >>> df = convert_pressure_psig_to_pascal(df)
+            >>> df
+            PT_POSITION_POS@10M_Pressure_PA
+            0                             6894757.28
+            1                            13789514.56
+            2                            10342135.92
+
+        Note:
+            - The conversion factor used is 6894.75728, which is an approximate factor for psig to pascals conversion.
+            - The function identifies pressure columns from the DataFrame if they are not provided.
+            - It raises a ValueError if pressure columns are not provided or if a pressure column is not found.
+        """
         positions = list()
         df_columns = list()
         
@@ -1251,8 +1680,44 @@ class Transform:
         
         return df
 
-    def convert_temperature_fahrenheit_to_celsius(df: pd.DataFrame, temperature_columns: list | None = None):
+    def convert_temperature_fahrenheit_to_celsius(df: pd.DataFrame, temperature_columns: list | None = None)->pd.DataFrame:
+        """
+            Convert temperature values from Fahrenheit to Celsius in a DataFrame.
 
+            This function performs the conversion of temperature values in a DataFrame from units of Fahrenheit (°F)
+            to units of Celsius (°C). It requires specifying the columns containing temperature values.
+            The conversion formula used is (°F - 32) * (5/9), which is the standard formula for converting
+            Fahrenheit to Celsius.
+
+            Args:
+                df (pd.DataFrame): The DataFrame containing temperature values to be converted.
+                temperature_columns (list | None): A list of column names containing temperature values in °F.
+                    If None, the function will attempt to identify temperature columns from the DataFrame by looking into the positions of the transfer.
+
+            Returns:
+                pd.DataFrame: The DataFrame with temperature values converted to Celsius.
+
+            Raises:
+                ValueError: If the temperature columns are not provided, or if a temperature column is not found for a position.
+
+            Example:
+                >>> import pandas as pd
+                >>> data = {
+                ...     'TM_POSITION_POS@10M_Fluid_temperature_C': [68, 77, 86],
+                ... }
+                >>> df = pd.DataFrame(data)
+                >>> df = convert_temperature_fahrenheit_to_celsius(df)
+                >>> df
+                TM_POSITION_POS@10M_Fluid_temperature_C
+                0                                 20.0
+                1                                 25.0
+                2                                 30.0
+
+            Note:
+                - The conversion formula used is (°F - 32) * (5/9) for Fahrenheit to Celsius conversion.
+                - The function identifies temperature columns from the DataFrame if they are not provided.
+                - It raises a ValueError if temperature columns are not provided or if a temperature column is not found.
+        """
         positions = list()
         df_columns = list()
         
