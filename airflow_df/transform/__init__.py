@@ -1189,3 +1189,88 @@ class Transform:
             df[f'FRICTION_FACTOR_POS@{position}'] = friction_factor
         # alfa_reynolds = 100
         return df
+
+
+    def convert_mass_fluid_barrel_per_hour_to_KG_per_second(df: pd.DataFrame, density_columns: list | None = None, mass_flow_columns: list | None = None):
+        
+
+        positions = list()
+        df_columns = list()
+        
+        if(mass_flow_columns is None or density_columns is None):
+            positions = Transform._get_tranfer_positions(df.columns.to_list())
+            df_columns = df.columns.to_list()
+
+        if(mass_flow_columns is None):
+            mass_flow_columns = list()
+
+            for position in positions: 
+                if (f"GT_POSITION_POS@{position}M_Total_mass_flow_KG/S" not in df_columns):
+                    raise ValueError(f'Total mass flow column is not in the DF for the position {position} meters.')
+                mass_flow_columns.append(f"GT_POSITION_POS@{position}M_Total_mass_flow_KG/S")
+        
+        if(density_columns is None):
+            density_columns = list()
+
+            for position in positions: 
+                if (f"ROHL_POSITION_POS@{position}M_Oil_density_KG/M3" not in df_columns):
+                    raise ValueError(f'Total mass flow column is not in the DF for the position {position} meters.')
+                density_columns.append(f"ROHL_POSITION_POS@{position}M_Oil_density_KG/M3")
+
+
+        if(len(mass_flow_columns) != len(density_columns)):
+            raise ValueError('You should pass the same number of columns for density and mass flow.')
+        for i in range(len(mass_flow_columns)):
+
+            df[mass_flow_columns[i]] = df[mass_flow_columns[i]] * 0.158787 * df[density_columns[i]]/3600
+
+        return df
+
+    def convert_pressure_psig_to_pascal(df: pd.DataFrame, pressure_columns: list | None = None):
+
+        positions = list()
+        df_columns = list()
+        
+        if(pressure_columns is None):
+            positions = Transform._get_tranfer_positions(df.columns.to_list())
+            df_columns = df.columns.to_list()
+
+
+        if(pressure_columns is None):
+            pressure_columns = list()
+
+            for position in positions: 
+
+                if (f"PT_POSITION_POS@{position}M_Pressure_PA" not in df_columns):
+                    raise ValueError(f'Pressure column is not in the DF for the position {position} meters.')
+                pressure_columns.append(f"PT_POSITION_POS@{position}M_Pressure_PA")
+        
+        for i in range(len(pressure_columns)):
+
+            df[pressure_columns[i]] = df[pressure_columns[i]] * 6894.75728
+        
+        return df
+
+    def convert_temperature_fahrenheit_to_celsius(df: pd.DataFrame, temperature_columns: list | None = None):
+
+        positions = list()
+        df_columns = list()
+        
+        if(temperature_columns is None):
+            positions = Transform._get_tranfer_positions(df.columns.to_list())
+            df_columns = df.columns.to_list()
+
+
+        if(temperature_columns is None):
+            temperature_columns = list()
+
+            for position in positions: 
+                if (f"TM_POSITION_POS@{position}M_Fluid_temperature_C" not in df_columns):
+                    raise ValueError(f'Temperature column is not in the DF for the position {position} meters.')
+                temperature_columns.append(f"TM_POSITION_POS@{position}M_Fluid_temperature_C")
+        
+        for i in range(len(temperature_columns)):
+
+            df[temperature_columns[i]] = (df[temperature_columns[i]] - 32) * (5/9)
+        
+        return df        
