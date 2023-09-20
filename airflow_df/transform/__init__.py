@@ -1025,43 +1025,123 @@ class Transform:
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def add_leak_size(df: pd.DataFrame, genkey: dict)->pd.DataFrame:
-        
-        LEAK_SIZE = None
+    def add_leak_size(df: pd.DataFrame, genkey: dict, constant_leak_size:bool = False, control_leak_column:str = 'CONTR_CONTROLLER_CONTROL_LEAK_Controller_output', manually: bool = False, leak_size: float | None = None)->pd.DataFrame:
+        """
+            Add leak size information to a DataFrame based on the provided genkey.
 
-        for i in genkey['Network Component']:
-            if 'NETWORKCOMPONENT' in i:
-                if 'TYPE' in i['NETWORKCOMPONENT']:
-                    if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
-                        if('LEAK' in i):
-                            LEAK_SIZE =  i['LEAK']['DIAMETER']['VALUE'][0]
+            This function optionally searches for information about a leak size in the provided 'genkey' dictionary,
+            which contains parameters related to network components, but it performs the search only when 'manually' is set to False.
+            If it finds a leak size associated with a network component of type 'FLOWPATH', it adds this leak size information as a new
+            column 'LEAK_SIZE' to the DataFrame.
 
-        if(LEAK_SIZE is None):
-            raise ValueError('There is no leak size in this genkey simulation.')
-        df['LEAK_SIZE'] = LEAK_SIZE
+            Args:
+                df (pd.DataFrame): The DataFrame to which the leak size information will be added.
+                genkey (dict): The dictionary containing network component information.
+                constant_leak_size (bool): If True, the 'LEAK_SIZE' column will have a constant value regardless of the control leak column.
+                    If False, the 'LEAK_SIZE' column will be multiplied by the control leak column values. Default is False.
+                control_leak_column (str): The name of the control leak column in the DataFrame when 'constant_leak_size' is False.
+                    Default is 'CONTR_CONTROLLER_CONTROL_LEAK_Controller_output'.
+                manually (bool): If True, the leak size is provided manually, and 'leak_size' must be specified.
+                    If False, the function searches for the leak size in the 'genkey' dictionary.
+                leak_size (float | None): The leak size to be added to the DataFrame when 'manually' is True.
+                    Default is None.
 
-        return df
+            Returns:
+                pd.DataFrame: The DataFrame with the 'LEAK_SIZE' column added.
+
+            Raises:
+                ValueError: If there is no leak size information found in the 'genkey' simulation or if 'leak_size' is invalid.
+
+            Example:
+                >>> import pandas as pd
+                >>> genkey = {
+                ...     'Network Component': [
+                ...         {
+                ...             'NETWORKCOMPONENT': {
+                ...                 'TYPE': 'FLOWPATH'
+                ...             },
+                ...             'LEAK': {
+                ...                 'DIAMETER': {'VALUE': [0.005]}
+                ...             }
+                ...         }
+                ...     ]
+                ... }
+                >>> data = {
+                ...     'Other_Column': [1, 2, 3],
+                ...     'CONTR_CONTROLLER_CONTROL_LEAK_Controller_output': [
+                ...         0.000000, 0.061748, 0.546996, 1.000000, 1.000000, 0.455432, 0.000000, 0.000000, 0.000000
+                ...     ]
+                ... }
+                >>> df = pd.DataFrame(data)
+                >>> df = add_leak_size(df, genkey)
+                >>> df
+                Other_Column  LEAK_SIZE
+                0             1      0.000000
+                1             2      0.061748
+                2             3      0.546996
+
+            Note:
+                - The function searches for leak size information in the 'genkey' dictionary when 'manually' is set to False.
+                - If 'manually' is True, 'leak_size' must be provided.
+                - If 'constant_leak_size' is True, the 'LEAK_SIZE' column will have a constant value.
+                - If 'constant_leak_size' is False, the 'LEAK_SIZE' column will be multiplied by the control leak column values.
+                - It raises a ValueError if no leak size information is found or if 'leak_size' is invalid.
+        """
+
+        if(not manually):
+            for i in genkey['Network Component']:
+                if 'NETWORKCOMPONENT' in i:
+                    if 'TYPE' in i['NETWORKCOMPONENT']:
+                        if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
+                            if('LEAK' in i):
+                                leak_size =  i['LEAK']['DIAMETER']['VALUE'][0]
+
+            if(leak_size is None):
+                raise ValueError('There is no leak size in this genkey simulation.')
+            
+            if(constant_leak_size):    
+                df['LEAK_SIZE'] = leak_size
+            else:
+                df['LEAK_SIZE'] = leak_size*df[control_leak_column]
+
+            return df
+        else:
+            if(leak_size is None):
+                raise ValueError('leak_size cannot be a None value.')
+            if(leak_size < 0):
+                raise ValueError('leak_size has to be a positive integer.')
+            
+            if(constant_leak_size):    
+                df['LEAK_SIZE'] = leak_size
+            else:
+                df['LEAK_SIZE'] = leak_size*df[control_leak_column]
+
+            return df
     
     @Helpers.check_airflow_task_args
     @staticmethod
-    def add_leak_location(df, genkey)->pd.DataFrame:
+    def add_leak_location(df:pd.DataFrame, genkey: dict, manually: bool = False, leak_location: float | None = None)->pd.DataFrame:
         """
-        Add leak size information to a DataFrame based on the provided genkey.
+        Add leak location information to a DataFrame based on the provided genkey.
 
-        This function searches for information about a leak size in the provided 'genkey' dictionary,
-        which contains parameters related to network components. If it finds a leak size associated
-        with a network component of type 'FLOWPATH', it adds this leak size information as a new
-        column 'LEAK_SIZE' to the DataFrame.
+        This function optionally searches for information about a leak location in the provided 'genkey' dictionary,
+        which contains parameters related to network components, but it performs the search only when 'manually' is set to False.
+        If it finds a leak location associated with a network component of type 'FLOWPATH', it adds this leak location information as a new
+        column 'LEAK_LOCATION' to the DataFrame.
 
         Args:
-            df (pd.DataFrame): The DataFrame to which the leak size information will be added.
+            df (pd.DataFrame): The DataFrame to which the leak location information will be added.
             genkey (dict): The dictionary containing network component information.
+            manually (bool): If True, the leak location is provided manually, and 'leak_location' must be specified.
+                If False, the function searches for the leak location in the 'genkey' dictionary.
+            leak_location (float | None): The leak location to be added to the DataFrame when 'manually' is True.
+                Default is None.
 
         Returns:
-            pd.DataFrame: The DataFrame with the 'LEAK_SIZE' column added.
+            pd.DataFrame: The DataFrame with the 'LEAK_LOCATION' column added.
 
         Raises:
-            ValueError: If there is no leak size information found in the 'genkey' simulation.
+            ValueError: If there is no leak location information found in the 'genkey' simulation or if 'leak_location' is invalid.
 
         Example:
             >>> import pandas as pd
@@ -1072,7 +1152,7 @@ class Transform:
             ...                 'TYPE': 'FLOWPATH'
             ...             },
             ...             'LEAK': {
-            ...                 'DIAMETER': {'VALUE': [0.005]}
+            ...                 'ABSPOSITION': {'VALUE': [10.5]}
             ...             }
             ...         }
             ...     ]
@@ -1081,34 +1161,44 @@ class Transform:
             ...     'Other_Column': [1, 2, 3]
             ... }
             >>> df = pd.DataFrame(data)
-            >>> df = add_leak_size(df, genkey)
+            >>> df = add_leak_location(df, genkey)
             >>> df
-            Other_Column  LEAK_SIZE
-            0             1      0.005
-            1             2      0.005
-            2             3      0.005
+            Other_Column  LEAK_LOCATION
+            0             1           10.5
+            1             2           10.5
+            2             3           10.5
 
         Note:
-            - The function searches for leak size information in the 'genkey' dictionary.
-            - It raises a ValueError if no leak size information is found.
+            - The function searches for leak location information in the 'genkey' dictionary when 'manually' is set to False.
+            - If 'manually' is True, 'leak_location' must be provided.
+            - It raises a ValueError if no leak location information is found or if 'leak_location' is invalid.
         """
-        LEAK_LOCATION = None
+        if(not manually):
+            for i in genkey['Network Component']:
+                if 'NETWORKCOMPONENT' in i:
+                    if 'TYPE' in i['NETWORKCOMPONENT']:
+                        if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
+                            if('LEAK' in i):
 
-        for i in genkey['Network Component']:
-            if 'NETWORKCOMPONENT' in i:
-                if 'TYPE' in i['NETWORKCOMPONENT']:
-                    if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
-                        if('LEAK' in i):
+                                leak_location =  i['LEAK']['ABSPOSITION']['VALUE'][0]
 
-                            LEAK_LOCATION =  i['LEAK']['ABSPOSITION']['VALUE'][0]
+            if(leak_location is None):
+                raise ValueError('There is no leak location in this genkey simulation.')
 
-        if(LEAK_LOCATION is None):
-            raise ValueError('There is no leak location in this genkey simulation.')
+            df['LEAK_LOCATION'] = leak_location
 
-        df['LEAK_LOCATION'] = LEAK_LOCATION
+            return df
+        else:
 
-        return df
-    
+            if(leak_location is None):
+                raise ValueError('leak_location cannot be a None value.')
+            if(leak_location < 0):
+                raise ValueError('leak_location has to be a positive integer.')
+
+            df['LEAK_LOCATION'] = leak_location
+            
+            return df
+
     @Helpers.check_airflow_task_args
     @staticmethod
     def add_leak_status(df: pd.DataFrame, genkey: dict) -> pd.DataFrame:
@@ -1545,7 +1635,8 @@ class Transform:
 
         return df
 
-
+    @Helpers.check_airflow_task_args
+    @staticmethod
     def convert_mass_fluid_barrel_per_hour_to_KG_per_second(df: pd.DataFrame, density_columns: list | None = None, mass_flow_columns: list | None = None) -> pd.DataFrame:
         """
             Convert mass flow rates from fluid barrels per hour to kilograms per second in a DataFrame.
@@ -1620,6 +1711,8 @@ class Transform:
 
         return df
 
+    @Helpers.check_airflow_task_args
+    @staticmethod
     def convert_pressure_psig_to_pascal(df: pd.DataFrame, pressure_columns: list | None = None)-> pd.DataFrame:
         """
         Convert pressure values from psig (pounds per square inch gauge) to pascals in a DataFrame.
@@ -1680,6 +1773,8 @@ class Transform:
         
         return df
 
+    @Helpers.check_airflow_task_args
+    @staticmethod
     def convert_temperature_fahrenheit_to_celsius(df: pd.DataFrame, temperature_columns: list | None = None)->pd.DataFrame:
         """
             Convert temperature values from Fahrenheit to Celsius in a DataFrame.
@@ -1738,4 +1833,46 @@ class Transform:
 
             df[temperature_columns[i]] = (df[temperature_columns[i]] - 32) * (5/9)
         
-        return df        
+        return df
+            
+    @Helpers.check_airflow_task_args
+    @staticmethod    
+    def convert_timestamp_timeseries(df:pd.DataFrame, column_timestamp:str = 'timestamp', new_column_timeseries: str = 'TIME_SERIES_S')->pd.DataFrame:
+        """
+        Convert a timestamp column to a time series column in seconds relative to the first timestamp.
+
+        This function takes a DataFrame with a timestamp column and converts it into a time series column
+        representing time in seconds relative to the first timestamp in the dataset. The resulting time series
+        is added as a new column in the DataFrame.
+
+        Args:
+            df (pd.DataFrame): The DataFrame containing the timestamp data.
+            column_timestamp (str): The name of the timestamp column in the DataFrame. Default is 'timestamp'.
+            new_column_timeseries (str): The name of the new time series column to be added. Default is 'TIME_SERIES_S'.
+
+        Returns:
+            pd.DataFrame: The DataFrame with the new time series column.
+
+        Example:
+            >>> import pandas as pd
+            >>> data = {
+            ...     'timestamp': ['2023-09-18 10:00:00.000', '2023-09-18 10:00:01.000', '2023-09-18 10:00:02.000']
+            ... }
+            >>> df = pd.DataFrame(data)
+            >>> df = convert_timestamp_timeseries(df)
+            >>> df
+                        timestamp  TIME_SERIES_S
+            0  2023-09-18 10:00:00.000             0.0
+            1  2023-09-18 10:00:01.000             1.0
+            2  2023-09-18 10:00:02.000             2.0
+
+        Note:
+            - The function assumes that the timestamp column is in the format 'YYYY-MM-DD HH:MM:SS.SSS'.
+            - The new time series column represents time in seconds relative to the first timestamp in the dataset.
+        """
+
+        timestamps = pd.to_datetime(df[column_timestamp], format='%Y-%m-%d %H:%M:%S.%f')
+        time_diff_from_start = (timestamps - timestamps.iloc[0]).dt.total_seconds()
+        df[new_column_timeseries] = time_diff_from_start
+        
+        return  df
