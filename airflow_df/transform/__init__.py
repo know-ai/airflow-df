@@ -1585,6 +1585,45 @@ class Transform:
         positions.sort()
 
         return positions
+    
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def _extract_pipeline_name(column_name: str) -> str | None:
+        """
+            Extracts the pipeline name from a given column name string.
+
+            Args:
+                column_name (str): The input column name string from which the pipeline name will be extracted.
+
+            Returns:
+                str | None: If a pipeline name is found in the column name string, it returns the extracted pipeline name as a string.
+                            If no pipeline name is found, it returns None.
+        """
+        pattern = r'_([A-Z0-9]+)@'
+        matches = re.findall(pattern, column_name)
+        if matches:
+            return matches[0]
+        else:
+            return None
+        
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def _get_unique_pipelines_name_tpl(df_columns: list) -> list:
+        """
+            Returns a list of unique pipeline names extracted from a list of column names, removing any None values.
+
+            Args:
+                df_columns (list): A list of column names from which the unique pipeline names will be extracted.
+
+            Returns:
+                list: A list of unique pipeline names (strings) extracted from the column names, with None values removed.
+        """
+        pipeline_names = [Transform._extract_pipeline_name(string) for string in df_columns]
+        pipeline_names = [x for x in pipeline_names if x is not None]
+        pipeline_names = list(set(pipeline_names))
+        return pipeline_names
+    
+
 
     @Helpers.check_airflow_task_args
     @staticmethod
@@ -1669,17 +1708,19 @@ class Transform:
         df_columns = df.columns.to_list()
 
         positions = Transform._get_tranfer_positions_tpl(df_columns)
+        unique_pipeline_names = Transform._get_unique_pipelines_name_tpl(df_columns)
+        pipeline_name = unique_pipeline_names[0]
 
         for position in positions: 
 
-            if (f"VISHLTAB_POSITION_POS@{position}M_Oil_viscosity_from_fluid_tables_N-S/M2" not in df_columns):
+            if (f"VISHLTAB_POSITION_{pipeline_name}@{position}M_Oil_viscosity_from_fluid_tables_N-S/M2" not in df_columns):
                 raise ValueError(f'Oil viscosity from fluid column is not in the DF for the position {position} meters.')
 
-            if (f"GT_POSITION_POS@{position}M_Total_mass_flow_KG/S" not in df_columns):
+            if (f"GT_POSITION_{pipeline_name}@{position}M_Total_mass_flow_KG/S" not in df_columns):
                 raise ValueError(f'Total mass flow column is not in the DF for the position {position} meters.')
 
-            oil_vicosity = df[f"VISHLTAB_POSITION_POS@{position}M_Oil_viscosity_from_fluid_tables_N-S/M2"]
-            total_mass_flow = df[f"GT_POSITION_POS@{position}M_Total_mass_flow_KG/S"]
+            oil_vicosity = df[f"VISHLTAB_POSITION_{pipeline_name}@{position}M_Oil_viscosity_from_fluid_tables_N-S/M2"]
+            total_mass_flow = df[f"GT_POSITION_{pipeline_name}@{position}M_Total_mass_flow_KG/S"]
 
             parameters_pipe = Transform.get_pipe_diameters(genkey)
             pipe_diameter = Transform.get_pipe_diameter_by_position(parameters_pipe, position)
@@ -1687,14 +1728,14 @@ class Transform:
 
             reynolds_number = Transform.calculate_reynolds_number(total_mass_flow, pipe_diameter, oil_vicosity)
             if(add_reynolds_number):
-                df[f'REYNOLDS_NUMBER_POS@{position}'] = reynolds_number
+                df[f'REYNOLDS_NUMBER_{pipeline_name}@{position}'] = reynolds_number
             
             alfa_reynolds = Transform.calculate_alfa_reynolds_number(roughness,reynolds_number,pipe_diameter)
             if(add_alfa_reynolds_number):
-                df[f'ALFA_REYNOLDS_NUMBER_POS@{position}'] = alfa_reynolds
+                df[f'ALFA_REYNOLDS_NUMBER_{pipeline_name}@{position}'] = alfa_reynolds
 
             friction_factor = ( ( (64/reynolds_number)**8) + (9.5*( (alfa_reynolds - ((2500/reynolds_number)**6) )** -16)))**(1/8)
-            df[f'FRICTION_FACTOR_POS@{position}'] = friction_factor
+            df[f'FRICTION_FACTOR_{pipeline_name}@{position}'] = friction_factor
 
         return df
 
