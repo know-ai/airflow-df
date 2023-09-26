@@ -1980,3 +1980,31 @@ class Transform:
         df[new_column_timeseries] = time_diff_from_start
         
         return  df
+    
+    @Helpers.check_airflow_task_args
+    @staticmethod    
+    def _check_for_gtsource_column(df: pd.DataFrame) -> bool :
+        df_columns = df.columns.to_list()
+        
+        if('GTSOUR_SOURCE_IN_Source_mass_rate_KG/S' in df_columns):
+            if(list(df['GTLEAK_LEAK_LEAK_Leakage_total_mass_flow_rate_KG/S'].unique()) == [0]):
+            
+                return True
+            else:
+                return False
+        else:
+            return False    
+
+    @Helpers.check_airflow_task_args
+    @staticmethod    
+    def replace_gtleak_gtsource_column(df: pd.DataFrame) -> pd.DataFrame:
+        have_to_replace_column = Transform._check_for_gtsource_column(df)
+
+        if(have_to_replace_column):
+            df['GTLEAK_LEAK_LEAK_Leakage_total_mass_flow_rate_KG/S_DUPLICATED'] = df['GTLEAK_LEAK_LEAK_Leakage_total_mass_flow_rate_KG/S']
+            df['GTLEAK_LEAK_LEAK_Leakage_total_mass_flow_rate_KG/S'] = df['GTSOUR_SOURCE_IN_Source_mass_rate_KG/S']
+            
+            return df
+        else:
+            return df
+        
