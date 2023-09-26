@@ -1022,6 +1022,28 @@ class Transform:
             column_standarize_names[i] = Transform._concatenate_three_parts(i)
         df = Transform.rename(df, columns=column_standarize_names)
         return df
+    
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def _get_leak_size_from_genkey(genkey: dict) -> float | None:
+        """
+        Extracts the leak size from a given genkey dictionary.
+
+        Args:
+            genkey (dict): The genkey dictionary containing network component information.
+
+        Returns:
+            float | None: The size of the leak, or None if no leak is found.
+
+        """
+        for i in genkey['Network Component']:
+                        if 'NETWORKCOMPONENT' in i:
+                            if 'TYPE' in i['NETWORKCOMPONENT']:
+                                if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
+                                    if('LEAK' in i):
+                                        leak_size =  i['LEAK']['DIAMETER']['VALUE'][0]
+                                        return leak_size
+        return None
 
     @Helpers.check_airflow_task_args
     @staticmethod
@@ -1076,9 +1098,9 @@ class Transform:
                 >>> df = add_leak_size(df, genkey)
                 >>> df
                 Other_Column  LEAK_SIZE
-                0             1      0.000000
-                1             2      0.061748
-                2             3      0.546996
+                0             1    0.000000
+                1             2    0.061748
+                2             3    0.546996
 
             Note:
                 - The function searches for leak size information in the 'genkey' dictionary when 'manually' is set to False.
@@ -1089,12 +1111,7 @@ class Transform:
         """
 
         if(not manually):
-            for i in genkey['Network Component']:
-                if 'NETWORKCOMPONENT' in i:
-                    if 'TYPE' in i['NETWORKCOMPONENT']:
-                        if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
-                            if('LEAK' in i):
-                                leak_size =  i['LEAK']['DIAMETER']['VALUE'][0]
+            leak_size =  Transform._get_leak_size_from_genkey(genkey)
 
             if(leak_size is None):
                 raise ValueError('There is no leak size in this genkey simulation.')
@@ -1118,6 +1135,30 @@ class Transform:
 
             return df
     
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def _get_leak_location_from_genkey(genkey: dict) -> int | None:
+        """
+        Extracts the leak location from a given genkey dictionary.
+
+        Args:
+            genkey (dict): The genkey dictionary containing network component information.
+
+        Returns:
+            int | None: The location of the leak, or None if no leak is found.
+
+        """
+        for i in genkey['Network Component']:
+            if 'NETWORKCOMPONENT' in i:
+                if 'TYPE' in i['NETWORKCOMPONENT']:
+                    if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
+                        if('LEAK' in i):
+
+                            leak_location =  i['LEAK']['ABSPOSITION']['VALUE'][0]
+                            return leak_location
+        return None
+    
     @Helpers.check_airflow_task_args
     @staticmethod
     def add_leak_location(df:pd.DataFrame, genkey: dict, manually: bool = False, leak_location: float | None = None)->pd.DataFrame:
@@ -1125,15 +1166,15 @@ class Transform:
         Add leak location information to a DataFrame based on the provided genkey.
 
         This function optionally searches for information about a leak location in the provided 'genkey' dictionary,
-        which contains parameters related to network components, but it performs the search only when 'manually' is set to False.
-        If it finds a leak location associated with a network component of type 'FLOWPATH', it adds this leak location information as a new
-        column 'LEAK_LOCATION' to the DataFrame.
+        which contains parameters related to network components. It performs the search only when 'manually' is set to False.
+        If it finds a leak location associated with a network component of type 'FLOWPATH', it adds this leak location information
+        as a new column 'LEAK_LOCATION' to the DataFrame.
 
         Args:
             df (pd.DataFrame): The DataFrame to which the leak location information will be added.
             genkey (dict): The dictionary containing network component information.
             manually (bool): If True, the leak location is provided manually, and 'leak_location' must be specified.
-                If False, the function searches for the leak location in the 'genkey' dictionary.
+                If False, the function searches for the leak location in the 'genkey' dictionary. Default is False.
             leak_location (float | None): The leak location to be added to the DataFrame when 'manually' is True.
                 Default is None.
 
@@ -1174,13 +1215,8 @@ class Transform:
             - It raises a ValueError if no leak location information is found or if 'leak_location' is invalid.
         """
         if(not manually):
-            for i in genkey['Network Component']:
-                if 'NETWORKCOMPONENT' in i:
-                    if 'TYPE' in i['NETWORKCOMPONENT']:
-                        if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
-                            if('LEAK' in i):
-
-                                leak_location =  i['LEAK']['ABSPOSITION']['VALUE'][0]
+            
+            leak_location =  Transform._get_leak_location_from_genkey(genkey)
 
             if(leak_location is None):
                 raise ValueError('There is no leak location in this genkey simulation.')
@@ -1201,7 +1237,7 @@ class Transform:
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def add_leak_status(df: pd.DataFrame, genkey: dict) -> pd.DataFrame:
+    def add_leak_status(df: pd.DataFrame, genkey: dict, manually: bool = False, time_values: list | None = None, leak_sign: list | None = None, time_series_column: str = 'TIME_SERIES_S') -> pd.DataFrame:
         """
         Add leak status information to a DataFrame based on the provided genkey.
 
@@ -1251,31 +1287,47 @@ class Transform:
             - The 'genkey' dictionary should include information about 'Control-Leak' with setpoints and time values.
             - It raises a KeyError if 'TIME_SERIES_S' is not present in the DataFrame.
         """
-        if('TIME_SERIES_S' in df):
-            for i in genkey['Network Component']:
-                if 'LABEL' in i['PARAMETERS']:
-                    if('Control-Leak' == i['PARAMETERS']['LABEL']):   
-                        setpoint = i['PARAMETERS']['SETPOINT']
-                        time_values = i['PARAMETERS']['TIME']['VALUE']
-                        break
-            if(type(setpoint)==int):
-                df['LEAK_STATUS'] = 'NO LEAK'
-
-            elif(type(setpoint)==list):
+        if(manually):
+            if(time_series_column in df):
                 leak_ranges = list()
-                for i in range(len(setpoint)):
-                    if(setpoint[i]):
+                for i in range(len(leak_sign)):
+                    if(leak_sign[i]):
                         if(i+1 < len(time_values)):
                             leak_ranges.append((time_values[i], time_values[i+1]))
                         else:
                             leak_ranges.append((time_values[i], float('inf')))
                 df['LEAK_STATUS'] = 'NO LEAK'
                 for i in leak_ranges:
-                    df.loc[(i[0]<df['TIME_SERIES_S'])&(df['TIME_SERIES_S']<i[1]), 'LEAK_STATUS'] = 'LEAK'
-            
-            return df 
+                    df.loc[(i[0]<df[time_series_column])&(df[time_series_column]<i[1]), 'LEAK_STATUS'] = 'LEAK'
+            else:
+                raise KeyError(f"You must have the column {time_series_column} to do this transformation.\nPlease, don't remove it and make the standarize_name transformation")
+        
         else:
-            raise KeyError("You must have the column TIME_SERIES_S to do this transformation.\nPlease, don't remove it and make the standarize_name transformation")
+            if(time_series_column in df):
+                for i in genkey['Network Component']:
+                    if 'LABEL' in i['PARAMETERS']:
+                        if('Control-Leak' == i['PARAMETERS']['LABEL']):   
+                            leak_sign = i['PARAMETERS']['SETPOINT']
+                            time_values = i['PARAMETERS']['TIME']['VALUE']
+                            break
+                if(type(leak_sign)==int):
+                    df['LEAK_STATUS'] = 'NO LEAK'
+
+                elif(type(leak_sign)==list):
+                    leak_ranges = list()
+                    for i in range(len(leak_sign)):
+                        if(leak_sign[i]):
+                            if(i+1 < len(time_values)):
+                                leak_ranges.append((time_values[i], time_values[i+1]))
+                            else:
+                                leak_ranges.append((time_values[i], float('inf')))
+                    df['LEAK_STATUS'] = 'NO LEAK'
+                    for i in leak_ranges:
+                        df.loc[(i[0]<df[time_series_column])&(df[time_series_column]<i[1]), 'LEAK_STATUS'] = 'LEAK'
+                
+                return df 
+            else:
+                raise KeyError(f"You must have the column {time_series_column} to do this transformation.\nPlease, don't remove it and make the standarize_name transformation")
         
     @Helpers.check_airflow_task_args
     @staticmethod
@@ -1502,7 +1554,7 @@ class Transform:
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def _get_tranfer_positions(df_columns: list):
+    def _get_tranfer_positions_tpl(df_columns: list):
         """
             Retrieve and return a sorted list of transfer positions from a list of DataFrame columns.
 
@@ -1526,13 +1578,24 @@ class Transform:
         positions = [
                         int(column.split('@')[-1].split('M')[0])
                         for column in df_columns
-                        if 'POS@' in column
+                        if '@' in column
                     ]
 
         positions = list(set(positions))
         positions.sort()
 
-        return positions  
+        return positions
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def _get_tranfer_positions_genkey(genkey: dict)->list | None:
+        for i in genkey['Network Component']:
+            if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):
+                for j in i['TRENDDATA']:
+                    if('ABSPOSITION' in j):
+                        return j['ABSPOSITION']['VALUE']
+                        
+        return None
     
     @Helpers.check_airflow_task_args
     @staticmethod
@@ -1548,7 +1611,7 @@ class Transform:
             pd.DataFrame: The DataFrame with columns filtered based on positions.
         """
         df_columns = df.columns.to_list()
-        positions = Transform._get_tranfer_positions(df_columns)
+        positions = Transform._get_tranfer_positions_tpl(df_columns)
 
         if not keep_positions:
             raise ValueError('The list of positions you provided should have at least one element.')
@@ -1605,7 +1668,7 @@ class Transform:
         
         df_columns = df.columns.to_list()
 
-        positions = Transform._get_tranfer_positions(df_columns)
+        positions = Transform._get_tranfer_positions_tpl(df_columns)
 
         for position in positions: 
 
@@ -1683,7 +1746,7 @@ class Transform:
         df_columns = list()
         
         if(mass_flow_columns is None or density_columns is None):
-            positions = Transform._get_tranfer_positions(df.columns.to_list())
+            positions = Transform._get_tranfer_positions_tpl(df.columns.to_list())
             df_columns = df.columns.to_list()
 
         if(mass_flow_columns is None):
@@ -1754,7 +1817,7 @@ class Transform:
         df_columns = list()
         
         if(pressure_columns is None):
-            positions = Transform._get_tranfer_positions(df.columns.to_list())
+            positions = Transform._get_tranfer_positions_tpl(df.columns.to_list())
             df_columns = df.columns.to_list()
 
 
@@ -1817,7 +1880,7 @@ class Transform:
         df_columns = list()
         
         if(temperature_columns is None):
-            positions = Transform._get_tranfer_positions(df.columns.to_list())
+            positions = Transform._get_tranfer_positions_tpl(df.columns.to_list())
             df_columns = df.columns.to_list()
 
 
