@@ -1397,7 +1397,7 @@ class Transform:
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def get_pipe_roughness_by_position(parameters_pipe, position):
+    def get_pipe_roughness_by_position(parameters_pipe: list, position: float) -> float | None:
         """
         Get the pipe roughness at a specific position along a pipe based on provided parameters.
 
@@ -1406,8 +1406,8 @@ class Transform:
         the appropriate pipe roughness corresponding to the position.
 
         Args:
-            parameters_pipe (list): A list of dictionaries, each containing 'length_start' and 'pipe_roughness'.
-                These parameters define the pipe roughness changes along the pipe.
+            parameters_pipe (list): A list of dictionaries, each containing 'length_start', 'length_end',
+                and 'pipe_roughness'. These parameters define the pipe roughness changes along the pipe.
             position (float): The position along the pipe for which to retrieve the pipe roughness.
 
         Returns:
@@ -1415,36 +1415,28 @@ class Transform:
 
         Example:
             >>> parameters_pipe = [
-            ...     {'length_start': 0, 'pipe_roughness': 0.005},
-            ...     {'length_start': 100, 'pipe_roughness': 0.006},
-            ...     {'length_start': 200, 'pipe_roughness': 0.004}
+            ...     {'length_start': 0, 'length_end': 100, 'pipe_roughness': 0.005},
+            ...     {'length_start': 100, 'length_end': 200, 'pipe_roughness': 0.006},
+            ...     {'length_start': 200, 'length_end': 300, 'pipe_roughness': 0.004}
             ... ]
             >>> position = 150
             >>> roughness = get_pipe_roughness_by_position(parameters_pipe, position)
             >>> roughness
             0.006
-        Note:
-            You have had ran the function get_pipe_diameters to pass the argument parameters_pipe.
-        """
-        length_start_aux = -1
-        pipe_roughness_aux = -1
 
+        Note:
+            Make sure to run the function `get_pipe_diameters` to pass the argument `parameters_pipe`.
+        """
         for parameters in parameters_pipe:
             length_start = parameters['length_start']
+            length_end = parameters['length_end']
             pipe_roughness = parameters['pipe_roughness']
-            if(length_start_aux != -1):
-                if(length_start_aux<=position<length_start):
-                    
-                    pipe_roughness = pipe_roughness_aux
-                    return pipe_roughness
-                        
-            length_start_aux = length_start
-            pipe_roughness_aux = pipe_roughness
+            if length_start <= position < length_end:
+                return pipe_roughness
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def get_pipe_diameter_by_position(parameters_pipe, position):
-
+    def get_pipe_diameter_by_position(parameters_pipe: list, position: float)-> float | None:
         """
         Get the pipe diameter at a specific position along a pipe based on provided parameters.
 
@@ -1453,8 +1445,8 @@ class Transform:
         the appropriate pipe diameter corresponding to the position.
 
         Args:
-            parameters_pipe (list): A list of dictionaries, each containing 'length_start' and 'pipe_diameter'.
-                These parameters define the pipe diameter changes along the pipe.
+            parameters_pipe (list): A list of dictionaries, each containing 'length_start', 'length_end',
+                and 'pipe_diameter'. These parameters define the pipe diameter changes along the pipe.
             position (float): The position along the pipe for which to retrieve the pipe diameter.
 
         Returns:
@@ -1462,35 +1454,30 @@ class Transform:
 
         Example:
             >>> parameters_pipe = [
-            ...     {'length_start': 0, 'pipe_diameter': 0.2},
-            ...     {'length_start': 100, 'pipe_diameter': 0.3},
-            ...     {'length_start': 200, 'pipe_diameter': 0.25}
+            ...     {'length_start': 0, 'length_end': 100, 'pipe_diameter': 0.2},
+            ...     {'length_start': 100, 'length_end': 200, 'pipe_diameter': 0.3},
+            ...     {'length_start': 200, 'length_end': 300, 'pipe_diameter': 0.25}
             ... ]
             >>> position = 150
             >>> diameter = get_pipe_diameter_by_position(parameters_pipe, position)
             >>> diameter
             0.3
-        Note:
-            You have had ran the function get_pipe_diameters to pass the argument parameters_pipe.
-        """
-        length_start_aux = -1
-        pipe_diameter_aux = -1
 
+        Note:
+            Before calling this function, make sure to run the function 'get_pipe_diameters' to obtain
+            the 'parameters_pipe' argument containing the pipe diameter information.
+        """
         for parameters in parameters_pipe:
             length_start = parameters['length_start']
+            length_end = parameters['length_end']
             pipe_diameter = parameters['pipe_diameter']
-            if(length_start_aux != -1):
-                if(length_start_aux<=position<length_start):
                     
-                    pipe_diameter = pipe_diameter_aux
-                    return pipe_diameter
-                        
-            length_start_aux = length_start
-            pipe_diameter_aux = pipe_diameter
+            if length_start <= position < length_end:
+                return pipe_diameter
 
     @Helpers.check_airflow_task_args
     @staticmethod
-    def get_pipe_diameters(genkey):
+    def get_pipe_diameters(genkey: dict) -> list | None:
         """
         Get pipe diameter and roughness parameters from the given genkey dictionary.
 
@@ -1502,8 +1489,9 @@ class Transform:
             genkey (dict): The dictionary containing network component information.
 
         Returns:
-            list: A list of dictionaries, each containing 'length_start', 'pipe_diameter', and 'pipe_roughness'.
-                This information is extracted from the 'genkey' dictionary for the FLOWPATH network component.
+            list: A list of dictionaries, each containing 'length_start', 'length_end', 'pipe_diameter',
+                and 'pipe_roughness'. This information is extracted from the 'genkey' dictionary for the
+                FLOWPATH network component.
 
         Raises:
             ValueError: If there are no network components of type 'FLOWPATH' in the 'genkey' dictionary.
@@ -1532,29 +1520,37 @@ class Transform:
             ... }
             >>> pipe_parameters = get_pipe_diameters(genkey)
             >>> pipe_parameters
-            [{'length_start': 0, 'pipe_diameter': 0.2, 'pipe_roughness': 0.005},
-            {'length_start': 100, 'pipe_diameter': 0.3, 'pipe_roughness': 0.006}]
-        Note:
-            This is mainly used to get the friction factor getting 
-        """
+            [{'length_start': 0, 'length_end': 100, 'pipe_diameter': 0.2, 'pipe_roughness': 0.005},
+            {'length_start': 100, 'length_end': 150, 'pipe_diameter': 0.3, 'pipe_roughness': 0.006}]
 
+        Note:
+            This function is mainly used to extract pipe diameter and roughness parameters from the 'genkey' dictionary
+            for network components of type 'FLOWPATH'. The returned list of dictionaries can be used in other calculations,
+            such as determining friction factors.
+        """
+        
         for i in genkey['Network Component']:
             if 'NETWORKCOMPONENT' in i:
                 if 'TYPE' in i['NETWORKCOMPONENT']:
-                    if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
-                        parameters_pipe = list()
+                    if 'FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']:
+                        parameters_pipe = []
                         pipe_length = 0
                         for j in i['PIPE']:
-                            parameters_pipe.append({'length_start':pipe_length, 'pipe_diameter': j['DIAMETER']['VALUE'][0], 'pipe_roughness': j['ROUGHNESS']['VALUE'][0]})
-                            pipe_length = pipe_length + j['LENGTH']['VALUE'][0]
+                            length = j['LENGTH']['VALUE'][0]
+                            parameters_pipe.append({
+                                'length_start': pipe_length,
+                                'length_end': pipe_length + length,
+                                'pipe_diameter': j['DIAMETER']['VALUE'][0],
+                                'pipe_roughness': j['ROUGHNESS']['VALUE'][0]
+                            })
+                            pipe_length += length
 
                         return parameters_pipe
 
-        raise ValueError("There isn't any Network Component with FLOWPATH type.")
-
+        raise ValueError("There are no network components with the FLOWPATH type in the 'genkey' dictionary.")
     @Helpers.check_airflow_task_args
     @staticmethod
-    def _get_tranfer_positions_tpl(df_columns: list):
+    def _get_transfer_positions_tpl(df_columns: list):
         """
             Retrieve and return a sorted list of transfer positions from a list of DataFrame columns.
 
@@ -1650,7 +1646,7 @@ class Transform:
             pd.DataFrame: The DataFrame with columns filtered based on positions.
         """
         df_columns = df.columns.to_list()
-        positions = Transform._get_tranfer_positions_tpl(df_columns)
+        positions = Transform._get_transfer_positions_tpl(df_columns)
 
         if not keep_positions:
             raise ValueError('The list of positions you provided should have at least one element.')
@@ -1707,7 +1703,7 @@ class Transform:
         
         df_columns = df.columns.to_list()
 
-        positions = Transform._get_tranfer_positions_tpl(df_columns)
+        positions = Transform._get_transfer_positions_tpl(df_columns)
         unique_pipeline_names = Transform._get_unique_pipelines_name_tpl(df_columns)
         pipeline_name = unique_pipeline_names[0]
 
@@ -1787,7 +1783,7 @@ class Transform:
         df_columns = list()
         
         if(mass_flow_columns is None or density_columns is None):
-            positions = Transform._get_tranfer_positions_tpl(df.columns.to_list())
+            positions = Transform._get_transfer_positions_tpl(df.columns.to_list())
             df_columns = df.columns.to_list()
 
         if(mass_flow_columns is None):
@@ -1858,7 +1854,7 @@ class Transform:
         df_columns = list()
         
         if(pressure_columns is None):
-            positions = Transform._get_tranfer_positions_tpl(df.columns.to_list())
+            positions = Transform._get_transfer_positions_tpl(df.columns.to_list())
             df_columns = df.columns.to_list()
 
 
@@ -1921,7 +1917,7 @@ class Transform:
         df_columns = list()
         
         if(temperature_columns is None):
-            positions = Transform._get_tranfer_positions_tpl(df.columns.to_list())
+            positions = Transform._get_transfer_positions_tpl(df.columns.to_list())
             df_columns = df.columns.to_list()
 
 
