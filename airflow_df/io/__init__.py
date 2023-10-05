@@ -2,6 +2,10 @@ from ..helpers import Helpers
 from .csv import CSVFormatter
 from .olga import Olga
 import pandas as pd
+import pickle
+import struct
+import os
+
 olga = Olga()
 csv = CSVFormatter()
 
@@ -290,3 +294,26 @@ class IO:
         Documentation here
         """
         pass
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def save_append_to_pkl(filepath, filename, data_dict):
+    
+        pickled_data = pickle.dumps(data_dict)
+        with open(os.path.join(filepath, filename), 'ab') as f:
+            f.write(struct.pack("I", len(pickled_data)))  # 4 bytes to indicate the size of the pickled data
+            f.write(pickled_data)
+    
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def read_dicts(filepath, filename):
+        dicts = []
+        with open(os.path.join(filepath, filename), 'rb') as f:
+            while True:
+                size_data = f.read(4)
+                if not size_data:
+                    break
+                size = struct.unpack("I", size_data)[0]
+                pickled_data = f.read(size)
+                dicts.append(pickle.loads(pickled_data))
+        return dicts

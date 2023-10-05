@@ -34,7 +34,30 @@ class Olga:
 
             file = self.__file(tpl, genkey)
             return file
-    
+
+    @staticmethod
+    def get_files(filepath: str, ext:str=".tpl") -> list:
+        """
+        Gets all the files contained in a folder. Returns a list of files.
+
+        **Parameters**
+
+        - **filepath:** (str) Path to the folder.
+        - **ext:** (str) 
+
+        **Returns**
+
+        - **filenames:** (list) List of filenames with "ext" inside "filepath"
+        """
+        result = list()
+        if not ext.startswith("."):
+            ext = f".{ext}"
+
+        file_pattern = f"**/*{ext}"
+        files_to_return = glob.glob(os.path.join(filepath, file_pattern), recursive=True)
+
+        return files_to_return
+
     def remove_file_extension(self, filename:str)->str:
         """
         Check if the filename has an extension section valid (.tpl or .genkey), 

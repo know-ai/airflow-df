@@ -1,24 +1,20 @@
 from ..helpers import Helpers
 import pandas as pd
-
+import re
 
 @Helpers.as_airflow_tasks()
 class Transform:
     """Documentation here
 
     """
+
+    @Helpers.check_airflow_task_args
     @staticmethod
     def rename(
         df,
-        mapper:None=None,
         *,
-        index:None=None,
         columns:None=None,
-        axis:None=None,
-        copy:bool=None,
-        inplace:bool=False,
-        level=None,
-        errors="ignore",
+        errors="ignore"
     )->pd.DataFrame | None:
         """
             Rename columns or index labels.
@@ -129,16 +125,11 @@ class Transform:
         """
 
         return df.rename(
-            mapper=mapper,
-            index=index,
             columns=columns,
-            axis=axis,
-            copy=copy,
-            inplace=inplace,
-            level=level,
-            errors=errors,
+            errors=errors
         )
     
+    @Helpers.check_airflow_task_args
     @staticmethod
     def drop(
         df,
@@ -148,7 +139,6 @@ class Transform:
         index:bool=None,
         columns:bool=None,
         level=None,
-        inplace:bool=False,
         errors="raise",
     ) -> pd.DataFrame | None:
         """
@@ -288,16 +278,20 @@ class Transform:
             falcon  speed   320.0   250.0
                     weight  1.0     0.8
         """
+        __columns = df.columns.values.tolist()
+                
+        not_in_df_columns = [column for column in labels if column not in df_columns]
+        
+        if(len(not_in_df_columns)>0):
+            raise IndexError(f'This labels are not in the dataframe {", ".join(not_in_df_columns)}')
+
         return df.drop(
-            labels=labels,
-            axis=axis,
-            index=index,
-            columns=columns,
+            columns=__columns,
             level=level,
-            inplace=inplace,
             errors=errors,
         )
     
+    @Helpers.check_airflow_task_args
     @staticmethod
     def keep(df,
         labels=None,
@@ -446,22 +440,25 @@ class Transform:
             falcon  speed   320.0   250.0
                     weight  1.0     0.8
         """
-        __columns = df.columns.to_list()
-        index = 0
-        for column in __columns:
-            if column in columns:
-                __columns.pop(index)
-            index += 1
+
+        __df_columns = df.columns.values.tolist()
+                
+        not_in_df_columns = [column for column in columns if column not in __df_columns]
+        
+        if(len(not_in_df_columns)>0):
+            raise IndexError(f'This labels are not in the dataframe {", ".join(not_in_df_columns)}')
+
+        __df_columns = [column for column in __df_columns if column not in columns]
+
+
         return df.drop(
-            labels=labels,
-            axis=axis,
             index=index,
-            columns=__columns,
+            columns=__df_columns,
             level=level,
-            inplace=inplace,
             errors=errors,
         )
     
+    @Helpers.check_airflow_task_args
     @staticmethod
     def resample(
         df:pd.DataFrame,
@@ -869,6 +866,7 @@ class Transform:
             group_keys=group_keys
         )
     
+    @Helpers.check_airflow_task_args
     @staticmethod
     def reset_index(df:pd.DataFrame)->pd.DataFrame:
         r"""
@@ -876,7 +874,8 @@ class Transform:
         """
 
         return df.reset_index()
-
+    
+    @Helpers.check_airflow_task_args
     @staticmethod
     def convert_to_float(df:pd.DataFrame)->pd.DataFrame:
         r"""
@@ -884,7 +883,8 @@ class Transform:
         """
 
         return df
-
+    
+    @Helpers.check_airflow_task_args
     @staticmethod
     def set_datetime_index(df:pd.DataFrame)->pd.DataFrame:
         r"""
@@ -892,7 +892,8 @@ class Transform:
         """
 
         return df
-
+    
+    @Helpers.check_airflow_task_args
     @staticmethod
     def info(df:pd.DataFrame)->pd.DataFrame:
         r"""
@@ -901,6 +902,7 @@ class Transform:
         print(df.info())
         return df
     
+    @Helpers.check_airflow_task_args
     @staticmethod
     def add_columns(df:pd.DataFrame)->pd.DataFrame:
         r"""
@@ -908,3 +910,120 @@ class Transform:
         """
 
         return df
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def concatenate_three_parts(input_string)->str:
+        """
+        This concatenates the three "special" parts of the column names from a TPL
+        It transforms names as such as SSP 'POSITION:' 'POS-19M' '(M/S)' 'Speed of sound in fluid'
+        to SSP_POSITION_POS@19M_Speed_of_sound_in_fluid_M/S.
+
+        It takes the label name the string position and the position for the first  part
+        then adds the name of the variable and at the end appends the measure unit.
+        
+        for the common uses makes this 
+        LABEL_NAME_POS@XXM_Variable_name_MEASURE_UNIT
+
+        If there is not any variable name nor measure unit, it just doesn't add it
+        """
+        # Split the input string into parts using single quotes as separators
+        unit_match = re.search(r'\((.*?)\)', input_string)
+        unit = None
+        if unit_match:
+            # Extract and return the text inside parentheses
+            unit = unit_match.group(1)
+        
+        parts = input_string.split("(")
+        parts_2 = input_string.split(")")
+
+        parts = parts[0]
+        parts_2 = parts_2[-1]
+        parts = parts.replace("'"," ")
+        parts_2 = parts_2.replace("'"," ")
+
+        parts_2 = parts_2.replace(":"," ")
+        parts = parts.replace(":"," ")
+
+        parts = ' '.join(parts.split())
+        parts_2 = ' '.join(parts_2.split())
+
+        
+        parts = parts.replace(" ", "_") 
+        parts_2 = parts_2.replace(" ", "_") 
+        if('POS' in parts):
+            parts = parts.replace("-", "@")
+        else:
+            parts = parts.replace("-", "_")
+
+        if(parts_2):
+            parts = f"{parts}_{parts_2}"
+        if(unit):
+            parts = f"{parts}_{unit}" 
+        parts = parts.strip('-')
+        parts = parts.strip('_')
+        
+        # Extract the first three parts and join them with underscores
+        concatenated_parts = parts
+        return concatenated_parts
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def standarize_column_names(self, df:pd.DataFrame, *args)->pd.DataFrame | None:
+
+        column_names = df.columns.to_list()
+        column_standarize_names = dict()
+        for i in column_names:
+            column_standarize_names[i] = self.concatenate_three_parts(i)
+        df = self.rename(df, columns=column_standarize_names)
+        return df
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def add_leak_size(df, genkey):
+        for i in genkey['Network Component']:
+            if 'LABEL' in i['PARAMETERS']:
+                if('LB' == i['PARAMETERS']['LABEL']):   
+                    if('LEAK' in i):
+                        LEAK_SIZE =  i['LEAK']['DIAMETER']['VALUE'][0]
+        df['LEAK_SIZE'] = LEAK_SIZE
+
+        return df
+    
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def add_leak_location(df, genkey):
+        for i in genkey['Network Component']:
+            if 'LABEL' in i['PARAMETERS']:
+                if('LB' == i['PARAMETERS']['LABEL']):   
+                    if('LEAK' in i):
+                        LEAK_LOCATION =  i['LEAK']['ABSPOSITION']['VALUE'][0]
+        df['LEAK_LOCATION'] = LEAK_LOCATION
+
+        return df
+    
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def add_leak_status(df, genkey):
+        if('TIME_SERIES_S' in df):
+            for i in genkey['Network Component']:
+                if 'LABEL' in i['PARAMETERS']:
+                    if('Control-Leak' == i['PARAMETERS']['LABEL']):   
+                        setpoint = i['PARAMETERS']['SETPOINT']
+                        time_values = i['PARAMETERS']['TIME']['VALUE']
+                        break
+
+            leak_ranges = list()
+            for i in range(len(setpoint)):
+                if(setpoint[i]):
+                    if(i+1 < len(time_values)):
+                        leak_ranges.append((time_values[i], time_values[i+1]))
+                    else:
+                        leak_ranges.append((time_values[i], float('inf')))
+            df['LEAK_STATUS'] = 'NO LEAK'
+            for i in leak_ranges:
+                df.loc[(i[0]<df['TIME_SERIES_S'])&(df['TIME_SERIES_S']<i[1]), 'LEAK_STATUS'] = 'LEAK'
+            
+            return df 
+        else:
+            raise KeyError("You must have the column TIME_SERIES_S to do this transformation.\nPlease, don't remove it and make the standarize_name transformation")
