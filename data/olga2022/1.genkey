@@ -1,0 +1,177 @@
+
+!**************************************************************************************
+! Generated with OLGA version 2022.1.0
+!**************************************************************************************
+
+!**************************************************************************************
+! Global keywords
+!**************************************************************************************
+OPTIONS TEMPERATURE=ADIABATIC, FLASHMODEL=HYDROCARBON, MASSEQSCHEME=2NDORDER, ELASTICWALLS=ON, \
+        FLOWMODEL=OLGAHD
+CASE AUTHOR="Jesus E Varajas", DATE=02/09/2022, PROJECT=Supe, INFO=Modelo
+FILES PVTFILE="../../../Documents/iDetect fugas/00 Fluidos/01 Diesel/Diesel_1.tab"
+INTEGRATION ENDTIME=3 s, MAXDT=10 s, MINDT=0.02 s, MAXLAGFACT=0, STARTTIME=0 s, \
+        DTSTART=0.02 s
+TREND DTPLOT=1 s
+PROFILE WRITEFILE=ON, DTPLOT=1 s, DTTIME=0 s
+RESTART WRITE=OFF, READFILE=OFF
+ANIMATE DTPLOT=0 s
+SERVER EXPOSE=ALL
+
+!**************************************************************************************
+! Library keywords
+!**************************************************************************************
+MATERIAL LABEL="Stainless Steel", CAPACITY=450 J/kg-C, CONDUCTIVITY=20 W/m-K, DENSITY=7850 kg/m3, \
+        EMOD=210000000000 Pa
+WALL LABEL="WALL-1", THICKNESS=(1, 1.5875, 1) cm, MATERIAL=("Fibra de vidrio", "Stainless Steel", \
+        "Concrete Coating HD"), ELASTIC=ON
+CENTPUMPCURVE LABEL="C-1", VOLUMEFLOW=(0, 181.9067, 363.6619, 545.2656, 681.582, \
+        817.8984, 954.2148, 1090.531) m3/h, SPEED=(3299.76, 3299.76, 3299.76, \
+        3299.76, 3299.76, 3299.76, 3299.76, 3299.76) rpm, GVF=0 %, DENSITY=997 kg/m3, \
+        EFFICIENCY=(63, 66.89, 69.22, 70, 69.56, 68.25, 66.06, 63) %, HEAD=(103.0491, \
+        99.92642, 96.80372, 93.68102, 78.1651, 57.37963, 31.32459, 0) m
+CENTPUMPCURVE LABEL="C-2", VOLUMEFLOW=(0, 188.5352, 376.9134, 565.1346, 706.4182, \
+        847.7018, 988.9855, 1130.269) m3/h, SPEED=(3420, 3420, 3420, 3420, 3420, \
+        3420, 3420, 3420) rpm, GVF=0 %, DENSITY=997 kg/m3, EFFICIENCY=(63, 66.89, \
+        69.22, 70, 69.56, 68.25, 66.06, 63) %, HEAD=(110.696, 107.3415, 103.9871, \
+        100.6327, 83.96541, 61.63753, 33.64906, 0) m
+CENTPUMPCURVE LABEL="C-3", VOLUMEFLOW=(0, 198.4581, 396.7509, 594.8785, 743.5981, \
+        892.3177, 1041.037, 1189.757) m3/h, SPEED=(3600, 3600, 3600, 3600, 3600, \
+        3600, 3600, 3600) rpm, GVF=0 %, DENSITY=997 kg/m3, EFFICIENCY=(63, 66.89, \
+        69.22, 70, 69.56, 68.25, 66.06, 63) %, HEAD=(122.6548, 118.938, 115.2212, \
+        111.5044, 93.03646, 68.29643, 37.28428, 0) m
+MATERIAL LABEL="Fibra de vidrio", CAPACITY=450 J/kg-C, CONDUCTIVITY=20 W/m-C, DENSITY=7850 kg/m3, \
+        EMOD=400000000000 Pa
+MATERIAL LABEL="Concrete Coating HD", CAPACITY=880 J/kg-C, CONDUCTIVITY=2.7 W/m-K, \
+        DENSITY=3000 kg/m3, EMOD=500000000000 Pa
+TIMESERIES LABEL="Clima aire", TYPE=POINTS, TIME0=0 M, AMPLITUDE=2, PERIOD=48 h, \
+        TIME=(0, 150, 300) s, SERIES=(0, 0, 49)
+TIMESERIES LABEL="Clima mar", AMPLITUDE=2, PERIOD=2 d
+TIMESERIES LABEL="clima suelo", AMPLITUDE=2, PERIOD=2 d
+
+!**************************************************************************************
+! Network Component
+!**************************************************************************************
+NETWORKCOMPONENT TYPE=FLOWPATH, TAG=FLOWPATH_1
+ PARAMETERS LABEL=Pipeline
+ BRANCH FLUID=Diesel_1
+ GEOMETRY LABEL="GEOMETRY-1"
+ PIPE ROUGHNESS=0.0053 mm, LABEL="Pipe-1", WALL="WALL-1", NSEGMENT=2, LENGTH=3 m, \
+        ELEVATION=0 m, DIAMETER=304.8 mm
+ TRENDDATA VARIABLE=PT, ABSPOSITION=1378 m
+ TRENDDATA VARIABLE=GT, ABSPOSITION=1378 m
+ PROFILEDATA VARIABLE=(GT, PT)
+ PIPE ROUGHNESS=0.0053 mm, LABEL="Pipe-2", WALL="WALL-1", NSEGMENT=2, LENGTH=13.7 m, \
+        ELEVATION=13.7 m, DIAMETER=304.8 mm
+ PIPE ROUGHNESS=0.0053 mm, LABEL="Pipe-3", WALL="WALL-1", NSEGMENT=2, LENGTH=4 m, \
+        ELEVATION=0 m, DIAMETER=304.8 mm
+ PIPE ROUGHNESS=0.0053 mm, LABEL="Pipe-4", WALL="WALL-1", NSEGMENT=2, LENGTH=17.2 m, \
+        ELEVATION=-17.2 m, DIAMETER=203.2 mm
+ PIPE ROUGHNESS=0.0053 mm, LABEL="Pipe-5", WALL="WALL-1", NSEGMENT=2, LENGTH=15 m, \
+        ELEVATION=0 m, DIAMETER=203.2 mm
+ PIPE ROUGHNESS=0.0053 mm, LABEL="Pipe-6", WALL="WALL-1", NSEGMENT=2, LENGTH=1026.48 m, \
+        ELEVATION=12.5 m, DIAMETER=283.999999999999 mm
+ PIPE ROUGHNESS=0.0053 mm, LABEL="Pipe-7", WALL="WALL-1", NSEGMENT=2, LENGTH=285.3 m, \
+        ELEVATION=0 m, DIAMETER=283.999999999999 mm
+ PIPE ROUGHNESS=0.0053 mm, LABEL="Pipe-8", WALL="WALL-1", NSEGMENT=2, LENGTH=2 m, \
+        ELEVATION=2 m, DIAMETER=283.999999999999 mm
+ PIPE ROUGHNESS=0.0053 mm, LABEL="Pipe-9", WALL="WALL-1", NSEGMENT=2, LENGTH=126.7 m, \
+        ELEVATION=0 m, DIAMETER=283.999999999999 mm
+ HEATTRANSFER LABEL=Air, PIPE=("PIPE-15", "PIPE-16", "PIPE-17", "PIPE-18", "PIPE-19", \
+        "PIPE-20", "PIPE-21", "PIPE-22", "PIPE-23", "PIPE-24", "PIPE-25", "PIPE-26"), \
+        HMININNERWALL=10 W/m2-C, HOUTEROPTION=AIR, TAMBIENT=21 C
+ LEAK LABEL=LEAK, VALVETYPE=OLGAVALVE, ABSPOSITION=250 m, TIME=0 s, BACKPRESSURE=15 psig, \
+        DIAMETER=0.0001 in
+ HEATTRANSFER LABEL=Water, PIPE=("PIPE-5", "PIPE-6", "PIPE-1", "PIPE-2", "PIPE-3", \
+        "PIPE-4"), HMININNERWALL=10 W/m2-C, HOUTEROPTION=WATER, TAMBIENT=21 C
+ HEATTRANSFER LABEL=Soil, PIPE=("PIPE-7", "PIPE-8", "PIPE-9", "PIPE-10", "PIPE-11", \
+        "PIPE-12", "PIPE-13", "PIPE-14"), HOUTEROPTION=HGIVEN, TAMBIENT=21 C, \
+        HAMBIENT=10000 W/m2-C
+ VALVE LABEL="C-1", MODEL=HYDROVALVE, ABSPOSITION=16.7 m, DIAMETER=12 in
+ VALVE LABEL="C-2", MODEL=HYDROVALVE, ABSPOSITION=20 m, DIAMETER=20.32 cm
+ VALVE LABEL="C-4", MODEL=HYDROVALVE, ABSPOSITION=1145 m, DIAMETER=28.4 cm
+ VALVE LABEL="C-7", MODEL=HYDROVALVE, ABSPOSITION=1364 m, DIAMETER=28.4 cm
+ VALVE LABEL="C-8", MODEL=HYDROVALVE, ABSPOSITION=1366 m, DIAMETER=28.4 cm
+ VALVE LABEL="V-in", MODEL=HYDROVALVE, TIME=0 s, STROKETIME=0 s, ABSPOSITION=40 m, \
+        SLIPMODEL=NOSLIP, OPENING=1, DIAMETER=20.32 cm
+ VALVE LABEL="V-out", MODEL=HYDROVALVE, TIME=0 s, STROKETIME=0 s, ABSPOSITION=1410 m, \
+        OPENING=1, DIAMETER=20.32 cm
+ VALVE LABEL="C-9", MODEL=HYDROVALVE, ABSPOSITION=1382 m, DIAMETER=28.4 cm
+ TRENDDATA VARIABLE=PTLKUP, LEAK=LEAK
+ SHUTIN LABEL="SHUTIN-1", TIME=0 s, ACTIVATE=ON
+ CHECKVALVE LABEL="CHECK-1", PIPE="Pipe-9", SECTIONBOUNDARY=3
+ SOURCE LABEL=Entrada, TIME=0 s, SOURCETYPE=PRESSUREDRIVEN, ABSPOSITION=1000 m, \
+        TOTALWATERFRACTION=100 %, TEMPERATURE=21 C, PRESSURE=0 psig, STROKETIME=0 s, \
+        DIAMETER=0 in
+ ANIMATETRENDDATA POSITION="POS-1"
+ POSITION LABEL="POS-1", ABSPOSITION=1380 m
+ CROSSDATA VARIABLE="U-PROFILE", ABSPOSITION=1380 m
+ SERVERDATA VARIABLE=PT, ABSPOSITION=1378 m
+ENDNETWORKCOMPONENT
+
+!**************************************************************************************
+! Network Component
+!**************************************************************************************
+NETWORKCOMPONENT TYPE=MANUALCONTROLLER, TAG=MANUALCONTROLLER_1
+ PARAMETERS LABEL="Control-Vout", TIME=(0, 86) s, SETPOINT=(0.13, 0), OPENINGTIME=10 s, \
+        CLOSINGTIME=30.769231 s
+ENDNETWORKCOMPONENT
+
+!**************************************************************************************
+! Network Component
+!**************************************************************************************
+NETWORKCOMPONENT TYPE=MANUALCONTROLLER, TAG=MANUALCONTROLLER_2
+ PARAMETERS LABEL="Control-Leak", TIME=(0, 75, 135) s, SETPOINT=(0, 1, 0), STROKETIME=9.75 s
+ENDNETWORKCOMPONENT
+
+!**************************************************************************************
+! Network Component
+!**************************************************************************************
+NETWORKCOMPONENT TYPE=MANUALCONTROLLER, TAG=MANUALCONTROLLER_3
+ PARAMETERS LABEL="Control-Vin", TIME=(0, 88) s, SETPOINT=(1, 0), OPENINGTIME=10 s, \
+        CLOSINGTIME=2 s
+ENDNETWORKCOMPONENT
+
+!**************************************************************************************
+! Network Component
+!**************************************************************************************
+NETWORKCOMPONENT TYPE=MANUALCONTROLLER, TAG=MANUALCONTROLLER_4
+ PARAMETERS LABEL="Control-TKin", TIME=(0, 60) s, SETPOINT=(1, 0.14), OPENINGTIME=10 s, \
+        CLOSINGTIME=25 s
+ENDNETWORKCOMPONENT
+
+!**************************************************************************************
+! Network Component
+!**************************************************************************************
+NETWORKCOMPONENT TYPE=MANUALCONTROLLER, TAG=MANUALCONTROLLER_5
+ PARAMETERS LABEL="Control-Source", TIME=0 s, SETPOINT=0, STROKETIME=0 s
+ENDNETWORKCOMPONENT
+
+!**************************************************************************************
+! Network Component
+!**************************************************************************************
+NETWORKCOMPONENT TYPE=NODE, TAG=NODE_1
+ PARAMETERS LABEL="TK-in", TYPE=PRESSURE, GASFRACEQ=1 -, WATERFRACEQ=1 -, FEEDNAME=P500, \
+        FEEDVOLFRACTION=1 -, TEMPERATURE=21 C, PRESSURE=130 psig, TIME=0 M, FLUID=Diesel_1
+ENDNETWORKCOMPONENT
+
+!**************************************************************************************
+! Network Component
+!**************************************************************************************
+NETWORKCOMPONENT TYPE=NODE, TAG=NODE_2
+ PARAMETERS LABEL="TK-Out", TYPE=PRESSURE, GASFRACEQ=1 -, WATERFRACEQ=1 -, FEEDNAME=P500, \
+        FEEDVOLFRACTION=1 -, TEMPERATURE=30 C, PRESSURE=10 psig, TIME=0 s, FLUID=Diesel_1
+ENDNETWORKCOMPONENT
+
+!**************************************************************************************
+! Connections
+!**************************************************************************************
+CONNECTION TERMINALS = (FLOWPATH_1 INLET, NODE_1 FLOWTERM_1)
+CONNECTION TERMINALS = (FLOWPATH_1 OUTLET, NODE_2 FLOWTERM_1)
+CONNECTION TERMINALS = (MANUALCONTROLLER_2 CONTR_1, FLOWPATH_1 LEAK@VALVESIG)
+CONNECTION TERMINALS = (MANUALCONTROLLER_1 CONTR_1, FLOWPATH_1 V-out@VALVESIG)
+CONNECTION TERMINALS = (MANUALCONTROLLER_3 CONTR_1, FLOWPATH_1 V-in@VALVESIG)
+CONNECTION TERMINALS = (MANUALCONTROLLER_4 CONTR_1, NODE_1 PRESSURESIG)
+CONNECTION TERMINALS = (MANUALCONTROLLER_5 CONTR_1, FLOWPATH_1 Entrada@VALVESIG)
+
+ENDCASE

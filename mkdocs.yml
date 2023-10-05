@@ -15,9 +15,42 @@ nav:
     - IO: 
       - class: io/api_io.md
       - read_csv: io/api_io_read_csv.md
-      - read_tpl: io/api_io_read_tpl.md
+      - read_olga: io/api_io_read_olga.md
       - read_sql: io/api_io_read_sql.md
       - read_pkl: io/api_io_read_pkl.md
+      - CSV:
+        - class: io/csv/api_csv.md
+        - read:  io/csv/api_csv_read.md
+      - Olga:
+        - class: io/olga/api_olga.md
+        - TPL:
+          - class: io/olga/tpl/api_tpl.md
+          - read: io/olga/tpl/api_tpl_read.md
+          - read_raw_file: io/olga/tpl/api_tpl_read_raw_file.md
+          - set_info: io/olga/tpl/api_tpl_set_info.md
+          - set_profile: io/olga/tpl/api_tpl_set_profile.md
+          - set_data: io/olga/tpl/api_tpl_set_data.md
+          - df: io/olga/tpl/api_tpl_df.md
+          - serialize: io/olga/tpl/api_tpl_serialize.md
+          - Info:
+            - class: io/olga/tpl/api_info.md
+            - set_info: io/olga/tpl/api_info_set_info.md
+            - serialize: io/olga/tpl/api_info_serialize.md
+          - Profile:
+            - class: io/olga/tpl/api_profile.md
+            - append: io/olga/tpl/api_profile_append.md
+            - set_profile: io/olga/tpl/api_profile_set_profile.md
+            - x: io/olga/tpl/api_profile_x.md
+            - y: io/olga/tpl/api_profile_y.md
+            - profile: io/olga/tpl/api_profile_profile.md
+            - serialize: io/olga/tpl/api_profile_serialize.md
+          - Data:
+            - class: io/olga/tpl/api_data.md
+            - set_data: io/olga/tpl/api_data_set_data.md
+            - df: io/olga/tpl/api_data_df.md
+            - serialize: io/olga/tpl/api_data_serialize.md
+        - Genkey:
+          - class: io/olga/genkey/api_genkey.md
     - Transform:
       - class: transform/api_transform.md
     - DAG:

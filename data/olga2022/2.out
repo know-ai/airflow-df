@@ -1,0 +1,1491 @@
+WARNING Violation of recommended ratio for neighboring section lengths found (recommended ratio is between 0.5 and 2.0). Reported in NETWORKCOMPONENT 'Pipeline'.
+WARNING Ratio 0.22 between PIPE=Pipe-1, SECTION=2 and PIPE=Pipe-2, SECTION=1.
+WARNING Ratio 3.4 between PIPE=Pipe-2, SECTION=2 and PIPE=Pipe-3, SECTION=1.
+WARNING Ratio 0.23 between PIPE=Pipe-3, SECTION=2 and PIPE=Pipe-4, SECTION=1.
+WARNING Ratio 0.015 between PIPE=Pipe-5, SECTION=2 and PIPE=Pipe-6, SECTION=1.
+WARNING Ratio 3.6 between PIPE=Pipe-6, SECTION=2 and PIPE=Pipe-7, SECTION=1.
+WARNING Ratio 1.4e+02 between PIPE=Pipe-7, SECTION=2 and PIPE=Pipe-8, SECTION=1.
+WARNING Ratio 0.016 between PIPE=Pipe-8, SECTION=2 and PIPE=Pipe-9, SECTION=1.
+
+
+
+     **************************************************************
+     *                                                            *
+     *                                                            *
+     *    XXXXXXX     XXX               XXXXXXX        XXXXXXX    *
+     *   XX     XX    XXX              XX     XX      XX     XX   *
+     * XXX       XXX  XXX            XXX       XXX  XXX       XXX *
+     * XXX       XXX  XXX            XXX            XXX       XXX *
+     * XXX       XXX  XXX            XXX   XXXXXXX  XXXXXXXXXXXXX *
+     * XXX       XXX  XXX            XXX       XXX  XXX       XXX *
+     * XXX       XXX  XXX            XXX       XXX  XXX       XXX *
+     *   XX     XX    XXX              XX     XX    XXX       XXX *
+     *    XXXXXXX     XXXXXXXXXXXXX     XXXXXXX     XXX       XXX *
+     *                                                            *
+     *                                                            *
+     **************************************************************
+
+
+
+     A  T R A N S I E N T,  O N E  D I M E N S I O N A L  M O D E L
+
+     F O R  T H R E E - P H A S E  F L O W  I N  P I P E L I N E S
+
+
+
+     DELIVERED BY    :   Schlumberger
+
+     VERSION         :   OLGA 2022.1.0.35696
+
+     SUPPORT         :   customercarecenter@slb.com
+
+     DATE            :   23-07-07
+
+     PROJECT         :   Supe
+     TITLE           :   
+     AUTHOR          :   Jesus E Varajas
+     CASE NAME       :   C:\Users\Intelcon\Desktop\olga 22\Data de carlos\2
+     INPUT FILE      :   2.genkey
+     PVT FILE        :   ../../../Documents/iDetect fugas/00 Fluidos/01 Diesel/Diesel_1.tab
+
+     FLOWMODEL       :   OLGA HD
+
+     CPU CORES USED  :   2
+     CORES AVAILABLE :   4
+     PHYSICAL CPUs   :   2
+
+     ARGUMENTS       :  ''
+
+
+
+*****************************************************
+      Results at Simulation Time: 0s
+*****************************************************
+
+
+
+Time step information:
+
+--*++*-- Time: 0.000e+00s. Step no: 0/150. Current step-size: 2.000e-02s --*++*--
+
+
+---------------------------
+Variables for FlowPath: PIPELINE
+---------------------------
+
+
+
+
+Variables in control volumes:
+
+
+Variables at control volume boundaries:
+
+
+
+Wall information from each control volume:
+
+
+Mass error information:
+
+
+
+
+
+     PRESSURE DRIVEN SOURCE INFORMATION:
+     ***********************************
+
+
+     SOURCE VALVE: Entrada, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 2
+     ===================================================================
+
+        SOURCE MASS FLOW, GAS     = -0.00        (KG/S)
+        SOURCE MASS FLOW, OIL     = -0.00        (KG/S)
+        SOURCE MASS FLOW, WATER   = -0.00        (KG/S)
+        GAS FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM VALVE = 119.06       (KG/S)
+        WAT FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. VALVE = 21.00        (C)
+        SOURCE ENTHALPY           = 0.000e+00    (W)
+
+
+     LEAKAGE INFORMATION :
+     ***********************************
+
+
+     LEAK: LEAK, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 1
+     ===================================================================
+
+        LEAK MASS FLOW, TOTAL    = -0.00        (KG/S)
+        LEAK MASS FLOW, GAS      = -0.00        (KG/S)
+        LEAK MASS FLOW, OIL      = -0.00        (KG/S)
+        LEAK MASS FLOW, WATER    = -0.00        (KG/S)
+        GAS FLOW DOWNSTREAM LEAK = -0.00        (KG/S)
+        OIL FLOW DOWNSTREAM LEAK = -0.00        (KG/S)
+        WAT FLOW DOWNSTREAM LEAK = -0.00        (KG/S)
+        FLUID TEMP. DWNSTR. LEAK = 21.44        (C)
+        LEAK ENTHALPY            = -0.00000e+00 (W)
+        ACCUMULATED MASS FLOW, TOTAL             = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, GAS      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, OIL      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, WATER    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, GAS    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, OIL    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, WATER  = 0.00         (KG)
+
+
+     CHOKE INFORMATION:
+     ******************
+
+
+     VALVE: C-1, BRANCH: Pipeline, PIPE: Pipe-2, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 7.297e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 6.612e+01    (PA)
+     CHOKE MASS FLOW   = 119.07       (KG/S)
+     CHOKE PRESSURE    = 1.086e+06    (PA)
+     CHOKE TEMPERATURE = 20.98        (C)
+     CHOKE VELOCITY    = 2.31         (M/S)
+
+     VALVE: C-2, BRANCH: Pipeline, PIPE: Pipe-3, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 6.729e+03    (PA)
+     CHOKE MASS FLOW   = 119.07       (KG/S)
+     CHOKE PRESSURE    = 1.105e+06    (PA)
+     CHOKE TEMPERATURE = 20.99        (C)
+     CHOKE VELOCITY    = 5.20         (M/S)
+
+     VALVE: C-4, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 8.775e+01    (PA)
+     CHOKE MASS FLOW   = 119.07       (KG/S)
+     CHOKE PRESSURE    = 8.285e+05    (PA)
+     CHOKE TEMPERATURE = 21.08        (C)
+     CHOKE VELOCITY    = 2.66         (M/S)
+
+     VALVE: C-7, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 8.776e+01    (PA)
+     CHOKE MASS FLOW   = 119.07       (KG/S)
+     CHOKE PRESSURE    = 7.974e+05    (PA)
+     CHOKE TEMPERATURE = 21.12        (C)
+     CHOKE VELOCITY    = 2.66         (M/S)
+
+     VALVE: C-8, BRANCH: Pipeline, PIPE: Pipe-8, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 8.776e+01    (PA)
+     CHOKE MASS FLOW   = 119.07       (KG/S)
+     CHOKE PRESSURE    = 7.890e+05    (PA)
+     CHOKE TEMPERATURE = 21.13        (C)
+     CHOKE VELOCITY    = 2.66         (M/S)
+
+     VALVE: V-in, BRANCH: Pipeline, PIPE: Pipe-5, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.347e+02    (PA)
+     CHOKE MASS FLOW   = 119.07       (KG/S)
+     CHOKE PRESSURE    = 1.200e+06    (PA)
+     CHOKE TEMPERATURE = 21.01        (C)
+     CHOKE VELOCITY    = 5.20         (M/S)
+
+     VALVE: V-out, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 4.216e-03    (M2)
+     CHOKE OPENING = 0.13         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 5.999e+05    (PA)
+     CHOKE MASS FLOW   = 119.07       (KG/S)
+     CHOKE PRESSURE    = 1.032e+05    (PA)
+     CHOKE TEMPERATURE = 20.54        (C)
+     CHOKE VELOCITY    = 40.04        (M/S)
+
+     VALVE: C-9, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 8.776e+01    (PA)
+     CHOKE MASS FLOW   = 119.07       (KG/S)
+     CHOKE PRESSURE    = 7.807e+05    (PA)
+     CHOKE TEMPERATURE = 21.13        (C)
+     CHOKE VELOCITY    = 2.66         (M/S)
+
+
+     CHECK VALVE INFORMATION:
+     ************************
+
+
+     CHECK VALVE: CHECK-1
+     =================================
+
+     CHECK VALVE OPENED AT TIME = 0.00 (S)
+
+*****************************************************
+      Results at Simulation Time: 7.39e-01s
+*****************************************************
+
+
+
+Time step information:
+
+--*++*-- Time: 7.391e-01s. Step no: 9/24. Current step-size: 2.664e-01s --*++*--
+
+
+---------------------------
+Variables for FlowPath: PIPELINE
+---------------------------
+
+
+
+
+Variables in control volumes:
+
+
+Variables at control volume boundaries:
+
+
+
+Wall information from each control volume:
+
+
+Mass error information:
+
+
+
+
+
+     PRESSURE DRIVEN SOURCE INFORMATION:
+     ***********************************
+
+
+     SOURCE VALVE: Entrada, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 2
+     ===================================================================
+
+        SOURCE MASS FLOW, GAS     = 0.00         (KG/S)
+        SOURCE MASS FLOW, OIL     = 0.00         (KG/S)
+        SOURCE MASS FLOW, WATER   = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM VALVE = 122.32       (KG/S)
+        WAT FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. VALVE = 21.00        (C)
+        SOURCE ENTHALPY           = 0.000e+00    (W)
+
+
+     LEAKAGE INFORMATION :
+     ***********************************
+
+
+     LEAK: LEAK, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 1
+     ===================================================================
+
+        LEAK MASS FLOW, TOTAL    = 0.00         (KG/S)
+        LEAK MASS FLOW, GAS      = 0.00         (KG/S)
+        LEAK MASS FLOW, OIL      = 0.00         (KG/S)
+        LEAK MASS FLOW, WATER    = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        WAT FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. LEAK = 21.49        (C)
+        LEAK ENTHALPY            = -0.00000e+00 (W)
+        ACCUMULATED MASS FLOW, TOTAL             = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, GAS      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, OIL      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, WATER    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, GAS    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, OIL    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, WATER  = 0.00         (KG)
+
+
+     CHOKE INFORMATION:
+     ******************
+
+
+     VALVE: C-1, BRANCH: Pipeline, PIPE: Pipe-2, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 7.297e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 7.163e+01    (PA)
+     CHOKE MASS FLOW   = 123.92       (KG/S)
+     CHOKE PRESSURE    = 1.085e+06    (PA)
+     CHOKE TEMPERATURE = 20.99        (C)
+     CHOKE VELOCITY    = 2.41         (M/S)
+
+     VALVE: C-2, BRANCH: Pipeline, PIPE: Pipe-3, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.626e+02    (PA)
+     CHOKE MASS FLOW   = 123.92       (KG/S)
+     CHOKE PRESSURE    = 1.081e+06    (PA)
+     CHOKE TEMPERATURE = 20.96        (C)
+     CHOKE VELOCITY    = 5.41         (M/S)
+
+     VALVE: C-4, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 8.850e+01    (PA)
+     CHOKE MASS FLOW   = 119.56       (KG/S)
+     CHOKE PRESSURE    = 8.582e+05    (PA)
+     CHOKE TEMPERATURE = 21.06        (C)
+     CHOKE VELOCITY    = 2.68         (M/S)
+
+     VALVE: C-7, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 8.803e+01    (PA)
+     CHOKE MASS FLOW   = 119.25       (KG/S)
+     CHOKE PRESSURE    = 8.068e+05    (PA)
+     CHOKE TEMPERATURE = 21.12        (C)
+     CHOKE VELOCITY    = 2.67         (M/S)
+
+     VALVE: C-8, BRANCH: Pipeline, PIPE: Pipe-8, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 8.803e+01    (PA)
+     CHOKE MASS FLOW   = 119.25       (KG/S)
+     CHOKE PRESSURE    = 7.971e+05    (PA)
+     CHOKE TEMPERATURE = 21.13        (C)
+     CHOKE VELOCITY    = 2.67         (M/S)
+
+     VALVE: V-in, BRANCH: Pipeline, PIPE: Pipe-5, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.626e+02    (PA)
+     CHOKE MASS FLOW   = 123.92       (KG/S)
+     CHOKE PRESSURE    = 1.202e+06    (PA)
+     CHOKE TEMPERATURE = 21.00        (C)
+     CHOKE VELOCITY    = 5.41         (M/S)
+
+     VALVE: V-out, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 4.216e-03    (M2)
+     CHOKE OPENING = 0.13         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 6.014e+05    (PA)
+     CHOKE MASS FLOW   = 119.21       (KG/S)
+     CHOKE PRESSURE    = 1.082e+05    (PA)
+     CHOKE TEMPERATURE = 20.55        (C)
+     CHOKE VELOCITY    = 40.09        (M/S)
+
+     VALVE: C-9, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 8.803e+01    (PA)
+     CHOKE MASS FLOW   = 119.25       (KG/S)
+     CHOKE PRESSURE    = 7.886e+05    (PA)
+     CHOKE TEMPERATURE = 21.13        (C)
+     CHOKE VELOCITY    = 2.67         (M/S)
+
+
+     CHECK VALVE INFORMATION:
+     ************************
+
+
+     CHECK VALVE: CHECK-1
+     =================================
+
+     CHECK VALVE OPENED AT TIME = 0.00 (S)
+
+*****************************************************
+      Results at Simulation Time: 1.36e+00s
+*****************************************************
+
+
+
+Time step information:
+
+--*++*-- Time: 1.355e+00s. Step no: 11/18. Current step-size: 3.460e-01s --*++*--
+
+
+---------------------------
+Variables for FlowPath: PIPELINE
+---------------------------
+
+
+
+
+Variables in control volumes:
+
+
+Variables at control volume boundaries:
+
+
+
+Wall information from each control volume:
+
+
+Mass error information:
+
+
+
+
+
+     PRESSURE DRIVEN SOURCE INFORMATION:
+     ***********************************
+
+
+     SOURCE VALVE: Entrada, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 2
+     ===================================================================
+
+        SOURCE MASS FLOW, GAS     = 0.00         (KG/S)
+        SOURCE MASS FLOW, OIL     = 0.00         (KG/S)
+        SOURCE MASS FLOW, WATER   = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM VALVE = 124.47       (KG/S)
+        WAT FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. VALVE = 21.00        (C)
+        SOURCE ENTHALPY           = 0.000e+00    (W)
+
+
+     LEAKAGE INFORMATION :
+     ***********************************
+
+
+     LEAK: LEAK, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 1
+     ===================================================================
+
+        LEAK MASS FLOW, TOTAL    = 0.00         (KG/S)
+        LEAK MASS FLOW, GAS      = 0.00         (KG/S)
+        LEAK MASS FLOW, OIL      = 0.00         (KG/S)
+        LEAK MASS FLOW, WATER    = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        WAT FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. LEAK = 21.50        (C)
+        LEAK ENTHALPY            = -0.00000e+00 (W)
+        ACCUMULATED MASS FLOW, TOTAL             = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, GAS      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, OIL      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, WATER    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, GAS    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, OIL    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, WATER  = 0.00         (KG)
+
+
+     CHOKE INFORMATION:
+     ******************
+
+
+     VALVE: C-1, BRANCH: Pipeline, PIPE: Pipe-2, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 7.297e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 7.235e+01    (PA)
+     CHOKE MASS FLOW   = 124.55       (KG/S)
+     CHOKE PRESSURE    = 1.086e+06    (PA)
+     CHOKE TEMPERATURE = 20.99        (C)
+     CHOKE VELOCITY    = 2.42         (M/S)
+
+     VALVE: C-2, BRANCH: Pipeline, PIPE: Pipe-3, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.663e+02    (PA)
+     CHOKE MASS FLOW   = 124.55       (KG/S)
+     CHOKE PRESSURE    = 1.082e+06    (PA)
+     CHOKE TEMPERATURE = 20.96        (C)
+     CHOKE VELOCITY    = 5.44         (M/S)
+
+     VALVE: C-4, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.175e+01    (PA)
+     CHOKE MASS FLOW   = 121.74       (KG/S)
+     CHOKE PRESSURE    = 9.076e+05    (PA)
+     CHOKE TEMPERATURE = 21.01        (C)
+     CHOKE VELOCITY    = 2.72         (M/S)
+
+     VALVE: C-7, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.073e+01    (PA)
+     CHOKE MASS FLOW   = 121.06       (KG/S)
+     CHOKE PRESSURE    = 8.327e+05    (PA)
+     CHOKE TEMPERATURE = 21.11        (C)
+     CHOKE VELOCITY    = 2.71         (M/S)
+
+     VALVE: C-8, BRANCH: Pipeline, PIPE: Pipe-8, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.072e+01    (PA)
+     CHOKE MASS FLOW   = 121.06       (KG/S)
+     CHOKE PRESSURE    = 8.189e+05    (PA)
+     CHOKE TEMPERATURE = 21.14        (C)
+     CHOKE VELOCITY    = 2.71         (M/S)
+
+     VALVE: V-in, BRANCH: Pipeline, PIPE: Pipe-5, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.662e+02    (PA)
+     CHOKE MASS FLOW   = 124.54       (KG/S)
+     CHOKE PRESSURE    = 1.205e+06    (PA)
+     CHOKE TEMPERATURE = 21.00        (C)
+     CHOKE VELOCITY    = 5.44         (M/S)
+
+     VALVE: V-out, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 4.216e-03    (M2)
+     CHOKE OPENING = 0.13         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 6.191e+05    (PA)
+     CHOKE MASS FLOW   = 120.95       (KG/S)
+     CHOKE PRESSURE    = 1.083e+05    (PA)
+     CHOKE TEMPERATURE = 20.54        (C)
+     CHOKE VELOCITY    = 40.67        (M/S)
+
+     VALVE: C-9, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.072e+01    (PA)
+     CHOKE MASS FLOW   = 121.06       (KG/S)
+     CHOKE PRESSURE    = 8.104e+05    (PA)
+     CHOKE TEMPERATURE = 21.12        (C)
+     CHOKE VELOCITY    = 2.71         (M/S)
+
+
+     CHECK VALVE INFORMATION:
+     ************************
+
+
+     CHECK VALVE: CHECK-1
+     =================================
+
+     CHECK VALVE OPENED AT TIME = 0.00 (S)
+
+*****************************************************
+      Results at Simulation Time: 2.04e+00s
+*****************************************************
+
+
+
+Time step information:
+
+--*++*-- Time: 2.043e+00s. Step no: 13/16. Current step-size: 3.382e-01s --*++*--
+
+
+---------------------------
+Variables for FlowPath: PIPELINE
+---------------------------
+
+
+
+
+Variables in control volumes:
+
+
+Variables at control volume boundaries:
+
+
+
+Wall information from each control volume:
+
+
+Mass error information:
+
+
+
+
+
+     PRESSURE DRIVEN SOURCE INFORMATION:
+     ***********************************
+
+
+     SOURCE VALVE: Entrada, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 2
+     ===================================================================
+
+        SOURCE MASS FLOW, GAS     = 0.00         (KG/S)
+        SOURCE MASS FLOW, OIL     = 0.00         (KG/S)
+        SOURCE MASS FLOW, WATER   = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM VALVE = 125.59       (KG/S)
+        WAT FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. VALVE = 21.00        (C)
+        SOURCE ENTHALPY           = 0.000e+00    (W)
+
+
+     LEAKAGE INFORMATION :
+     ***********************************
+
+
+     LEAK: LEAK, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 1
+     ===================================================================
+
+        LEAK MASS FLOW, TOTAL    = 0.00         (KG/S)
+        LEAK MASS FLOW, GAS      = 0.00         (KG/S)
+        LEAK MASS FLOW, OIL      = 0.00         (KG/S)
+        LEAK MASS FLOW, WATER    = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        WAT FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. LEAK = 21.50        (C)
+        LEAK ENTHALPY            = -0.00000e+00 (W)
+        ACCUMULATED MASS FLOW, TOTAL             = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, GAS      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, OIL      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, WATER    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, GAS    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, OIL    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, WATER  = 0.00         (KG)
+
+
+     CHOKE INFORMATION:
+     ******************
+
+
+     VALVE: C-1, BRANCH: Pipeline, PIPE: Pipe-2, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 7.297e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 7.272e+01    (PA)
+     CHOKE MASS FLOW   = 124.86       (KG/S)
+     CHOKE PRESSURE    = 1.086e+06    (PA)
+     CHOKE TEMPERATURE = 20.99        (C)
+     CHOKE VELOCITY    = 2.42         (M/S)
+
+     VALVE: C-2, BRANCH: Pipeline, PIPE: Pipe-3, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.681e+02    (PA)
+     CHOKE MASS FLOW   = 124.86       (KG/S)
+     CHOKE PRESSURE    = 1.082e+06    (PA)
+     CHOKE TEMPERATURE = 20.96        (C)
+     CHOKE VELOCITY    = 5.46         (M/S)
+
+     VALVE: C-4, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.662e+01    (PA)
+     CHOKE MASS FLOW   = 124.93       (KG/S)
+     CHOKE PRESSURE    = 9.276e+05    (PA)
+     CHOKE TEMPERATURE = 21.04        (C)
+     CHOKE VELOCITY    = 2.80         (M/S)
+
+     VALVE: C-7, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.629e+01    (PA)
+     CHOKE MASS FLOW   = 124.72       (KG/S)
+     CHOKE PRESSURE    = 8.580e+05    (PA)
+     CHOKE TEMPERATURE = 21.12        (C)
+     CHOKE VELOCITY    = 2.79         (M/S)
+
+     VALVE: C-8, BRANCH: Pipeline, PIPE: Pipe-8, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.629e+01    (PA)
+     CHOKE MASS FLOW   = 124.72       (KG/S)
+     CHOKE PRESSURE    = 8.441e+05    (PA)
+     CHOKE TEMPERATURE = 21.14        (C)
+     CHOKE VELOCITY    = 2.79         (M/S)
+
+     VALVE: V-in, BRANCH: Pipeline, PIPE: Pipe-5, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.681e+02    (PA)
+     CHOKE MASS FLOW   = 124.86       (KG/S)
+     CHOKE PRESSURE    = 1.204e+06    (PA)
+     CHOKE TEMPERATURE = 21.00        (C)
+     CHOKE VELOCITY    = 5.46         (M/S)
+
+     VALVE: V-out, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 4.216e-03    (M2)
+     CHOKE OPENING = 0.13         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 6.577e+05    (PA)
+     CHOKE MASS FLOW   = 124.67       (KG/S)
+     CHOKE PRESSURE    = 8.982e+04    (PA)
+     CHOKE TEMPERATURE = 20.53        (C)
+     CHOKE VELOCITY    = 41.92        (M/S)
+
+     VALVE: C-9, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.629e+01    (PA)
+     CHOKE MASS FLOW   = 124.72       (KG/S)
+     CHOKE PRESSURE    = 8.355e+05    (PA)
+     CHOKE TEMPERATURE = 21.13        (C)
+     CHOKE VELOCITY    = 2.79         (M/S)
+
+
+     CHECK VALVE INFORMATION:
+     ************************
+
+
+     CHECK VALVE: CHECK-1
+     =================================
+
+     CHECK VALVE OPENED AT TIME = 0.00 (S)
+
+*****************************************************
+      Results at Simulation Time: 2.72e+00s
+*****************************************************
+
+
+
+Time step information:
+
+--*++*-- Time: 2.718e+00s. Step no: 15/16. Current step-size: 3.360e-01s --*++*--
+
+
+---------------------------
+Variables for FlowPath: PIPELINE
+---------------------------
+
+
+
+
+Variables in control volumes:
+
+
+Variables at control volume boundaries:
+
+
+
+Wall information from each control volume:
+
+
+Mass error information:
+
+
+
+
+
+     PRESSURE DRIVEN SOURCE INFORMATION:
+     ***********************************
+
+
+     SOURCE VALVE: Entrada, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 2
+     ===================================================================
+
+        SOURCE MASS FLOW, GAS     = 0.00         (KG/S)
+        SOURCE MASS FLOW, OIL     = 0.00         (KG/S)
+        SOURCE MASS FLOW, WATER   = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM VALVE = 126.65       (KG/S)
+        WAT FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. VALVE = 21.00        (C)
+        SOURCE ENTHALPY           = 0.000e+00    (W)
+
+
+     LEAKAGE INFORMATION :
+     ***********************************
+
+
+     LEAK: LEAK, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 1
+     ===================================================================
+
+        LEAK MASS FLOW, TOTAL    = 0.00         (KG/S)
+        LEAK MASS FLOW, GAS      = 0.00         (KG/S)
+        LEAK MASS FLOW, OIL      = 0.00         (KG/S)
+        LEAK MASS FLOW, WATER    = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        WAT FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. LEAK = 21.49        (C)
+        LEAK ENTHALPY            = -0.00000e+00 (W)
+        ACCUMULATED MASS FLOW, TOTAL             = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, GAS      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, OIL      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, WATER    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, GAS    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, OIL    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, WATER  = 0.00         (KG)
+
+
+     CHOKE INFORMATION:
+     ******************
+
+
+     VALVE: C-1, BRANCH: Pipeline, PIPE: Pipe-2, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 7.297e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 7.393e+01    (PA)
+     CHOKE MASS FLOW   = 125.90       (KG/S)
+     CHOKE PRESSURE    = 1.085e+06    (PA)
+     CHOKE TEMPERATURE = 20.99        (C)
+     CHOKE VELOCITY    = 2.45         (M/S)
+
+     VALVE: C-2, BRANCH: Pipeline, PIPE: Pipe-3, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.743e+02    (PA)
+     CHOKE MASS FLOW   = 125.90       (KG/S)
+     CHOKE PRESSURE    = 1.081e+06    (PA)
+     CHOKE TEMPERATURE = 20.96        (C)
+     CHOKE VELOCITY    = 5.50         (M/S)
+
+     VALVE: C-4, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.898e+01    (PA)
+     CHOKE MASS FLOW   = 126.45       (KG/S)
+     CHOKE PRESSURE    = 9.149e+05    (PA)
+     CHOKE TEMPERATURE = 21.09        (C)
+     CHOKE VELOCITY    = 2.83         (M/S)
+
+     VALVE: C-7, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.894e+01    (PA)
+     CHOKE MASS FLOW   = 126.43       (KG/S)
+     CHOKE PRESSURE    = 8.630e+05    (PA)
+     CHOKE TEMPERATURE = 21.13        (C)
+     CHOKE VELOCITY    = 2.83         (M/S)
+
+     VALVE: C-8, BRANCH: Pipeline, PIPE: Pipe-8, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.894e+01    (PA)
+     CHOKE MASS FLOW   = 126.43       (KG/S)
+     CHOKE PRESSURE    = 8.527e+05    (PA)
+     CHOKE TEMPERATURE = 21.14        (C)
+     CHOKE VELOCITY    = 2.83         (M/S)
+
+     VALVE: V-in, BRANCH: Pipeline, PIPE: Pipe-5, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.742e+02    (PA)
+     CHOKE MASS FLOW   = 125.90       (KG/S)
+     CHOKE PRESSURE    = 1.203e+06    (PA)
+     CHOKE TEMPERATURE = 21.00        (C)
+     CHOKE VELOCITY    = 5.50         (M/S)
+
+     VALVE: V-out, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 4.216e-03    (M2)
+     CHOKE OPENING = 0.13         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 6.760e+05    (PA)
+     CHOKE MASS FLOW   = 126.40       (KG/S)
+     CHOKE PRESSURE    = 7.935e+04    (PA)
+     CHOKE TEMPERATURE = 20.52        (C)
+     CHOKE VELOCITY    = 42.50        (M/S)
+
+     VALVE: C-9, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.894e+01    (PA)
+     CHOKE MASS FLOW   = 126.42       (KG/S)
+     CHOKE PRESSURE    = 8.442e+05    (PA)
+     CHOKE TEMPERATURE = 21.14        (C)
+     CHOKE VELOCITY    = 2.83         (M/S)
+
+
+     CHECK VALVE INFORMATION:
+     ************************
+
+
+     CHECK VALVE: CHECK-1
+     =================================
+
+     CHECK VALVE OPENED AT TIME = 0.00 (S)
+
+*****************************************************
+      Results at Simulation Time: 3.05e+00s
+*****************************************************
+
+
+
+Time step information:
+
+--*++*-- Time: 3.054e+00s. Step no: 16/16. Current step-size: 3.357e-01s --*++*--
+
+
+---------------------------
+Variables for FlowPath: PIPELINE
+---------------------------
+
+
+
+
+Variables in control volumes:
+
+
+Variables at control volume boundaries:
+
+
+
+Wall information from each control volume:
+
+
+Mass error information:
+
+
+
+
+
+     PRESSURE DRIVEN SOURCE INFORMATION:
+     ***********************************
+
+
+     SOURCE VALVE: Entrada, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 2
+     ===================================================================
+
+        SOURCE MASS FLOW, GAS     = 0.00         (KG/S)
+        SOURCE MASS FLOW, OIL     = 0.00         (KG/S)
+        SOURCE MASS FLOW, WATER   = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM VALVE = 127.07       (KG/S)
+        WAT FLOW DOWNSTREAM VALVE = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. VALVE = 21.00        (C)
+        SOURCE ENTHALPY           = 0.000e+00    (W)
+
+
+     LEAKAGE INFORMATION :
+     ***********************************
+
+
+     LEAK: LEAK, BRANCH: Pipeline, PIPE: Pipe-6, SECTION: 1
+     ===================================================================
+
+        LEAK MASS FLOW, TOTAL    = 0.00         (KG/S)
+        LEAK MASS FLOW, GAS      = 0.00         (KG/S)
+        LEAK MASS FLOW, OIL      = 0.00         (KG/S)
+        LEAK MASS FLOW, WATER    = 0.00         (KG/S)
+        GAS FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        OIL FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        WAT FLOW DOWNSTREAM LEAK = 0.00         (KG/S)
+        FLUID TEMP. DWNSTR. LEAK = 21.49        (C)
+        LEAK ENTHALPY            = -0.00000e+00 (W)
+        ACCUMULATED MASS FLOW, TOTAL             = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, GAS      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, OIL      = 0.00         (KG)
+        ACCUMULATED MASS FLOW UPSTREAM, WATER    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, GAS    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, OIL    = 0.00         (KG)
+        ACCUMULATED MASS FLOW DOWNSTREAM, WATER  = 0.00         (KG)
+
+
+     CHOKE INFORMATION:
+     ******************
+
+
+     VALVE: C-1, BRANCH: Pipeline, PIPE: Pipe-2, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 7.297e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 7.470e+01    (PA)
+     CHOKE MASS FLOW   = 126.55       (KG/S)
+     CHOKE PRESSURE    = 1.085e+06    (PA)
+     CHOKE TEMPERATURE = 20.99        (C)
+     CHOKE VELOCITY    = 2.46         (M/S)
+
+     VALVE: C-2, BRANCH: Pipeline, PIPE: Pipe-3, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.781e+02    (PA)
+     CHOKE MASS FLOW   = 126.55       (KG/S)
+     CHOKE PRESSURE    = 1.081e+06    (PA)
+     CHOKE TEMPERATURE = 20.96        (C)
+     CHOKE VELOCITY    = 5.53         (M/S)
+
+     VALVE: C-4, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.944e+01    (PA)
+     CHOKE MASS FLOW   = 126.74       (KG/S)
+     CHOKE PRESSURE    = 9.128e+05    (PA)
+     CHOKE TEMPERATURE = 21.10        (C)
+     CHOKE VELOCITY    = 2.84         (M/S)
+
+     VALVE: C-7, BRANCH: Pipeline, PIPE: Pipe-7, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.931e+01    (PA)
+     CHOKE MASS FLOW   = 126.66       (KG/S)
+     CHOKE PRESSURE    = 8.667e+05    (PA)
+     CHOKE TEMPERATURE = 21.13        (C)
+     CHOKE VELOCITY    = 2.83         (M/S)
+
+     VALVE: C-8, BRANCH: Pipeline, PIPE: Pipe-8, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.931e+01    (PA)
+     CHOKE MASS FLOW   = 126.66       (KG/S)
+     CHOKE PRESSURE    = 8.575e+05    (PA)
+     CHOKE TEMPERATURE = 21.14        (C)
+     CHOKE VELOCITY    = 2.83         (M/S)
+
+     VALVE: V-in, BRANCH: Pipeline, PIPE: Pipe-5, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 3.243e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 3.781e+02    (PA)
+     CHOKE MASS FLOW   = 126.55       (KG/S)
+     CHOKE PRESSURE    = 1.203e+06    (PA)
+     CHOKE TEMPERATURE = 21.00        (C)
+     CHOKE VELOCITY    = 5.53         (M/S)
+
+     VALVE: V-out, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 2
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 4.216e-03    (M2)
+     CHOKE OPENING = 0.13         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 6.785e+05    (PA)
+     CHOKE MASS FLOW   = 126.63       (KG/S)
+     CHOKE PRESSURE    = 8.184e+04    (PA)
+     CHOKE TEMPERATURE = 20.52        (C)
+     CHOKE VELOCITY    = 42.58        (M/S)
+
+     VALVE: C-9, BRANCH: Pipeline, PIPE: Pipe-9, SECTION: 1
+     ===================================================================
+
+     CRITICAL FLOWMODEL: FROZEN       
+
+     CHOKE AREA FROM TIME TABLE
+
+     CHOKE AREA    = 6.335e-02    (M2)
+     CHOKE OPENING = 1.00         
+
+     FLOW CONDITION: SUBCRITICAL
+
+     PRESSURE DROP     = 9.931e+01    (PA)
+     CHOKE MASS FLOW   = 126.66       (KG/S)
+     CHOKE PRESSURE    = 8.490e+05    (PA)
+     CHOKE TEMPERATURE = 21.14        (C)
+     CHOKE VELOCITY    = 2.83         (M/S)
+
+
+     CHECK VALVE INFORMATION:
+     ************************
+
+
+     CHECK VALVE: CHECK-1
+     =================================
+
+     CHECK VALVE OPENED AT TIME = 0.00 (S)
+
+
+     ****************  NORMAL STOP IN EXECUTION  ****************
+
+
+
+
+  TIME STEP INFORMATION
+  *********************
+
+  NUMBER OF TIME STEPS:  16
+  RUN TIME STEP AGAIN:   0
+  AVERAGE TIME STEP:     0.1908
+  MAXIMUM TIME STEP:     0.3500 s (Applied last: 1.3555) [Not limited]
+  MINIMUM TIME STEP:     0.0200 s (Applied last: 0.0200) [Limited first: 0.0200, last: 0.0200]
+  TOTAL SIMULATED TIME: 3.0536 s
+
+
+  TIMING INFORMATION
+  *********************
+  (Note: this might be affected by total system load)
+
+  TOTAL EXECUTION TIME:   17.7070 s
+  TOTAL CPU USAGE:        22 % (of max 50 %)
+  SIMULATION TIME:        0.2548 s
+  INITIALIZATION TIME:    17.4501 s
+  SS PRE-PROCESSOR TIME:  0.1570 s
+

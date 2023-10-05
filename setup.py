@@ -3,7 +3,7 @@ from airflow_df import __version__
 import setuptools
 import platform
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
 with open("requirements.txt", "r") as fh:

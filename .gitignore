@@ -9,6 +9,8 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+data_test/
+__sectrets/
 develop-eggs/
 dist/
 downloads/
@@ -160,3 +162,5 @@ cython_debug/
 #.idea/
 
 *Zone.Identifier
+
+data

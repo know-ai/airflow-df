@@ -1,3 +1,3 @@
 from .genkey import Genkey
 from .tpl import TPL
-from .olga import OlgaFormatter
+from .olga import Olga

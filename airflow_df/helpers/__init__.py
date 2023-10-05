@@ -1,6 +1,7 @@
 import inspect
 import functools
 from airflow.decorators import task
+import os
 
 class Helpers:
     r"""
@@ -116,6 +117,62 @@ class Helpers:
 
         return result
 
+    @decorator
+    @staticmethod
+    def hide_airflow_compatibility(func, args, kwargs):
+        r"""
+        This is a method decorator to hide airflow compatibility.
+
+        ```python
+        from utils.helpers import Helpers
+
+        @Helpers.hide_airflow_compatibility
+        @staticmethod
+        def read_csv(filepath:str, **kwargs)->pd.DataFrame:
+            
+            pass
+        ```
+        """
+        _kwargs = kwargs.copy()
+        default_args = dict()
+        for key in _kwargs.keys():
+
+            if key in Helpers.get_default_args_in_tasks():
+
+                default_args[key] = kwargs.pop(key)
+
+        task = func(*args, **kwargs)
+        task = task.operator.python_callable
+        return task(*args[1:], **kwargs)
+
+    @staticmethod
+    def get_files(filepath: str, ext:str=".tpl") -> list:
+        """
+        Gets all the files contained in a folder. Returns a list of files.
+
+        **Parameters**
+
+        - **filepath:** (str) Path to the folder.
+        - **ext:** (str) 
+
+        **Returns**
+
+        - **filenames:** (list) List of filenames with "ext" inside "filepath"
+        """
+        result = list()
+        if not ext.startswith("."):
+            ext = f".{ext}"
+        
+        filepath = filepath.split(os.sep)
+        filepath = os.sep.join(filepath)
+        for root, dirnames, filenames in os.walk(filepath):
+            for filename in filenames:
+                if filename.endswith(ext):
+
+                    result.append(os.path.join(root,filename))
+        
+        return result
+
     @staticmethod
     def get_default_args_in_tasks():
         r"""
@@ -164,3 +221,4 @@ class Helpers:
             'yesterday_ds_nodash',
             'templates_dict'
         ]
+    
