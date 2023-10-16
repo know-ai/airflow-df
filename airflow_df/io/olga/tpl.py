@@ -4,20 +4,21 @@ import numpy as np
 
 
 class Info:
-    """Stores the attributes to describe the information section of a tpl file as class attributes.
+    """
+    Stores the attributes to describe the information section of a tpl file as class attributes.
 
-**Attributes**
+    **Attributes**
 
-- **version:** (str) Olga version with which the file was generated
-- **input_file:** (str) Genkey file name binded to this tpl file
-- **pvt_file:** (str) Fluid property file name
-- **date:** (str) TPL file generation date
-- **project:** (str) Project name
-- **title:** (str) Simulation title name
-- **author:** (str) Responsible for the simulation
-- **network:** (int) If 1, is a pipeline, > 1, is a network
-- **geometry:** (str) Unit for pipeline length
-- **branch:** (str) Branch name
+    - **version:** (str) Olga version with which the file was generated
+    - **input_file:** (str) Genkey file name binded to this tpl file
+    - **pvt_file:** (str) Fluid property file name
+    - **date:** (str) TPL file generation date
+    - **project:** (str) Project name
+    - **title:** (str) Simulation title name
+    - **author:** (str) Responsible for the simulation
+    - **network:** (int) If 1, is a pipeline, > 1, is a network
+    - **geometry:** (str) Unit for pipeline length
+    - **branch:** (str) Branch name
     """
 
     def __init__(self):
@@ -35,33 +36,35 @@ class Info:
 
     @staticmethod
     def delete_quotes(string: str = '') -> str:
-        """Deletes inner quotes in a string. Returns a string without them.
+        """
+        Deletes inner quotes in a string. Returns a string without them.
 
-    **Parameters**
+        **Parameters**
 
-    **string:** (str) string with inner quotes.
+        **string:** (str) string with inner quotes.
         """
         return string.replace("'", "").strip()
 
     def set_info(self, file: str):
-        """Set all info attributes of tpl file in each class attribute.
+        """
+        Set all info attributes of tpl file in each class attribute.
 
-**Parameters**
+        **Parameters**
 
-- **file:** (str) raw tpl file as string.
+        - **file:** (str) raw tpl file as string.
 
-**Attributes to set**
+        **Attributes to set**
 
-- **version:** (str) Olga version with which the file was generated
-- **input_file:** (str) Genkey file name binded to this tpl file
-- **pvt_file:** (str) Fluid property file name
-- **date:** (str) TPL file generation date
-- **project:** (str) Project name
-- **title:** (str) Simulation title name
-- **author:** (str) Responsible for the simulation
-- **network:** (int) If 1, is a pipeline, > 1, is a network
-- **geometry:** (str) Unit for pipeline length
-- **branch:** (str) Branch name
+        - **version:** (str) Olga version with which the file was generated
+        - **input_file:** (str) Genkey file name binded to this tpl file
+        - **pvt_file:** (str) Fluid property file name
+        - **date:** (str) TPL file generation date
+        - **project:** (str) Project name
+        - **title:** (str) Simulation title name
+        - **author:** (str) Responsible for the simulation
+        - **network:** (int) If 1, is a pipeline, > 1, is a network
+        - **geometry:** (str) Unit for pipeline length
+        - **branch:** (str) Branch name
         """
         file = file.split('\n')[:19]
 
@@ -77,22 +80,23 @@ class Info:
         self.branch = self.delete_quotes(file[-1])
 
     def serialize(self):
-        """Serializes all information attributes of the Olga file
+        """
+        Serializes all information attributes of the Olga file
 
-**Returns**
+        **Returns**
 
-- **attrs:** (dict) {
-    'version': (str) Olga version with which the file was generated,
-    'input_file': (str) Genkey file name binded to this tpl file,
-    'pvt_file': (str) Fluid property file name,
-    'date': (str) TPL file generation date,
-    'project': (str) Project name,
-    'title': (str) Simulation title name,
-    'author': (str) Responsible for the simulation,
-    'network': (int) If 1, is a pipeline, > 1, is a network,
-    'geometry': (str) Unit for pipeline length,
-    'branch': (str) Branch name
-}
+        - **attrs:** (dict) {
+            'version': (str) Olga version with which the file was generated,
+            'input_file': (str) Genkey file name binded to this tpl file,
+            'pvt_file': (str) Fluid property file name,
+            'date': (str) TPL file generation date,
+            'project': (str) Project name,
+            'title': (str) Simulation title name,
+            'author': (str) Responsible for the simulation,
+            'network': (int) If 1, is a pipeline, > 1, is a network,
+            'geometry': (str) Unit for pipeline length,
+            'branch': (str) Branch name
+        }
         """
 
         return {
@@ -110,13 +114,14 @@ class Info:
 
 
 class Profile(list):
-    """Stores the attributes to describe the elevation profile section of a tpl file as class attributes.
+    """
+    Stores the attributes to describe the elevation profile section of a tpl file as class attributes.
 
-**Attributes**
+    **Attributes**
 
-- **x:** (list) x coordinates values (m)
-- **y:** (list) y coordinates values (m)
-- **profile:** (list) (x, y) pair coordinates values (m)
+    - **x:** (list) x coordinates values (m)
+    - **y:** (list) y coordinates values (m)
+    - **profile:** (list) (x, y) pair coordinates values (m)
     """
 
     def __init__(self):
@@ -124,12 +129,13 @@ class Profile(list):
         self.__point = namedtuple("Point", "x y")
 
     def append(self, x: float, y: float):
-        """Add point to profile list
+        """
+        Add point to profile list
 
-**Parameters**
+        **Parameters**
 
-- **x:** (float) x coordinate
-- **y:** (float) y coordinate
+        - **x:** (float) x coordinate
+        - **y:** (float) y coordinate
         """
 
         if isinstance(x, float) & isinstance(y, float):
@@ -139,7 +145,8 @@ class Profile(list):
 
     @staticmethod
     def string_list_2_float_list(val_list: list, join_by: str = '') -> list:
-        """Converts a list of string numeric values to a list of float values.
+        """
+        Converts a list of string numeric values to a list of float values.
         Returns a list of float values.
 
         **Parameters**
@@ -152,11 +159,12 @@ class Profile(list):
         return list(map(float, val_list))
 
     def set_profile(self, file: str):
-        """Set elevation profile
+        """
+        Set elevation profile
 
-**Parameters**
+        **Parameters**
 
-- **file:** (str) raw tpl file read
+        - **file:** (str) raw tpl file read
         """
         file = file.split('CATALOG')[0]
         file = file.split('\n')[20:]
@@ -176,32 +184,36 @@ class Profile(list):
 
     @property
     def x(self) -> list:
-        """X coordinates values
+        """
+        X coordinates values
         """
         return [point.x for point in self]
 
     @property
     def y(self) -> list:
-        """Y coordinate values
+        """
+        Y coordinate values
         """
         return [point.y for point in self]
 
     @property
     def profile(self) -> list:
-        """(x, y) coordinates values
+        """
+        (x, y) coordinates values
         """
         return [(point.x, point.y) for point in self]
 
     def serialize(self) -> dict:
-        """Serializes elevation profile of a tpl file
+        """
+        Serializes elevation profile of a tpl file
 
-**Returns**
+        **Returns**
 
-- **profile:** (dict) {
-    'profile': list of tuples (x, y),
-    'x': (list) x coordinates values,
-    'y': (list) y coordinates values
-}
+        - **profile:** (dict) {
+            'profile': list of tuples (x, y),
+            'x': (list) x coordinates values,
+            'y': (list) y coordinates values
+        }
         """
         return {
             'profile': self.profile,
@@ -211,11 +223,12 @@ class Profile(list):
 
 
 class Data:
-    """Stores Pandas DataFrame with variables values according Olga simulation
+    """
+    Stores Pandas DataFrame with variables values according Olga simulation
 
-**Attributes**
+    **Attributes**
 
-- **df:** (pd.DataFrame Object) stores tabular data of variable according Olga simulation 
+    - **df:** (pd.DataFrame Object) stores tabular data of variable according Olga simulation 
     """
 
     def __init__(self):
@@ -268,29 +281,30 @@ class Data:
 
 
 class TPL:
-    """Data Structure to wrap all operations needed to parse .tpl files into Python.
+    """
+    Data Structure to wrap all operations needed to parse .tpl files into Python.
 
-**Attributes**
+    **Attributes**
 
-- **info:** (Info Object) Stores the attributes to describe the information section of a tpl file as class attributes.
-    - **version:** (str) Olga version with which the file was generated
-    - **input_file:** (str) Genkey file name binded to this tpl file
-    - **pvt_file:** (str) Fluid property file name
-    - **date:** (str) TPL file generation date
-    - **project:** (str) Project name
-    - **title:** (str) Simulation title name
-    - **author:** (str) Responsible for the simulation
-    - **network:** (int) If 1, is a pipeline, > 1, is a network
-    - **geometry:** (str) Unit for pipeline length
-    - **branch:** (str) Branch name
+    - **info:** (Info Object) Stores the attributes to describe the information section of a tpl file as class attributes.
+        - **version:** (str) Olga version with which the file was generated
+        - **input_file:** (str) Genkey file name binded to this tpl file
+        - **pvt_file:** (str) Fluid property file name
+        - **date:** (str) TPL file generation date
+        - **project:** (str) Project name
+        - **title:** (str) Simulation title name
+        - **author:** (str) Responsible for the simulation
+        - **network:** (int) If 1, is a pipeline, > 1, is a network
+        - **geometry:** (str) Unit for pipeline length
+        - **branch:** (str) Branch name
 
-- **profile:** (Profile Object) Stores the attributes to describe the elevation profile section of a tpl file as class attributes.
-    - **x:** (list) x coordinates values
-    - **y:** (list) y coordinates values
-    - **profile:** (list) (x, y) pair coordinates values
+    - **profile:** (Profile Object) Stores the attributes to describe the elevation profile section of a tpl file as class attributes.
+        - **x:** (list) x coordinates values
+        - **y:** (list) y coordinates values
+        - **profile:** (list) (x, y) pair coordinates values
 
-- **data:** (Data Object) Stores Pandas DataFrame with variables values according Olga simulation
-    - **df:** (pd.DataFrame Object) stores tabular data of variable according Olga simulation
+    - **data:** (Data Object) Stores Pandas DataFrame with variables values according Olga simulation
+        - **df:** (pd.DataFrame Object) stores tabular data of variable according Olga simulation
     """
 
     def __init__(self):
@@ -300,55 +314,59 @@ class TPL:
         self.data = Data()
 
     def set_info(self, file: str):
-        """Sets all info attributes of tpl file in each class attribute.
+        """
+        Sets all info attributes of tpl file in each class attribute.
 
-**Parameters**
+        **Parameters**
 
-- **file:** (str) raw tpl file as string.
+        - **file:** (str) raw tpl file as string.
 
-**Attributes to set**
+        **Attributes to set**
 
-- **version:** (str) Olga version with which the file was generated
-- **input_file:** (str) Genkey file name binded to this tpl file
-- **pvt_file:** (str) Fluid property file name
-- **date:** (str) TPL file generation date
-- **project:** (str) Project name
-- **title:** (str) Simulation title name
-- **author:** (str) Responsible for the simulation
-- **network:** (int) If 1, is a pipeline, > 1, is a network
-- **geometry:** (str) Unit for pipeline length
-- **branch:** (str) Branch name
+        - **version:** (str) Olga version with which the file was generated
+        - **input_file:** (str) Genkey file name binded to this tpl file
+        - **pvt_file:** (str) Fluid property file name
+        - **date:** (str) TPL file generation date
+        - **project:** (str) Project name
+        - **title:** (str) Simulation title name
+        - **author:** (str) Responsible for the simulation
+        - **network:** (int) If 1, is a pipeline, > 1, is a network
+        - **geometry:** (str) Unit for pipeline length
+        - **branch:** (str) Branch name
         """
         self.info.set_info(file)
 
     def set_profile(self, file: str):
-        """Sets elevation profile
+        """
+        Sets elevation profile
 
-**Parameters**
+        **Parameters**
 
-- **file:** (str) raw tpl file read
+        - **file:** (str) raw tpl file read
         """
         self.profile.set_profile(file)
 
     def set_data(self, file: str):
-        """Parses tabular time series data of a .tpl file into a Pandas DataFrame
+        """
+        Parses tabular time series data of a .tpl file into a Pandas DataFrame
 
-**Parameters**
+        **Parameters**
 
-- **file:** (str) raw tpl file as string.
+        - **file:** (str) raw tpl file as string.
         """
         self.data.set_data(file=file)
 
     def read_raw_file(self, filepath: str | list) -> str | list:
-        """Parses .tpl files into a python string
+        """
+        Parses .tpl files into a python string
 
-**Parameters**
+        **Parameters**
 
-- **filepath:** (str) .tpl file location
+        - **filepath:** (str) .tpl file location
 
-**Returns**
+        **Returns**
 
-- **file:** (str) 
+        - **file:** (str) 
         """
         with open(filepath, 'r') as file:
 
@@ -357,11 +375,12 @@ class TPL:
         return raw_file
 
     def read(self, filepath: str):
-        """Read .tpl file into a TPL Object Structure
+        """
+        Read .tpl file into a TPL Object Structure
 
-**Parameters**
+        **Parameters**
 
-- **filepath:** (str) .tpl file location
+        - **filepath:** (str) .tpl file location
         """
         file = self.read_raw_file(filepath=filepath)
 
@@ -371,39 +390,41 @@ class TPL:
 
     @property
     def df(self) -> pd.DataFrame:
-        """Gets tabular time series data of a .tpl
+        """
+        Gets tabular time series data of a .tpl
 
-**Returns**
+        **Returns**
 
-- **df:** (pd.DataFrame Object)
+        - **df:** (pd.DataFrame Object)
         """
         return self.data.df
 
     def serialize(self) -> dict:
-        """Serializes TPL Object
+        """
+        Serializes TPL Object
 
-**Returns**
+        **Returns**
 
-- **tpl:** (dict) {
-    'info': {
-        'version': (str) Olga version with which the file was generated,
-        'input_file': (str) Genkey file name binded to this tpl file,
-        'pvt_file': (str) Fluid property file name,
-        'date': (str) TPL file generation date,
-        'project': (str) Project name,
-        'title': (str) Simulation title name,
-        'author': (str) Responsible for the simulation,
-        'network': (int) If 1, is a pipeline, > 1, is a network,
-        'geometry': (str) Unit for pipeline length,
-        'branch': (str) Branch name
-    },
-    'profile': {
-        'profile': list of tuples (x, y),
-        'x': (list) x coordinates values,
-        'y': (list) y coordinates values
-    },
-    'data': DataFrame serialized
-}
+        - **tpl:** (dict) {
+            'info': {
+                'version': (str) Olga version with which the file was generated,
+                'input_file': (str) Genkey file name binded to this tpl file,
+                'pvt_file': (str) Fluid property file name,
+                'date': (str) TPL file generation date,
+                'project': (str) Project name,
+                'title': (str) Simulation title name,
+                'author': (str) Responsible for the simulation,
+                'network': (int) If 1, is a pipeline, > 1, is a network,
+                'geometry': (str) Unit for pipeline length,
+                'branch': (str) Branch name
+            },
+            'profile': {
+                'profile': list of tuples (x, y),
+                'x': (list) x coordinates values,
+                'y': (list) y coordinates values
+            },
+            'data': DataFrame serialized
+        }
         """
         return {
             'info': self.info.serialize(),
