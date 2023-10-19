@@ -1,6 +1,7 @@
 from ..helpers import Helpers
 from .csv import CSVFormatter
 from .olga import Olga
+from .data_lake import DataLake
 import pandas as pd
 import pickle
 import struct
@@ -317,3 +318,9 @@ class IO:
                 pickled_data = f.read(size)
                 dicts.append(pickle.loads(pickled_data))
         return dicts
+
+    @Helpers.check_airflow_task_args
+    @staticmethod
+    def read_data_lake(mongo_user:str, mongo_password:str, host:str, port:int = 27017, **kwargs):
+        data_lake = DataLake(mongo_user, mongo_password, host, port)
+        return data_lake.read(**kwargs)

@@ -1036,12 +1036,21 @@ class Transform:
             float | None: The size of the leak, or None if no leak is found.
 
         """
-        for i in genkey['Network Component']:
-                        if 'NETWORKCOMPONENT' in i:
-                            if 'TYPE' in i['NETWORKCOMPONENT']:
-                                if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
-                                    if('LEAK' in i):
-                                        leak_size =  i['LEAK']['DIAMETER']['VALUE'][0]
+
+        #This is do it to check if the genkey comes from Data Lake or directly from olga files
+        if('Network Component' in genkey):
+            network_component = 'Network Component'    
+        elif('network_components' in genkey):
+            network_component = 'network_components'    
+        else:
+            raise ValueError('There is no Network Component in this genkey simulation.')
+
+        for i in genkey[network_component]:
+                        if 'networkcomponent' in i:
+                            if 'type' in i['networkcomponent']:
+                                if('flowpath' == i['networkcomponent']['type']):   
+                                    if('leak' in i):
+                                        leak_size =  i['leak']['diameter']['value'][0]
                                         return leak_size
         return None
 
@@ -1149,13 +1158,21 @@ class Transform:
             int | None: The location of the leak, or None if no leak is found.
 
         """
-        for i in genkey['Network Component']:
-            if 'NETWORKCOMPONENT' in i:
-                if 'TYPE' in i['NETWORKCOMPONENT']:
-                    if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):   
-                        if('LEAK' in i):
+        #This is do it to check if the genkey comes from Data Lake or directly from olga files
+        if('Network Component' in genkey):
+            network_component = 'Network Component'    
+        elif('network_components' in genkey):
+            network_component = 'network_components'    
+        else:
+            raise ValueError('There is no Network Component in this genkey simulation.')
+        
+        for i in genkey[network_component]:
+            if 'networkcomponent' in i:
+                if 'type' in i['networkcomponent']:
+                    if('flowpath' == i['networkcomponent']['type']):   
+                        if('leak' in i):
 
-                            leak_location =  i['LEAK']['ABSPOSITION']['VALUE'][0]
+                            leak_location =  i['leak']['absposition']['value'][0]
                             return leak_location
         return None
     
@@ -1304,11 +1321,20 @@ class Transform:
         
         else:
             if(time_series_column in df):
-                for i in genkey['Network Component']:
-                    if 'LABEL' in i['PARAMETERS']:
-                        if('Control-Leak' == i['PARAMETERS']['LABEL']):   
-                            leak_sign = i['PARAMETERS']['SETPOINT']
-                            time_values = i['PARAMETERS']['TIME']['VALUE']
+                
+                #This is do it to check if the genkey comes from Data Lake or directly from olga files
+                if('Network Component' in genkey):
+                    network_component = 'Network Component'    
+                elif('network_components' in genkey):
+                    network_component = 'network_components'    
+                else:
+                    raise ValueError('There is no Network Component in this genkey simulation.')
+
+                for i in genkey[network_component]:
+                    if 'label' in i['parameters']:
+                        if('Control-Leak' == i['parameters']['label']):   
+                            leak_sign = i['parameters']['setpoint']
+                            time_values = i['parameters']['time']['value']
                             break
                 if(type(leak_sign)==int):
                     df['LEAK_STATUS'] = 'NO LEAK'
@@ -1525,23 +1551,30 @@ class Transform:
 
         Note:
             This function is mainly used to extract pipe diameter and roughness parameters from the 'genkey' dictionary
-            for network components of type 'FLOWPATH'. The returned list of dictionaries can be used in other calculations,
+            for network components of type 'flowpath'. The returned list of dictionaries can be used in other calculations,
             such as determining friction factors.
         """
-        
-        for i in genkey['Network Component']:
-            if 'NETWORKCOMPONENT' in i:
-                if 'TYPE' in i['NETWORKCOMPONENT']:
-                    if 'FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']:
+        #This is do it to check if the genkey comes from Data Lake or directly from olga files
+        if('Network Component' in genkey):
+            network_component = 'Network Component'    
+        elif('network_components' in genkey):
+            network_component = 'network_components'    
+        else:
+            raise ValueError('There is no Network Component in this genkey simulation.')
+
+        for i in genkey[network_component]:
+            if 'networkcomponent' in i:
+                if 'type' in i['networkcomponent']:
+                    if 'flowpath' == i['networkcomponent']['type']:
                         parameters_pipe = []
                         pipe_length = 0
-                        for j in i['PIPE']:
-                            length = j['LENGTH']['VALUE'][0]
+                        for j in i['pipe']:
+                            length = j['length']['value'][0]
                             parameters_pipe.append({
                                 'length_start': pipe_length,
                                 'length_end': pipe_length + length,
-                                'pipe_diameter': j['DIAMETER']['VALUE'][0],
-                                'pipe_roughness': j['ROUGHNESS']['VALUE'][0]
+                                'pipe_diameter': j['diameter']['value'][0],
+                                'pipe_roughness': j['roughness']['value'][0]
                             })
                             pipe_length += length
 
@@ -1624,11 +1657,20 @@ class Transform:
     @Helpers.check_airflow_task_args
     @staticmethod
     def _get_tranfer_positions_genkey(genkey: dict)->list | None:
-        for i in genkey['Network Component']:
-            if('FLOWPATH' == i['NETWORKCOMPONENT']['TYPE']):
-                for j in i['TRENDDATA']:
-                    if('ABSPOSITION' in j):
-                        return j['ABSPOSITION']['VALUE']
+
+        #This is do it to check if the genkey comes from Data Lake or directly from olga files
+        if('Network Component' in genkey):
+            network_component = 'Network Component'    
+        elif('network_components' in genkey):
+            network_component = 'network_components'    
+        else:
+            raise ValueError('There is no Network Component in this genkey simulation.')
+
+        for i in genkey[network_component]:
+            if('flowpath' == i['networkcomponent']['type']):
+                for j in i['trenddata']:
+                    if('absposition' in j):
+                        return j['absposition']['value']
                         
         return None
     
@@ -1735,6 +1777,27 @@ class Transform:
 
         return df
 
+    # @Helpers.check_airflow_task_args
+    # @staticmethod
+    # def calculate_speed_wave(df: pd.DataFrame, compresibility: list | None = None, density_columns: list | None = None):
+    #     'KAPPA_POSITION_LB@50M_Compressibility_of_fluid_1/Pa'
+    #     'ROHL_POSITION_LB@50M_Oil_density_KG/M3'
+    #     df_columns = df.columns.to_list()
+
+    #     positions = Transform._get_transfer_positions_tpl(df_columns)
+    #     unique_pipeline_names = Transform._get_unique_pipelines_name_tpl(df_columns)
+    #     pipeline_name = unique_pipeline_names[0]
+    #     for position in positions: 
+
+    #         if (f"KAPPA_POSITION_{pipeline_name}@{position}M_Compressibility_of_fluid_1/Pa" not in df_columns):
+    #             raise ValueError(f'Compressibility of fluid column is not in the DF for the position {position} meters.')
+
+    #         if (f"ROHL_POSITION_{pipeline_name}@{position}M_Oil_density_KG/M3" not in df_columns):
+    #             raise ValueError(f'Oil density column is not in the DF for the position {position} meters.')
+            
+    #         oil_vicosity = df[f"KAPPA_POSITION_{pipeline_name}@{position}M_Compressibility_of_fluid_1/Pa"]
+    #         total_mass_flow = df[f"ROHL_POSITION_{pipeline_name}@{position}M_Oil_density_KG/M3"]
+    
     @Helpers.check_airflow_task_args
     @staticmethod
     def convert_mass_fluid_barrel_per_hour_to_KG_per_second(df: pd.DataFrame, density_columns: list | None = None, mass_flow_columns: list | None = None) -> pd.DataFrame:
@@ -1869,7 +1932,7 @@ class Transform:
         
         for i in range(len(pressure_columns)):
 
-            df[pressure_columns[i]] = df[pressure_columns[i]] * 6894.75728
+            df[pressure_columns[i]] = (df[pressure_columns[i]] * 6894.75728) + 101325
         
         return df
 
@@ -2003,4 +2066,69 @@ class Transform:
             return df
         else:
             return df
+    
+    @Helpers.check_airflow_task_args
+    @staticmethod    
+    def interpolate_df(df: pd.DataFrame, interpolation_period: int) -> pd.DataFrame:
+        """
+        Interpolate missing values in a DataFrame using linear interpolation.
+
+        This function performs linear interpolation on a DataFrame to fill in missing values. It assumes that the DataFrame
+        has a column named 'TIME_SERIES_S' containing datetime values. The function converts the 'TIME_SERIES_S' column to
+        datetime data type, removes duplicate rows based on the 'TIME_SERIES_S' column, and sets 'TIME_SERIES_S' as the
+        index of the DataFrame. It then generates a range of dates with a total of `interpolation_period` data points and
+        reindexes the DataFrame with the interpolated dates. Finally, it performs linear interpolation to fill in the
+        missing values.
+
+        Args:
+            df (pd.DataFrame): The DataFrame to be interpolated.
+            interpolation_period (int): The number of data points to interpolate.
+
+        Returns:
+            pd.DataFrame: The interpolated DataFrame.
+
+        Example:
+            >>> import pandas as pd
+            >>> data = {
+            ...     'TIME_SERIES_S': ['2023-01-01', '2023-01-03', '2023-01-06'],
+            ...     'Value': [100, None, 200],
+            ... }
+            >>> df = pd.DataFrame(data)
+            >>> df = interpolate_df(df, interpolation_period=5)
+            >>> df
+                    Value
+            2023-01-01  100.0
+            2023-01-02  125.0
+            2023-01-03  150.0
+            2023-01-04  175.0
+            2023-01-05  187.5
+            2023-01-06  200.0
+
+        Note:
+            - The function assumes that the DataFrame has a column named 'TIME_SERIES_S' containing datetime values.
+            - Duplicate rows based on the 'TIME_SERIES_S' column are removed before interpolation.
+            - The DataFrame is reindexed with the interpolated dates.
+            - Linear interpolation is used to fill in the missing values.
+        """
+
+        # Convert the 'TIME_SERIES_S' column to datetime data type
+        df["TIME_SERIES_S"] = pd.to_datetime(df["TIME_SERIES_S"])
+
+        # Remove duplicate rows based on the 'TIME_SERIES_S' column
+        df = df.drop_duplicates(subset="TIME_SERIES_S")
+
+        # Set 'TIME_SERIES_S' as the index of the DataFrame
+        df = df.set_index("TIME_SERIES_S")
+
+        # Generate a range of dates with a total of 360 rows
+        start_date = df.index.min()
+        end_date = df.index.max()
+        interpolated_dates = pd.date_range(start=start_date, end=end_date, periods=interpolation_period)
+
+        # Reindex the DataFrame with the interpolated dates
+        df = df.reindex(interpolated_dates)
+
+        # Perform linear interpolation
+        df = df.interpolate(method="linear")
         
+        return df
