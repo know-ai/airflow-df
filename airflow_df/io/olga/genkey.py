@@ -264,7 +264,7 @@ class Genkey(dict):
                 with open(modified_filepath, 'r') as f:
                     file = f.read()
             except FileNotFoundError:
-                print("File not found in both locations.")
+                raise (f"File {os.path.basename(filepath)} not found in both locations.")
 
 
         # Splitting Genkey in principal elements
