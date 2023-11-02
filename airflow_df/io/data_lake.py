@@ -8,7 +8,7 @@ class DataLake:
     """
     Reads data lake files. 
     """
-    __file = namedtuple("File", "title tpl_df genkey tpl_serialized")
+    __file = namedtuple("File", "title tpl_df genkey tpl_serialized meta")
 
     def __init__(self, mongo_user: str, mongo_password: str, host: str, port:int = 27017):
         self.__mongo_user = mongo_user
@@ -22,9 +22,9 @@ class DataLake:
         db = client['iDetectFugas']
         self.info_case = db['info_case']
     
-    def group_olga_files(self, title, tpl_df, genkey: dict, tpl_serialized:dict)->namedtuple:
+    def group_olga_files(self, title, tpl_df, genkey: dict, tpl_serialized:dict, meta: dict)->namedtuple:
 
-            file = self.__file(title, tpl_df, genkey, tpl_serialized)
+            file = self.__file(title, tpl_df, genkey, tpl_serialized, meta)
             return file
     
     def read_file(self, case):
@@ -44,7 +44,21 @@ class DataLake:
         tpl_serialized = case['tpl']
         genkey = case['genkey']
 
-        return self.group_olga_files(title, tpl_df, genkey, tpl_serialized)
+        del case['tpl']
+        del case['genkey']
+        if 'date_added' in case:
+            del case['date_added']
+        if 'date_updated' in case:
+            del case['date_updated']
+        if '_id' in case:
+            del case['_id']
+
+        meta = case
+        if('info' in case['tpl']):
+            if('date' in case['tpl']['info']):
+                meta['date'] = case['tpl']['info']['date']
+
+        return self.group_olga_files(title, tpl_df, genkey, tpl_serialized, meta)
 
     def read(
             self,
@@ -57,7 +71,7 @@ class DataLake:
         counter = 0
         while are_there_cases:
 
-            case_found = self.info_case.find(self.__query, {'title': 1, 'tpl':1, 'genkey':1}).sort('_id').skip(counter).limit(1)
+            case_found = self.info_case.find(self.__query).sort('_id').skip(counter).limit(1)
             case_found = list(case_found)
             counter += 1
 
