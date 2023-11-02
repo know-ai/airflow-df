@@ -176,7 +176,21 @@ class Helpers:
 
     @staticmethod
     def _check_file_size_recursively(file_path) -> None:
+        """
+        Recursively checks the size of files in the specified directory and its subdirectories.
+        If any file has a size less than 5 bytes, it raises an exception along with the list of
+        files without size.
 
+        Args:
+            file_path (str): The path to the directory to be checked.
+
+        Raises:
+            Exception: If there are files without size, it raises an exception with the list of
+                    files without size.
+
+        Returns:
+            None
+        """
         files_without_size = []
 
         try:
