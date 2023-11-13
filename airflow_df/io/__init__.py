@@ -338,16 +338,16 @@ class IO:
         
         data_warehouse.send_bulk_simulation_timestamps_blob(timestamp_list)
         
-        data_warehouse.save_and_create_case(meta['leak_size'], meta['leak_location'], meta['fluid'], meta['stroke'], meta['operation_condition'], meta['failure'], meta['line'], meta['terminal'], meta['title'])
-        total_tags = data_warehouse.save_tags(tpl_df.columns)
-
-        for i in total_tags:
-            tag_values = []
-            for j in range(len(timestamp_list)):            
+        data_warehouse.save_and_create_case(meta['leak_size'], meta['leak_location'], meta['fluid'], meta['stroke'], meta['operation_state'], meta['failure'], meta['line'], meta['terminal'], meta['title'])
+        # total_tags = data_warehouse.save_tags(tpl_df.columns)
+        data_warehouse.save_tags_and_send_blobs(tpl_df, meta['title'])
+        # for i in total_tags:
+        #     tag_values = []
+        #     for j in range(len(timestamp_list)):            
                 
-                tag_values.append({'timestamp':timestamp_list[j], 'tag': i, 'case': meta['title'], 'value': tpl_df[i][j]})
+        #         tag_values.append({'timestamp':timestamp_list[j], 'tag': i, 'case': meta['title'], 'value': tpl_df[i][j]})
 
-            data_warehouse.send_bulk_tag_values_blob(tag_values)
+        #     data_warehouse.send_bulk_tag_values_blob(tag_values)
 
 
     @Helpers.check_airflow_task_args

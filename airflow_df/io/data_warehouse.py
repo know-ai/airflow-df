@@ -52,25 +52,68 @@ class DataWarehouse:
     
     def save_and_create_case(self, leak_size, leak_location, fluid, stroke, operation_condition, failure_type, line, terminal, title):
 
-        leak_size = self.__check_and_create_leak_size(leak_size)
-        leak_location = self.__check_and_create_leak_location(leak_location)
-        fluid = self.__check_and_create_fluid(fluid)
-        stroke = self.__check_and_create_stroke(stroke)
-        operation_condition = self.__check_and_create_operation_condition(operation_condition)
-        failure_type = self.__check_and_create_failure_type(failure_type)
-        line = self.__check_and_create_line(line, terminal)
-        terminal = self.__check_and_create_terminal(terminal)
+        self.__check_and_create_leak_size(leak_size)
+        self.__check_and_create_leak_location(leak_location)
+        self.__check_and_create_fluid(fluid)
+        self.__check_and_create_stroke(stroke)
+        self.__check_and_create_operation_condition(operation_condition)
+        self.__check_and_create_failure_type(failure_type)
+        self.__check_and_create_terminal(terminal)
+        self.__check_and_create_line(line, terminal)
 
-        self.__create_cases(leak_location, operation_condition, fluid, stroke, failure_type, line, terminal, title)
+        self.__create_cases(leak_size, leak_location, operation_condition, fluid, stroke, failure_type, line, terminal, title)
 
-    def save_tags(self, tpl_columns: list) -> list:
-        pressure_tags = self.__get_pressure_tag(tpl_columns)
-        flow_tags = self.__get_flow_tag(tpl_columns)
-        temperature_tags = self.__get_temperature_tag(tpl_columns)
-        density_tags = self.__get_density_tag(tpl_columns)    
+    def save_tags_and_send_blobs(self, tpl_df: pd.DataFrame, title: str):
+        
+        timestamp_list = []
+        for i in pd.to_datetime(tpl_df['TIME_SERIES_S'], unit='s').items():
+            timestamp_list.append(i[1].strftime('%Y/%m/%d %H:%M:%S.%f'))
 
-        total_tags = pressure_tags + flow_tags + temperature_tags + density_tags
-        return total_tags
+        total_value_tags = []
+        for i in tpl_df.columns:
+
+            tag_values = {}            
+            if('Pressure_PA' in i):
+                tag_values['tag'] = {}
+                tag_values['tag']['name'] = i
+                tag_values['tag']['unit']= 'Pa'
+                position = int(i.split('@')[-1].split('M')[0])
+                tag_values['tag']['description']= f'Pressure in Pascal at position {position}'
+
+            
+            elif('Total_mass_flow_KG/S' in i):
+                tag_values['tag'] = {}
+                tag_values['tag']['name'] = i
+                tag_values['tag']['unit']= 'kg/s'
+                position = int(i.split('@')[-1].split('M')[0])
+                tag_values['tag']['description']= f'Mass flow in kilogram second at position {position}'
+            
+            elif('Fluid_temperature_C' in i):
+                tag_values['tag'] = {}
+                tag_values['tag']['name'] = i
+                tag_values['tag']['unit']= 'C'
+                position = int(i.split('@')[-1].split('M')[0])
+                tag_values['tag']['description']= f'Temperature in Celsius Degrees at position {position}'
+                
+            elif('Oil_density_KG/M3' in i):
+                tag_values['tag'] = {}
+                tag_values['tag']['name'] = i
+                tag_values['tag']['unit']= 'kg/m3'
+                position = int(i.split('@')[-1].split('M')[0])
+                tag_values['tag']['description']= f'Mass desnity in kilogram cubic meter at position {position}'
+            
+            if('tag' in tag_values):
+                tag_values['tag']['data_type']= 'float'
+                tag_values['tag']['display_name']= i
+
+                tag_values['values'] = []
+                
+                for j in range(len(timestamp_list)):
+                    tag_values['values'].append({'timestamp':timestamp_list[j], 'tag': i, 'case': title, 'value': tpl_df[i][j]})
+
+                total_value_tags.append(tag_values)
+        
+        self.send_bulk_tag_values_blob(total_value_tags)
 
     def __check_and_create_timestamp(self, timestamp:str):
 
@@ -287,16 +330,16 @@ class DataWarehouse:
 
         json_data = {
             'name': line,
-            'terminal': terminal
+            'terminal_abbreviation': terminal
         }
 
 
-        response = requests.post('http://localhost:5050/api/lines/find-by-name-and-terminal', headers=headers, json=json_data, timeout=30)
+        response = requests.post('http://localhost:5050/api/lines/find-by-name-and-terminal-abbreviation', headers=headers, json=json_data, timeout=30)
         if('message' in response.json()):
             if(response.json()['message']=='Not found'):
                 try:
 
-                    response = requests.post('http://localhost:5050/api/lines/create', headers=headers, json=json_data, timeout=30)
+                    response = requests.post('http://localhost:5050/api/lines/create-by-terminal-abbreviation', headers=headers, json=json_data, timeout=30)
                     response.raise_for_status()  # Raise an exception if the request was unsuccessful (status code >= 400)
 
                     print(f'Line {line} created successfully')
@@ -323,10 +366,10 @@ class DataWarehouse:
         }
 
         json_data = {
-            'name': terminal
+            'abbreviation': terminal
         }
 
-        response = requests.post('http://localhost:5050/api/terminals/find-by-name', headers=headers, json=json_data, timeout=30)
+        response = requests.post('http://localhost:5050/api/terminals/find-by-abbreviation', headers=headers, json=json_data, timeout=30)
         if('message' in response.json()):
             if(response.json()['message']=='Not found'):
                 try:
@@ -386,61 +429,6 @@ class DataWarehouse:
             print(f'Failure type {failure_type} already exists')
             return response.json()
 
-    def __check_and_create_tag(self, tag_name:str):
-        headers = {
-            'accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
-
-        json_data = {
-            'name': tag_name,
-        }
-
-        response = requests.post('http://localhost:5050/api/tags/find-by-name', headers=headers, json=json_data)
-        
-        position = int(tag_name.split('@')[-1].split('M')[0])
-        if('message' in response.json()):
-            if(response.json()['message']=='Not found'):
-                try:
-                    if('Pressure_PA' in tag_name):
-                        json_data['unit']= 'Pa'
-                        json_data['description']= f'Pressure in Pascal at position {position}'
-
-                    elif('Fluid_temperature_C' in tag_name):
-                        json_data['unit']= 'C'
-                        json_data['description']= f'Temperature in Celsius Degrees at position {position}'
-
-                    elif('Total_mass_flow_KG/S' in tag_name):
-                        json_data['unit']= 'kg/s'
-                        json_data['description']= f'Mass flow in kilogram second at position {position}'
-
-                    elif('Oil_density_KG/M3' in tag_name):
-                        json_data['unit']= 'kg/m3'
-                        json_data['description']= f'Mass desnity in kilogram cubic meter at position {position}'
-
-                    json_data['data_type']= 'float'
-                    json_data['display_name']= tag_name
-
-
-                    response = requests.post('http://localhost:5050/api/tags/create', headers=headers, json=json_data, timeout=30)
-                    response.raise_for_status()  # Raise an exception if the request was unsuccessful (status code >= 400)
-
-                    print(f'Tag {tag_name} created successfully')
-                    return response.json()['data']
-
-                except requests.exceptions.RequestException as e:
-                    # Handle connection errors, timeouts, or other request-related exceptions
-                    print(f"Request failed for tag '{tag_name}': {e}")
-                    raise e
-                except Exception as e:
-                    # Handle any other unexpected exceptions
-                    print(f"An error occurred for tag '{tag_name}': {e}")
-                    raise e
-
-        else:
-            print(f'Tag {tag_name} already exists')
-            return response.json()
-
     def __create_cases(
             self,
             leak_size: float, 
@@ -477,7 +465,7 @@ class DataWarehouse:
                         "stroke": stroke,
                         "failure_type": failure_type,
                         "line": line,
-                        "terminal": terminal
+                        "terminal_abbreviation": terminal
                     }
                     
                     response = requests.post('http://localhost:5050/api/cases/create', headers=headers, json=json_data, timeout=30)
@@ -500,10 +488,10 @@ class DataWarehouse:
             return response.json()
 
     def send_bulk_tag_values_blob(self, blob: list):
-        url = 'http://localhost:5050/api/simulation-tag-values/blob'  # Replace with the appropriate URL
+        url = 'http://localhost:5050/api/simulation-tag-values/blob-multiple-tags-and-values'  # Replace with the appropriate URL
         
         blob = json.dumps(blob)	
-        blob.encode('utf-8')
+        blob = blob.encode('utf-8')
         
         try:
             headers = {'Content-Type': 'application/octet-stream'}
@@ -522,7 +510,7 @@ class DataWarehouse:
         url = 'http://localhost:5050/api/simulation-timestamp/blob'  # Replace with the appropriate URL
         
         blob = json.dumps(blob)	
-        blob.encode('utf-8')
+        blob = blob.encode('utf-8')
 
         try:
             headers = {'Content-Type': 'application/octet-stream'}
@@ -535,37 +523,3 @@ class DataWarehouse:
         except requests.exceptions.RequestException as e:
 
             raise Exception('Error sending simulation timestamps blob:', str(e))
-
-    def __get_pressure_tag(self, columns:list)->list:
-        pressure_tag = []
-        for i in columns:
-            if('Pressure_PA' in i):
-                self.__check_and_create_tag(i)
-                pressure_tag.append(i)
-        return pressure_tag
-
-    def __get_flow_tag(self, columns:list)->list:
-        flow_tag = []
-        for i in columns:
-            if('Total_mass_flow_KG/S' in i):
-                self.__check_and_create_tag(i)
-                flow_tag.append(i)
-        return flow_tag
-
-    def __get_temperature_tag(self, columns:list)->list:
-        temperature_tag = []
-        for i in columns:
-            if('Fluid_temperature_C' in i):
-                self.__check_and_create_tag(i)
-                temperature_tag.append(i)
-        return temperature_tag
-
-    def __get_density_tag(self, columns:list)->list:
-        density_tag = []
-        for i in columns:
-            if('Oil_density_KG/M3' in i):
-                self.__check_and_create_tag(i)
-                density_tag.append(i)
-        return density_tag
-    
-

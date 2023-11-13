@@ -54,9 +54,9 @@ class DataLake:
             del case['_id']
 
         meta = case
-        if('info' in case['tpl']):
-            if('date' in case['tpl']['info']):
-                meta['date'] = case['tpl']['info']['date']
+        if('info' in tpl_serialized):
+            if('date' in tpl_serialized['info']):
+                meta['date'] = tpl_serialized['info']['date']
 
         return self.group_olga_files(title, tpl_df, genkey, tpl_serialized, meta)
 

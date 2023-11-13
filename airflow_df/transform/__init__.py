@@ -2132,3 +2132,62 @@ class Transform:
         df = df.interpolate(method="linear")
         
         return df
+
+    @Helpers.check_airflow_task_args
+    @staticmethod    
+    def expand_dataframe_with_time_series(df: pd.DataFrame, repeat_count: int, time_interval: float) -> pd.DataFrame | None:
+        """
+            Expands the given DataFrame by repeating it `repeat_count` times and adds a time series column with incremental values.
+            If the DataFrame has more than one row, the function will prompt the user to confirm whether they want to continue.
+            If the user chooses not to continue, the function will return `None`.
+
+            Parameters:
+                df (pd.DataFrame): The DataFrame to be expanded.
+                repeat_count (int): The number of times to repeat the DataFrame.
+                time_interval (float): The time interval between each consecutive row in the time series column.
+
+            Returns:
+                pd.DataFrame | None: A new DataFrame with the original DataFrame expanded `repeat_count` times and a new column
+                'TIME_SERIES_S' added, representing the time series with incremental values. The values in the 'TIME_SERIES_S' 
+                column are calculated by multiplying the row index by the `time_interval`. If the user chooses not to continue 
+                when prompted, the function will return `None`.
+
+            Raises:
+                ValueError: If `repeat_count` is less than or equal to 0.
+                TypeError: If `df` is not a DataFrame or `time_interval` is not a float.
+
+            Example:
+                >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+                >>> expand_dataframe_with_time_series(df, 2, 0.5)
+                A  B  TIME_SERIES_S
+                0  1  4            0.0
+                1  2  5            0.5
+                2  3  6            1.0
+                3  1  4            1.5
+                4  2  5            2.0
+                5  3  6            2.5
+        """
+
+        if not isinstance(df, pd.DataFrame):
+            raise TypeError("The 'df' parameter must be a DataFrame.")
+        if not isinstance(time_interval, float):
+            raise TypeError("The 'time_interval' parameter must be a float.")
+        if repeat_count <= 0:
+            raise ValueError("The 'repeat_count' parameter must be greater than 0.")
+                
+        num_rows = expanded_dataframe.shape[0]
+        if num_rows > 1:
+            while True:
+                is_continue = input('The expanded dataframe has more than one row. Do you want to continue? Y/N ').upper()
+                if is_continue == 'N':
+                    return None
+                elif is_continue == 'Y':
+                    break
+                else:
+                    print("Invalid input. Please enter 'Y' or 'N'.")
+            
+        expanded_dataframe = pd.concat([df] * repeat_count, ignore_index=True)
+        expanded_dataframe['TIME_SERIES_S'] = [i * time_interval for i in range(repeat_count)]
+        return expanded_dataframe
+
+
