@@ -16,6 +16,8 @@ class DataLake:
         self.__host = host
         self.__port = port
         self.__query = {}
+        self.__last_case_id = None
+
         MONGO_URI = f"mongodb://{self.__mongo_user}:{self.__mongo_password}@{self.__host}:{self.__port}/"
 
         client = MongoClient(MONGO_URI, maxPoolSize = 5)
@@ -50,6 +52,9 @@ class DataLake:
             del case['date_added']
         if 'date_updated' in case:
             del case['date_updated']
+
+        self.__last_case_id = case['_id']
+
         if '_id' in case:
             del case['_id']
 
@@ -70,8 +75,9 @@ class DataLake:
         are_there_cases = True
         counter = 0
         while are_there_cases:
-
-            case_found = self.info_case.find(self.__query).sort('_id').skip(counter).limit(1)
+            if(self.__last_case_id is not None):
+                self.__query['_id'] = {'$gt': self.__last_case_id}
+            case_found = self.info_case.find(self.__query).limit(1)
             case_found = list(case_found)
             counter += 1
 
@@ -147,7 +153,7 @@ class DataLake:
 
         if operation_state:
             query['operation_state'] = operation_state
-
+        
         self.__query = query
 
 
