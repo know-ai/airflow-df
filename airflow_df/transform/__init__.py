@@ -864,6 +864,15 @@ class Transform:
     
     @Helpers.check_airflow_task_args
     @staticmethod
+    def get_only_odd_index(df:pd.DataFrame)->pd.DataFrame:
+        r"""
+        Documentation here
+        """
+
+        return df.iloc[::2]
+    
+    @Helpers.check_airflow_task_args
+    @staticmethod
     def reset_index(df:pd.DataFrame)->pd.DataFrame:
         r"""
         Documentation here
