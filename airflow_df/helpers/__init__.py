@@ -159,6 +159,7 @@ class Helpers:
 
         - **filenames:** (list) List of filenames with "ext" inside "filepath"
         """
+        Helpers._check_file_size_recursively(filepath)
         result = list()
         if not ext.startswith("."):
             ext = f".{ext}"
@@ -172,6 +173,44 @@ class Helpers:
                     result.append(os.path.join(root,filename))
         
         return result
+
+    @staticmethod
+    def _check_file_size_recursively(file_path) -> None:
+        """
+        Recursively checks the size of files in the specified directory and its subdirectories.
+        If any file has a size less than 5 bytes, it raises an exception along with the list of
+        files without size.
+
+        Args:
+            file_path (str): The path to the directory to be checked.
+
+        Raises:
+            Exception: If there are files without size, it raises an exception with the list of
+                    files without size.
+
+        Returns:
+            None
+        """
+        files_without_size = []
+
+        try:
+            for root, dirs, files in os.walk(file_path):
+                for filename in files:
+                    filepath = os.path.join(root, filename)
+                    if os.path.isfile(filepath):
+                        file_size = os.path.getsize(filepath)
+                        if file_size < 5:
+                            files_without_size.append(filename)
+
+        except Exception as error:
+            raise error
+
+        if(len(files_without_size)>0):
+
+            for f in files_without_size:
+                print(f"This file {f} is empty, please check it and remove it.")
+
+            raise Exception("There are files without size, please check them and remove them.")
 
     @staticmethod
     def get_default_args_in_tasks():
